@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import Container from "../components/Container";
@@ -6,46 +6,34 @@ import StyledButton from "../styles/StyledButton";
 import StyledLink from "../styles/StyledLink";
 import {pageNavLinks} from "./pageNavLinks";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
+import InputField from "../components/form-inputs/InputField";
+import {useForm} from "react-hook-form";
 
 
 export default function Login() {
 
-   const [formData, setFormData] = useState({
-      email: "",
-      password: ""
-   })
-   const {email, password} = formData
+   const {register, handleSubmit} = useForm()
 
-   function handleOnChange(e) {
-      setFormData({
-         ...formData,
-         [e.target.name]: e.target.value
-      })
-   }
 
-   function handleSubmit(e, formData) {
-      e.preventDefault()
-
-      console.log(formData)
+   function onSubmit(data) {
+      console.log(data)
    }
 
    return (
       <Layout navLinks={pageNavLinks.home}>
          <Container maxWidth={500} bgImage={whiteAltitudeLines} fullHeight={true}>
-            <StyledForm onSubmit={e => handleSubmit(e, formData)}>
+            <StyledForm onSubmit={handleSubmit(onSubmit)}>
                <h1>Login</h1>
-               <label>* Email
-                  <input type="email" name="email" value={email}
-                         onChange={e => handleOnChange(e)}/>
-               </label>
-               <label>* Password
-                  <input type="password" name="password" value={password}
-                         onChange={e => handleOnChange(e)}/>
-               </label>
+
+               <InputField labelTitle="* Email" type="email" name="email" register={register}/>
+
+               <InputField labelTitle="* Wachtwoord" type="password" name="password" register={register}/>
+
                <div className="form-footer">
                   <label>* Verplichte velden</label>
                   <StyledButton type="onsubmit">Login</StyledButton>
                </div>
+
                <div className="or-register">
                   <StyledLink to="/register">or REGISTER</StyledLink>
                </div>
@@ -65,29 +53,14 @@ const StyledForm = styled.form`
     margin: 2rem 0;
   }
 
-  label {
-    color: ${({theme: {colors}}) => colors.green};
-    font-size: 1.6rem;
-    font-weight: 500;
-  }
-
-  input {
-    padding: 0.8rem 1.6rem;
-    font-family: "Merriweather", serif;
-    font-size: 1.8rem;
-    color: black;
-    border: 3px solid ${({theme: {colors}}) => colors.green};
-    width: 100%;
-    background-color: ${({theme: {colors}}) => colors.white};
-    margin-bottom: 1.5rem;
-  }
-
   .form-footer {
     display: flex;
     justify-content: space-between;
 
-    p {
+    label {
+      color: ${({theme: {colors}}) => colors.green};
       font-size: 1.6rem;
+      font-weight: 500;
     }
   }
 

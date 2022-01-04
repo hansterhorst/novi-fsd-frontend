@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import Layout from "../components/layout/Layout";
 import Container from "../components/Container";
 import styled from "styled-components";
@@ -6,66 +6,42 @@ import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import StyledButton from "../styles/StyledButton";
 import {pageNavLinks} from "./pageNavLinks";
 import StyledLink from "../styles/StyledLink";
+import {useForm} from "react-hook-form";
+import InputField from "../components/form-inputs/InputField";
 
 export default function Register() {
 
-   const [newUser, setNewUser] = useState({
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      password2: ""
-   })
-   const {firstname, lastname, email, password, password2} = newUser
+   const {register, handleSubmit} = useForm()
 
-   function handleOnChange(e) {
-      setNewUser({
-         ...newUser,
-         [e.target.name]: e.target.value
-      })
-   }
-
-   function handleSubmit(e, newUser) {
-      e.preventDefault()
-
-      console.log(newUser)
+   function onSubmit(data) {
+      console.log(data)
    }
 
 
    return (
       <Layout navLinks={pageNavLinks.home}>
          <Container bgImage={whiteAltitudeLines} fullHeight={true} maxWidth={500}>
-            <StyledForm onSubmit={e => handleSubmit(e, newUser)}>
+            <StyledForm onSubmit={handleSubmit(onSubmit)}>
                <h1>Register</h1>
-               <label>* Voornaam
-                  <input type="text" name="firstname" value={firstname}
-                         onChange={e => handleOnChange(e)}/>
-               </label>
 
-               <label>* Achternaam
-                  <input type="text" name="lastname" value={lastname}
-                         onChange={e => handleOnChange(e)}/>
-               </label>
+               <InputField labelTitle="* Voornaam" name="firstname" register={register}/>
 
-               <label>* E-mailadres
-                  <input type="email" name="email" value={email}
-                         onChange={e => handleOnChange(e)}/>
-               </label>
+               <InputField labelTitle="* Achternaam" name="lastname" register={register}/>
 
-               <label>* Wachtwoord
-                  <input type="password" name="password" value={password}
-                         onChange={e => handleOnChange(e)}/>
-               </label>
+               <InputField labelTitle="* E-mailadres" name="email" type="email"
+                           register={register}/>
 
-               <label>* Bevestig wachtwoord
-                  <input type="password" name="password2" value={password2}
-                         onChange={e => handleOnChange(e)}/>
-               </label>
+               <InputField labelTitle="* Wachtwoord" name="password" type="password"
+                           register={register}/>
+
+               <InputField labelTitle="* Bevestig wachtwoord" name="password2" type="password"
+                           register={register}/>
 
                <div className="form-footer">
                   <label>* Verplichte velden</label>
                   <StyledButton type="onsubmit">Register</StyledButton>
                </div>
+
                <div className="or-login">
                   <StyledLink to="/login">or LOGIN</StyledLink>
                </div>
@@ -85,30 +61,15 @@ const StyledForm = styled.form`
     margin: 2rem 0;
   }
 
-  label {
-    color: ${({theme: {colors}}) => colors.green};
-    font-size: 1.6rem;
-    font-weight: 500;
-  }
-
-  input {
-    padding: 0.8rem 1.6rem;
-    font-family: "Merriweather", serif;
-    font-size: 1.8rem;
-    color: black;
-    border: 3px solid ${({theme: {colors}}) => colors.green};
-    width: 100%;
-    background-color: ${({theme: {colors}}) => colors.white};
-    margin-bottom: 1.5rem;
-  }
-
   .form-footer {
     display: flex;
     justify-content: space-between;
     text-align: center;
 
-    p {
+    label {
+      color: ${({theme: {colors}}) => colors.green};
       font-size: 1.6rem;
+      font-weight: 500;
     }
 
   }
