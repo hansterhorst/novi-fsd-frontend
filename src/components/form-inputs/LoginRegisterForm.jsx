@@ -4,7 +4,13 @@ import StyledButton from "../../styles/StyledButton";
 import StyledLink from "../../styles/StyledLink";
 
 
-export default function LoginRegisterForm({children, title, onSubmit, submitButtonTitle, orButtonTitle}) {
+export default function LoginRegisterForm({
+                                             children,
+                                             title,
+                                             onSubmit,
+                                             submitButtonTitle,
+                                             orButtonTitle
+                                          }) {
 
    return (
       <StyledForm onSubmit={onSubmit}>
@@ -18,7 +24,7 @@ export default function LoginRegisterForm({children, title, onSubmit, submitButt
          </div>
 
          <div className="or-register">
-            <StyledLink to="/register">{orButtonTitle}</StyledLink>
+            <StyledLink to={`/${orButtonTitle.toLowerCase()}`}>or {orButtonTitle}</StyledLink>
          </div>
       </StyledForm>
    )
