@@ -1,7 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function Container({children, bgImage, maxWidth = 1000, fullHeight = false}) {
+export default function Container({
+                                     children,
+                                     bgColor,
+                                     bgImage,
+                                     maxWidth = 1000,
+                                     fullHeight = false
+                                  }) {
 
    function randomBackgroundPosition() {
       const backgroundPositions = [`top`, `bottom`, `left`, `right`, `center`]
@@ -10,7 +16,7 @@ export default function Container({children, bgImage, maxWidth = 1000, fullHeigh
    }
 
    return (
-      <ContainerStyled bgImage={bgImage} maxWidth={maxWidth} fullHeight={fullHeight}
+      <ContainerStyled bgColor={bgColor} bgImage={bgImage} maxWidth={maxWidth} fullHeight={fullHeight}
                        randomPosition={randomBackgroundPosition}>
          <div className="container">
             {children}
@@ -24,6 +30,7 @@ const ContainerStyled = styled.div`
   background-position: ${({randomPosition}) => randomPosition};
   background-repeat: no-repeat;
   background-size: cover;
+  background-color: ${({bgColor}) => bgColor};
 
   ${({fullHeight}) => fullHeight && `
       display: flex;
@@ -37,5 +44,6 @@ const ContainerStyled = styled.div`
     max-width: ${({maxWidth}) => `${maxWidth}px`};
     width: 100%;
     margin: 0 auto;
+    padding: 0 2rem;
   }
 `
