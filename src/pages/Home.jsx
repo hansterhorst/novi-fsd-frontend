@@ -3,7 +3,7 @@ import Layout from "../components/layout/Layout";
 import HeaderBGImage from "../components/HeaderBGImage";
 import Feature from "../components/Feature";
 import styled from "styled-components";
-import StyledLink from "../styles/StyledLink";
+import StyledTextLink from "../styles/StyledTextLink";
 import StyledNavLink from "../styles/StyledNavLink";
 import wordCardImage from "../assets/images/world-card.png"
 import ballonsImage from "../assets/images/balloons.png"
@@ -38,7 +38,7 @@ export default function Home() {
                <h1>Create stories about your trips and share those with you friends</h1>
                <div className="buttons">
                   <StyledNavLink to="/register">Register</StyledNavLink>
-                  <StyledLink to="/login">or LOGIN</StyledLink>
+                  <StyledTextLink to="/login">or LOGIN</StyledTextLink>
                </div>
             </StyledHome>
          </HeaderBGImage>

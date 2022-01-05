@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import StyledButton from "../../styles/StyledButton";
-import StyledLink from "../../styles/StyledLink";
+import StyledTextLink from "../../styles/StyledTextLink";
 
 
 export default function LoginRegisterForm({
@@ -24,7 +24,7 @@ export default function LoginRegisterForm({
          </div>
 
          <div className="or-register">
-            <StyledLink to={`/${orButtonTitle.toLowerCase()}`}>or {orButtonTitle}</StyledLink>
+            <StyledTextLink to={`/${orButtonTitle.toLowerCase()}`}>or {orButtonTitle}</StyledTextLink>
          </div>
       </StyledForm>
    )

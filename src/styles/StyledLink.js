@@ -2,13 +2,21 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 
 const StyledLink = styled(Link)`
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: ${({theme: {colors}}) => colors.green};
-  text-decoration: underline;
-
-  &:hover {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: ${({theme: {colors}}) => colors.white};
+  text-transform: uppercase;
+  padding: 1rem 1.6rem 0.8rem;
+  background-color: ${({theme: {colors}}) => colors.red};
+  border: 3px solid ${({theme: {colors}}) => colors.red};
+  line-height: 1;
+  display: inline-block;
+  
+  &:hover{
     color: ${({theme: {colors}}) => colors.red};
+    background-color: ${({theme: {colors}}) => colors.white};
+    border: 3px solid ${({theme: {colors}}) => colors.red};
+    
   }
 `
 
