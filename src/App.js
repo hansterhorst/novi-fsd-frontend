@@ -7,18 +7,20 @@ import {Routes, Route} from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Travelstories from "./pages/Travelstories";
+import Travelstory from "./pages/Travelstory";
 
 function App() {
    return (
       <StyledThemesProvider>
          <ResetCSS/>
          <StyledTypography/>
-            <Routes>
-               <Route path="/" element={<Home/>}/>
-               <Route path="/register" element={<Register/>}/>
-               <Route path="/login" element={<Login/>}/>
-               <Route path="/travelstories" element={<Travelstories/>}/>
-            </Routes>
+         <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/travelstories" element={<Travelstories/>}/>
+            <Route path={"/travelstory/:id"} element={<Travelstory/>}/>
+         </Routes>
       </StyledThemesProvider>
    );
 }

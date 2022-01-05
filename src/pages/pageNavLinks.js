@@ -13,4 +13,10 @@ export const pageNavLinks = {
          url: "/login"
       },
    ],
+   user: [
+      {
+         title: "Travelstories",
+         url: "/travelstories"
+      },
+   ],
 }
