@@ -3,10 +3,10 @@ import profileImageMask from "../assets/svg/profileImageMask.svg";
 import bgImage from "../assets/images/lage-mountains.png";
 import styled from "styled-components";
 
-export default function ProfileImage() {
+export default function ProfileImage({squareSize = 100}) {
 
    return (
-      <StyledProfileImage mask={profileImageMask}>
+      <StyledProfileImage mask={profileImageMask} squareSize={squareSize}>
          <div className="mask">
             <img src={bgImage} alt="profile"/>
          </div>
@@ -25,8 +25,8 @@ const StyledProfileImage = styled.div`
   mask: url(${({mask}) => mask});
   mask-repeat: no-repeat;
   mask-size: cover;
-  width: 100%;
-  height: 100%;
+  width: ${({squareSize}) => `${squareSize}px`};
+  height: ${({squareSize}) => `${squareSize}px`};
 
   .mask {
     mask: url(${({mask}) => mask});
