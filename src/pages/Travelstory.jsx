@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Layout from "../components/layout/Layout";
@@ -9,17 +9,18 @@ import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
 import StyledButton from "../styles/StyledButton";
 import ProfileImage from "../components/ProfileImage";
-import StyledLink from "../styles/StyledLink";
 import StyledHeader from "../styles/StyledHeader";
 import {pageNavLinks} from "./pageNavLinks";
 import TextArea from "../components/form-inputs/TextArea";
 import {useForm} from "react-hook-form";
+import StyledTextLink from "../styles/StyledTextLink";
 
 
 export default function Travelstory() {
 
-   let [travelstory, setTravelstory] = useState([])
-   let {id} = useParams()
+   const [travelstory, setTravelstory] = useState([])
+   const {id} = useParams()
+   const navigate = useNavigate()
 
    const {register, handleSubmit} = useForm()
 
@@ -31,7 +32,6 @@ export default function Travelstory() {
       try {
          const response = await axios.get(`http://localhost:8080/api/v1/travelstories/${id}`)
          setTravelstory(response.data)
-         console.log(response)
 
       } catch (error) {
          console.error(error);
@@ -43,7 +43,6 @@ export default function Travelstory() {
       getTravelstoryById()
       // eslint-disable-next-line
    }, [])
-
 
    const {title, imageUrl, article, country, tripType, tripDate, author, userId} = travelstory
 
@@ -63,10 +62,10 @@ export default function Travelstory() {
                </div>
 
                <div className="article-header-profile">
-                  <ProfileImage squareSize={150}/>
-                  <Link to={`/user/${userId}`}>
+                  <ProfileImage squareSize={150} profileImage={imageUrl}/>
+                  <StyledTextLink to={`/user/${userId}`}>
                      <h3>{author}</h3>
-                  </Link>
+                  </StyledTextLink>
                   <StyledButton> ❤ 10 Likes</StyledButton>
                </div>
 
@@ -76,7 +75,7 @@ export default function Travelstory() {
          <Container bgImage={whiteAltitudeLines} maxWidth={800}>
             <StyledArticle>
                <p>{article}</p>
-               <StyledLink to={`/travelstories`}>terug</StyledLink>
+               <StyledButton onClick={() => navigate(-1)}>terug</StyledButton>
             </StyledArticle>
          </Container>
 
@@ -94,7 +93,7 @@ export default function Travelstory() {
             </StyledForm>
 
             <StyledComments>
-               <ProfileImage/>
+               <ProfileImage profileImage={imageUrl}/>
                <div className="comment">
                   <div className="comment-profile">
                      <h3>Hans ter Horst </h3>
@@ -137,13 +136,25 @@ const StyledArticleHeader = styled.div`
     flex-direction: column;
     align-items: center;
 
-    h3 {
-      color: ${({theme: {colors}}) => colors.green};
-      font-weight: 700;
-      margin: 1rem 0 2rem;
-      width: 200px;
-      text-align: center;
+    a {
+
+      text-decoration: none;
+      
+      h3 {
+        color: ${({theme: {colors}}) => colors.green};
+        font-weight: 700;
+        margin: 1rem 0 2rem;
+        width: 200px;
+        text-align: center;
+      }
+
+      &:hover {
+        h3 {
+          color: ${({theme: {colors}}) => colors.white};
+        }
+      }
     }
+
   }
 
 `

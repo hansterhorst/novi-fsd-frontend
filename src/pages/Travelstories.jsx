@@ -88,7 +88,7 @@ export default function Travelstories() {
    const {id,imageUrl, country, title, author} = travelstory
 
    return (
-      <Layout navLinks={pageNavLinks.home}>
+      <Layout navLinks={pageNavLinks.user}>
          <Link to={`/travelstory/${id}`}>
             <StyledHeader bgImage={imageUrl}>
                <div>
@@ -100,7 +100,7 @@ export default function Travelstories() {
          </Link>
          <Container bgImage={whiteAltitudeLines} maxWidth={1200}>
             <h1>Travel Stories</h1>
-            {travelstories && travelstories.map((rowsArray, index) => (
+            {travelstories.map((rowsArray, index) => (
                <StyledThreeColumnsGrid key={index} index={index}>
                   {rowsArray.map(travelstory => (
                      <TravelstoryCard key={travelstory.id} travelstory={travelstory}/>
