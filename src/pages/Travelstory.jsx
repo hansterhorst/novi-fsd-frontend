@@ -14,6 +14,7 @@ import {pageNavLinks} from "./pageNavLinks";
 import TextArea from "../components/form-inputs/TextArea";
 import {useForm} from "react-hook-form";
 import StyledTextLink from "../styles/StyledTextLink";
+import StyledLink from "../styles/StyledLink";
 
 
 export default function Travelstory() {
@@ -45,6 +46,7 @@ export default function Travelstory() {
    }, [])
 
    const {title, imageUrl, article, country, tripType, tripDate, author, userId} = travelstory
+   const isAuth = true
 
    return (
       <Layout navLinks={pageNavLinks.user}>
@@ -66,7 +68,11 @@ export default function Travelstory() {
                   <StyledTextLink to={`/user/${userId}`}>
                      <h3>{author}</h3>
                   </StyledTextLink>
-                  <StyledButton> ❤ 10 Likes</StyledButton>
+                  {isAuth ?
+                     <StyledLink to={`/travelstory/edit/${travelstory.id}`}>✏️ Edit</StyledLink>
+                     :
+                     <StyledButton> ❤ 10 Likes</StyledButton>
+                  }
                </div>
 
             </StyledArticleHeader>
@@ -139,7 +145,7 @@ const StyledArticleHeader = styled.div`
     a {
 
       text-decoration: none;
-      
+
       h3 {
         color: ${({theme: {colors}}) => colors.green};
         font-weight: 700;

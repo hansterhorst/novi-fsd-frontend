@@ -6,7 +6,7 @@ const StyledLink = styled(Link)`
   font-weight: bold;
   color: ${({theme: {colors}}) => colors.white};
   text-transform: uppercase;
-  padding: 0.4rem 1.6rem;
+  padding: 0.8rem 1.6rem;
   background-color: ${({theme: {colors}}) => colors.red};
   border: 3px solid ${({theme: {colors}}) => colors.red};
   line-height: 1;
