@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import StyledLabel from "../../styles/StyledLabel";
 
 export default function InputField({
                                       labelTitle,
@@ -16,14 +17,6 @@ export default function InputField({
    )
 
 }
-
-const StyledLabel = styled.label`
-
-  color: ${({theme: {colors}}) => colors.green};
-  font-size: 1.6rem;
-  font-weight: 500;
-
-`
 
 const StyledInput = styled.input`
   padding: 0.8rem 1.6rem;
