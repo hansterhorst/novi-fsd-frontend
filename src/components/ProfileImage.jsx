@@ -1,14 +1,13 @@
 import React from "react";
 import profileImageMask from "../assets/svg/profileImageMask.svg";
-import bgImage from "../assets/images/lage-mountains.png";
 import styled from "styled-components";
 
-export default function ProfileImage({squareSize = 100}) {
+export default function ProfileImage({profileImage, squareSize = 100}) {
 
    return (
       <StyledProfileImage mask={profileImageMask} squareSize={squareSize}>
          <div className="mask">
-            <img src={bgImage} alt="profile"/>
+            <img src={profileImage} alt="profile"/>
          </div>
       </StyledProfileImage>
    )
