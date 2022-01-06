@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Travelstories from "./pages/Travelstories";
 import Travelstory from "./pages/Travelstory";
+import User from "./pages/User";
 
 function App() {
    return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/travelstories" element={<Travelstories/>}/>
             <Route path={"/travelstory/:id"} element={<Travelstory/>}/>
+            <Route path={"/user/:userId"} element={<User/>}/>
          </Routes>
       </StyledThemesProvider>
    );
