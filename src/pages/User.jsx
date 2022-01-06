@@ -76,7 +76,7 @@ export default function User() {
                </div>
                <div className="profile-buttons">
                   <StyledButton onClick={() => console.log("Follow")}>Volg mij</StyledButton>
-                  <StyledLink to={`/user/${user.id}`}>✏️ TravelStory</StyledLink>
+                  <StyledLink to={`/travelstory/new`}>✏️ TravelStory</StyledLink>
                   <StyledLink to={`/user/${user.id}`}>
                      <ProfileImage squareSize={30} profileImage={image && image.imageUrl}/>
                      edit
