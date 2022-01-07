@@ -1,26 +1,24 @@
 import React from "react";
-import Container from "./Container";
 import styled from "styled-components";
 
-export default function HeaderBGImage({children, bgImage}) {
+export default function HeaderBgImage({children, bgImage}) {
 
    return (
-      <StyledHeaderBDImage bgImage={bgImage}>
-         <Container maxWidth={800}>
+      <StyledHeaderBgImage bgImage={bgImage}>
             {children}
-         </Container>
-      </StyledHeaderBDImage>
+      </StyledHeaderBgImage>
    )
 
 }
 
-const StyledHeaderBDImage = styled.header`
+const StyledHeaderBgImage = styled.header`
   background: rgba(0, 0, 0, 0.3) url(${({bgImage}) => bgImage}) no-repeat center;
   background-blend-mode: multiply;
   background-size: cover;
   width: 100%;
   aspect-ratio: 16/9;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items:center;
   justify-content: center;
 `
