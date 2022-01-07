@@ -1,65 +1,93 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
-import HeaderBGImage from "../components/HeaderBGImage";
+import HeaderBgImage from "../components/HeaderBgImage";
 import Feature from "../components/Feature";
 import styled from "styled-components";
 import StyledTextLink from "../styles/StyledTextLink";
-import StyledNavLink from "../styles/StyledNavLink";
 import wordCardImage from "../assets/images/world-card.png"
 import ballonsImage from "../assets/images/balloons.png"
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
+import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import anthemImage from "../assets/images/anthem.png"
 import {pageNavLinks} from "./pageNavLinks";
+import axios from "axios";
+import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
+import Container from "../components/Container";
+import StyledLink from "../styles/StyledLink";
 
+const featureData = [
+   {
+      text: {
+         header: "Alles wat je nodig hebt voor een geweldig verhaal",
+         body: "Schrijf jouw avonturen, deel prachtige foto's en inspireer ander personen."
+      },
+      image: wordCardImage
+   },
+   {
+      text: {
+         header: "Schrijf prachtige reisverhalen",
+         body: "Ga op reis met TravelStories en deel jouw prachtige ervaringen met anderen."
+      },
+      image: ballonsImage
+   }
+]
 
 export default function Home() {
 
-   const featureData = [
-      {
-         text: {
-            header: "Everything you need to create stories",
-            body: "Write your adventures, add beautiful photos and share your stories to inspire others."
-         },
-         image: wordCardImage
-      },
-      {
-         text: {
-            header: "Tell inspiring travel stories",
-            body: "Hit the road with TravelStories, and share your adventures with others."
-         },
-         image: ballonsImage
+   const [apiData, setApiData] = useState([])
+
+   async function getAllPublicTravelstories() {
+      try {
+
+         const response = await axios.get('http://localhost:8080/api/v1/travelstories/public')
+
+         setApiData(response.data)
+
+      } catch (error) {
+         console.log(error.response)
       }
-   ]
+   }
+
+   useEffect(() => {
+      getAllPublicTravelstories()
+   }, [])
+
 
    return (
       <Layout navLinks={pageNavLinks.home}>
-         <HeaderBGImage bgImage={anthemImage}>
-            <StyledHome>
-               <h1>Create stories about your trips and share those with you friends</h1>
-               <div className="buttons">
-                  <StyledNavLink to="/register">Register</StyledNavLink>
-                  <StyledTextLink to="/login">or LOGIN</StyledTextLink>
-               </div>
-            </StyledHome>
-         </HeaderBGImage>
-         <Feature data={featureData[0]}/>
-         <Feature data={featureData[1]} flexDirection="row-reverse" bgImage={greenAltitudeLines}/>
+         <StyledHome>
+            <HeaderBgImage bgImage={anthemImage}>
+               <Container>
+                  <h2>Schrijf verhalen over jouw reizen en deel ze met andere personen</h2>
+                  <div className="buttons">
+                     <StyledLink to="/register">Register</StyledLink>
+                     <StyledTextLink to="/login">or LOGIN</StyledTextLink>
+                  </div>
+               </Container>
+            </HeaderBgImage>
+         </StyledHome>
+         <Container bgImage={whiteAltitudeLines}>
+            <Feature data={featureData[0]}/>
+         </Container>
+         <Container bgImage={greenAltitudeLines}>
+            <Feature data={featureData[1]} flexDirection="row-reverse"/>
+         </Container>
+         <Container bgImage={whiteAltitudeLines}>
+            <TravelstoriesGrid dataArray={apiData} title="De laatste TravelStories"/>
+         </Container>
       </Layout>
    )
 }
 
 const StyledHome = styled.div`
   text-align: center;
+  display: flex;
 
-
-  h1 {
-    font-size: 5rem;
-    line-height: 1;
-    margin: 10rem 0 2rem;
-  }
 
   h2 {
-    margin: 0 0 4rem;
+    font-size: 5rem;
+    line-height: 1;
+    padding: 10rem 0 2rem;
   }
 
   .buttons {
@@ -67,16 +95,6 @@ const StyledHome = styled.div`
     flex-direction: column;
     margin: 2rem 0;
     row-gap: 1rem;
-
-    // overwrite StyledNavLink
-    a:first-child {
-      background-color: ${({theme: {colors}}) => colors.red};
-
-      &:hover {
-        color: ${({theme: {colors}}) => colors.red};
-        background-color: ${({theme: {colors}}) => colors.white};
-      }
-    }
   }
 `
 
