@@ -5,6 +5,10 @@ export const pageNavLinks = {
          url: "/"
       },
       {
+         title: "Travelstories",
+         url: "/travelstories"
+      },
+      {
          title: "Register",
          url: "/register"
       },
@@ -14,6 +18,10 @@ export const pageNavLinks = {
       },
    ],
    user: [
+      {
+         title: "Home",
+         url: "/"
+      },
       {
          title: "Travelstories",
          url: "/travelstories"
