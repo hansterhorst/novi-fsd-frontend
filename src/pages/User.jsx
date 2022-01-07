@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
-import HeaderBGImage from "../components/HeaderBGImage";
+import HeaderBgImage from "../components/HeaderBgImage";
 import altitudeLines from '../assets/images/white-altitude-lines.png'
 import grayAltitudeLines from '../assets/images/gray-altitude-lines.png'
 import styled from "styled-components";
 import StyledButton from "../styles/StyledButton";
 import axios from "axios";
-import TravelstoryCard from "../components/TravelstoryCard";
 import Container from "../components/Container";
 import ProfileImage from "../components/ProfileImage";
 import {useParams} from "react-router-dom";
 import {pageNavLinks} from "./pageNavLinks";
-import randomArrayIndexNumber from "../utils/randomArrayIndexNumber";
 import StyledLink from "../styles/StyledLink";
+import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 
 
 export default function User() {
 
    const [user, setUser] = useState({})
+   const [travelstories, setTravelstories] = useState([])
+   const [travelstory, setTravelstory] = useState({})
+
    let {userId} = useParams()
 
 
@@ -25,34 +27,67 @@ export default function User() {
 
       try {
          const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}`);
+
          setUser(response.data)
+         setTravelstories(response.data.travelstories)
+         randomTravelstory(response.data.travelstories)
 
       } catch (error) {
          console.error(error);
       }
    }
 
+
+   /*
+   * USE_EFFECTS
+   * */
+
    useEffect(() => {
       getTravelstories()
       // eslint-disable-next-line
    }, [])
 
-   const {firstname, lastname, travelstories} = user
 
-   const image = travelstories && travelstories[randomArrayIndexNumber(travelstories)]
+   useEffect(() => {
+      const interval = setInterval(() => {
+         randomTravelstory(travelstories)
+      }, 5000);
+      return () => clearInterval(interval)
+      // eslint-disable-next-line
+   }, [travelstory])
+
+
+   /*
+   * METHODES
+   * */
+
+   function randomTravelstory(array) {
+      const index = Math.floor(Math.random() * array.length)
+      setTravelstory(array[index])
+   }
+
+   const {imageUrl} = travelstory
+
+   const {firstname, lastname} = user
+
 
    return (
       <Layout navLinks={pageNavLinks.user}>
          <StyledUser>
-            <HeaderBGImage bgImage={image && image.imageUrl}/>
+
+            <HeaderBgImage bgImage={imageUrl}/>
+
             <Container maxWidth={750} bgImage={grayAltitudeLines}>
+
                <div className="profile-container">
                   <div className="profile-image">
                      <ProfileImage squareSize={150}
-                                   profileImage={image && image.imageUrl}/>
+                                   profileImage={imageUrl}/>
                   </div>
                </div>
+
                <div className="profile-bio">
+
                   <h2>{`${firstname} ${lastname}`}</h2>
                   <h3>Delden • Nederland</h3>
                   <p>I’m originally from sleepy Suffolk in the UK. I’m a crazy dreamer and with an
@@ -60,6 +95,7 @@ export default function User() {
                      ordinary
                      life or conform with the norm.</p>
                </div>
+
                <div className="details">
                   <label>Travelstories
                      <h3>10</h3>
@@ -74,24 +110,23 @@ export default function User() {
                      <h3>10</h3>
                   </label>
                </div>
+
                <div className="profile-buttons">
+
                   <StyledButton onClick={() => console.log("Follow")}>Volg mij</StyledButton>
                   <StyledLink to={`/travelstory/new`}>✏️ TravelStory</StyledLink>
                   <StyledLink to={`/user/${user.id}`}>
-                     <ProfileImage squareSize={30} profileImage={image && image.imageUrl}/>
+                     <ProfileImage squareSize={30} profileImage={imageUrl}/>
                      edit
                   </StyledLink>
                </div>
 
             </Container>
+
             <Container bgImage={altitudeLines} maxWidth={1000}>
-               <h1>Mijn TravelStories</h1>
-               <StyledGrid>
-                  {travelstories && travelstories.map((story) => (
-                     <TravelstoryCard key={story.id} travelstory={story}/>
-                  ))}
-               </StyledGrid>
+               <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories}/>
             </Container>
+
          </StyledUser>
       </Layout>
    )
@@ -124,7 +159,7 @@ const StyledUser = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    
+
     h2 {
       color: ${({theme: {colors}}) => colors.red};
     }
@@ -144,7 +179,7 @@ const StyledUser = styled.div`
     display: flex;
     justify-content: center;
     column-gap: 2rem;
-    padding: 4rem 0 ;
+    padding: 4rem 0;
   }
 
   .details {
@@ -159,10 +194,4 @@ const StyledUser = styled.div`
       margin: 1rem 0 1rem;
     }
   }
-`
-
-const StyledGrid = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding-bottom: 7rem;
 `
