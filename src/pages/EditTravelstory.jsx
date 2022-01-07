@@ -4,23 +4,18 @@ import styled from "styled-components";
 import Container from "../components/Container";
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
-import StyledButton from "../styles/StyledButton";
 import {pageNavLinks} from "./pageNavLinks";
-import InputField from "../components/form-inputs/InputField";
 import {useForm} from "react-hook-form";
-import TextArea from "../components/form-inputs/TextArea";
-import InputCheckbox from "../components/form-inputs/InputCheckbox";
-import InputOption from "../components/form-inputs/InputOption";
-import StyledLabel from "../styles/StyledLabel";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import StyledTextButton from "../styles/StyledTextButton";
+import CreateEditForm from "../components/form-inputs/CreateEditForm";
 
 
 export default function EditTravelstory() {
 
    let {id} = useParams()
-   const [fetchDate, setFetchData] = useState({})
+   const [apiData, setApiData] = useState({})
 
    const {register, handleSubmit, reset} = useForm()
 
@@ -34,7 +29,7 @@ export default function EditTravelstory() {
             tripDate: covertDateToInputDate(response.data.tripDate),
          }
 
-         setFetchData(data)
+         setApiData(data)
 
       } catch (error) {
          console.error(error);
@@ -49,9 +44,9 @@ export default function EditTravelstory() {
 
    //   reset form with the data from the database
    useEffect(() => {
-      reset(fetchDate)
+      reset(apiData)
       // eslint-disable-next-line
-   }, [fetchDate])
+   }, [apiData])
 
 
    function onSubmit(data) {
@@ -73,41 +68,16 @@ export default function EditTravelstory() {
                <h1>Verander jouw TravelStory voor een nog betere reiservaring</h1>
             </Container>
             <Container maxWidth={900} bgImage={greenAltitudeLines}>
-               <StyledForm onSubmit={handleSubmit(onSubmit)}>
-                  <p>Gebruik het formulier hieronder om jouw reisverhaal te verbeteren. Ga na de
-                     inputveld om daar jouw wijzigingen door te voeren.</p>
+               <p>Gebruik het formulier hieronder om jouw reisverhaal te verbeteren. Ga na de
+                  inputveld om daar jouw wijzigingen door te voeren.</p>
 
-                  <InputField labelTitle="* Titel Reisverhaal" name="title" register={register}/>
+               <CreateEditForm onSubmit={handleSubmit(onSubmit)} register={register}
+                               submitButtonTitle="Update Travelstory"/>
 
-                  <InputField labelTitle="* Welk land" name="country" register={register}/>
-
-                  <div className="input-container">
-                     <InputField labelTitle="* Datum Reis" type="date" name="tripDate"
-                                 register={register}/>
-
-                     <InputOption labelTitle="* Wat voor trip was het??" name="tripType"
-                                  checked={true} register={register}
-                                  placeholder="-- Kies een reis type --"
-                                  options={["Bikepacking", "Roadtrip", "Stedentrip", "Vakantie", "Weekend"]}/>
-                  </div>
-
-                  <InputField labelTitle="* Image link" name="imageUrl" register={register}/>
-
-                  <InputCheckbox labelTitle="Mag iedereen uw reisverhaal lezen?" name="isPrivate"
-                                 checked={true} register={register}/>
-
-                  <TextArea labelTitle="* Reisverhaal" name="article" register={register}
-                            height={400}/>
-
-                  <div className="form-footer">
-                     <StyledLabel>* Verplichte velden</StyledLabel>
-                     <div className="form-buttons">
-                        <StyledButton type="onsubmit">Update TravelStory</StyledButton>
-                        <StyledTextButton type="button" onClick={() => console.log("Verwijder")}>of
-                           Verwijder</StyledTextButton>
-                     </div>
-                  </div>
-               </StyledForm>
+               <div className="delete-button">
+                  <StyledTextButton type="button" onClick={() => console.log("Verwijder")}>
+                     of Verwijder</StyledTextButton>
+               </div>
             </Container>
          </StyledCreateTravelstory>
       </Layout>
@@ -123,39 +93,18 @@ const StyledCreateTravelstory = styled.div`
     text-align: center;
   }
 
-`
-
-const StyledForm = styled.form`
-
-  padding: 5rem 0;
-
   p {
-    margin-bottom: 3rem;
+    padding-top: 5rem;
   }
 
-  label {
-    color: ${({theme: {colors}}) => colors.white};
-  }
+  .delete-button {
+    text-align: end;
+    padding-bottom: 5rem;
 
-  .input-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-
-  .form-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-
-    .form-buttons {
-      display: flex;
-      flex-direction: column;
-      align-items: end;
-      row-gap: 1rem;
+    button {
+      padding: 1rem 0 1rem;
+      cursor: pointer;
     }
   }
-
+  
 `
-
