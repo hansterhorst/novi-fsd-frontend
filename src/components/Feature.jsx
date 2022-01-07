@@ -1,32 +1,22 @@
 import React from "react";
-import Container from "./Container";
 import styled from "styled-components";
-import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 
-export default function Feature({
-                                   data: {text, image},
-                                   bgImage = whiteAltitudeLines,
-                                   flexDirection
-                                }) {
-
+export default function Feature({data: {text, image}, flexDirection}) {
    return (
-      <Container bgImage={bgImage}>
-         <StyledFeature flexDirection={flexDirection}>
-            <div className="text-side">
-               <h2>{text.header}</h2>
-               <p>{text.body}</p>
-            </div>
-            <div className="image-side">
-               <img src={image} alt="map of the world"/>
-            </div>
-         </StyledFeature>
-      </Container>
+      <StyledFeature flexDirection={flexDirection}>
+         <div className="text-side">
+            <h2>{text.header}</h2>
+            <p>{text.body}</p>
+         </div>
+         <div className="image-side">
+            <img src={image} alt="map of the world"/>
+         </div>
+      </StyledFeature>
    )
 }
 
 const StyledFeature = styled.article`
 
-  max-width: ${({theme}) => theme.settings.maxWidth};
   display: flex;
   align-items: center;
   flex-direction: ${({flexDirection}) => flexDirection};
