@@ -26,5 +26,9 @@ export const pageNavLinks = {
          title: "Travelstories",
          url: "/travelstories"
       },
+      {
+         title: "Admin",
+         url: "/admin"
+      },
    ],
 }

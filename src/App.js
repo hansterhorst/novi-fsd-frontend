@@ -11,6 +11,7 @@ import Travelstory from "./pages/Travelstory";
 import User from "./pages/User";
 import CreateTravelstory from "./pages/CreateTravelstory";
 import EditTravelstory from "./pages/EditTravelstory";
+import Admin from "./pages/Admin";
 
 function App() {
    return (
@@ -26,6 +27,8 @@ function App() {
             <Route path="/travelstory/:id" element={<Travelstory/>}/>
             <Route path="/travelstory/edit/:id" element={<EditTravelstory/>}/>
             <Route path="/user/:userId" element={<User/>}/>
+            <Route path="/admin" element={<Admin/>}/>
+            <Route path="/admin/travelstory/:id" element={<EditTravelstory/>}/>
          </Routes>
       </StyledThemesProvider>
    );
