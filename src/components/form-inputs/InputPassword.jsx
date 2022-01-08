@@ -13,7 +13,7 @@ export default function InputPassword({
 
    return (
       <StyledPasswordLabel>{labelTitle}
-         <button onClick={() => setShow(!show)}>{show ? "hide" : "show"}</button>
+         <button type="button" onClick={() => setShow(!show)}>{show ? "hide" : "show"}</button>
          <StyledInput type={show ? "text" : "password"} {...register(`${name}`)}
                       required={required}/>
       </StyledPasswordLabel>

@@ -6,6 +6,7 @@ import {pageNavLinks} from "./pageNavLinks";
 import {useForm} from "react-hook-form";
 import InputField from "../components/form-inputs/InputField";
 import LoginRegisterForm from "../components/form-inputs/LoginRegisterForm";
+import InputPassword from "../components/form-inputs/InputPassword";
 
 export default function Register() {
 
@@ -30,10 +31,10 @@ export default function Register() {
                <InputField labelTitle="* E-mailadres" name="email" type="email"
                            register={register}/>
 
-               <InputField labelTitle="* Wachtwoord" name="password" type="password"
+               <InputPassword labelTitle="* Wachtwoord" name="password" type="password"
                            register={register}/>
 
-               <InputField labelTitle="* Bevestig wachtwoord" name="password2" type="password"
+               <InputPassword labelTitle="* Bevestig wachtwoord" name="password2" type="password"
                            register={register}/>
 
             </LoginRegisterForm>

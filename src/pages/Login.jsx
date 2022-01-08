@@ -6,6 +6,7 @@ import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import InputField from "../components/form-inputs/InputField";
 import {useForm} from "react-hook-form";
 import LoginRegisterForm from "../components/form-inputs/LoginRegisterForm";
+import InputPassword from "../components/form-inputs/InputPassword";
 
 
 export default function Login() {
@@ -26,7 +27,7 @@ export default function Login() {
 
                <InputField labelTitle="* Email" type="email" name="email" register={register}/>
 
-               <InputField labelTitle="* Wachtwoord" type="password" name="password"
+               <InputPassword labelTitle="* Wachtwoord" type="password" name="password"
                            register={register}/>
 
             </LoginRegisterForm>
