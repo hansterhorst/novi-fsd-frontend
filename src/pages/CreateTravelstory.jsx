@@ -7,17 +7,35 @@ import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import {pageNavLinks} from "./pageNavLinks";
 import {useForm} from "react-hook-form";
 import CreateEditForm from "../components/form-inputs/CreateEditForm";
+import axios from "axios";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 export default function CreateTravelstory() {
 
+   const navigate = useNavigate()
+   const {userId} = useParams()
+
    const {register, handleSubmit} = useForm({
       defaultValues: {
-         isPrivate: true
+         isPublic: true
       }
    })
 
-   function onSubmit(data) {
+   async function createTravelstory(data) {
+
+      try {
+
+         const response = await axios.post(`http://localhost:8080/api/v1/travelstories/${userId}`, data)
+         console.log(response)
+
+         const storyId = response.data.id
+         if (response.status === 201) return navigate(`/travelstory/${storyId}`)
+
+      } catch (error) {
+         console.log(error.response)
+      }
+
       console.log(data)
    }
 
@@ -39,7 +57,7 @@ export default function CreateTravelstory() {
                   foto’s
                   over deze trip.</p>
 
-               <CreateEditForm onSubmit={handleSubmit(onSubmit)} register={register}
+               <CreateEditForm onSubmit={handleSubmit(createTravelstory)} register={register}
                                submitButtonTitle="Verstuur Travelstory"/>
 
                <div className="padding"/>
@@ -50,7 +68,7 @@ export default function CreateTravelstory() {
 }
 
 const StyledCreateTravelstory = styled.div`
-  
+
   h1 {
     padding: 25rem 0 5rem;
     text-transform: uppercase;

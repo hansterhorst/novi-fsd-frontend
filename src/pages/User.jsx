@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
-import altitudeLines from '../assets/images/white-altitude-lines.png'
 import grayAltitudeLines from '../assets/images/gray-altitude-lines.png'
+import whiteAltitudeLines from '../assets/images/white-altitude-lines.png'
 import styled from "styled-components";
 import StyledButton from "../styles/StyledButton";
 import axios from "axios";
@@ -114,7 +114,7 @@ export default function User() {
                <div className="profile-buttons">
 
                   <StyledButton onClick={() => console.log("Follow")}>Volg mij</StyledButton>
-                  <StyledLink to={`/travelstory/new`}>✏️ TravelStory</StyledLink>
+                  <StyledLink to={`/travelstory/new/${userId}`}>✏️ TravelStory</StyledLink>
                   <StyledLink to={`/user/${user.id}`}>
                      <ProfileImage squareSize={30} profileImage={imageUrl}/>
                      edit
@@ -123,9 +123,7 @@ export default function User() {
 
             </Container>
 
-            <Container bgImage={altitudeLines} maxWidth={1000}>
-               <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories}/>
-            </Container>
+               <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories} maxWidth={1000} bgImage={whiteAltitudeLines}/>
 
          </StyledUser>
       </Layout>
