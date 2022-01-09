@@ -56,6 +56,7 @@ export default function Home() {
    return (
       <Layout navLinks={pageNavLinks.home}>
          <StyledHome>
+
             <HeaderBgImage bgImage={anthemImage}>
                <Container>
                   <h2>Schrijf verhalen over jouw reizen en deel ze met andere personen</h2>
@@ -65,16 +66,19 @@ export default function Home() {
                   </div>
                </Container>
             </HeaderBgImage>
+
          </StyledHome>
+
          <Container bgImage={whiteAltitudeLines}>
             <Feature data={featureData[0]}/>
          </Container>
+
          <Container bgImage={greenAltitudeLines}>
             <Feature data={featureData[1]} flexDirection="row-reverse"/>
          </Container>
-         <Container bgImage={whiteAltitudeLines}>
-            <TravelstoriesGrid dataArray={apiData} title="De laatste TravelStories"/>
-         </Container>
+
+         <TravelstoriesGrid dataArray={apiData} title="De laatste TravelStories" maxWidth={1000}
+                            bgImage={whiteAltitudeLines}/>
       </Layout>
    )
 }
