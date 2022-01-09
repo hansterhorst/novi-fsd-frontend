@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
-export default function TravelstoryCard({travelstory}) {
+export default function TravelstoryCard({travelstory, maxWidth}) {
 
    const {title, country, author, imageUrl, article, id} = travelstory
 
    return (
-      <StyledTravelstoryCard bgImage={imageUrl}>
+      <StyledTravelstoryCard bgImage={imageUrl} maxWidth={maxWidth}>
          <Link to={`/travelstory/${id}`}>
             <div className="header">
                <h3>{country}</h3>
@@ -27,7 +27,7 @@ const StyledTravelstoryCard = styled.div`
   background: rgba(0, 0, 0, 0.4) url(${({bgImage}) => bgImage}) no-repeat center;
   background-blend-mode: multiply;
   background-size: cover;
-  height: calc((${({theme: {settings}}) => settings.maxWidth} / 2) / 4 * 3);
+  height: calc((${({maxWidth}) => maxWidth+"px"} / 2) / 4 * 3);
   position: relative;
   margin: 0.5rem;
   text-align: center;
