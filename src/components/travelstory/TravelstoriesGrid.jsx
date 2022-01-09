@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import TravelstoryCard from "../TravelstoryCard";
+import TravelstoryCard from "./TravelstoryCard";
 import styled from "styled-components";
 
 
