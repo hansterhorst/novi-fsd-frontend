@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Layout from "../components/layout/Layout";
@@ -7,13 +7,13 @@ import Container from "../components/Container";
 import dateToLocalString from "../utils/dateToLocalString";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
+import grayAltitudeLines from "../assets/images/gray-altitude-lines.png"
 import StyledButton from "../styles/StyledButton";
 import ProfileImage from "../components/ProfileImage";
 import StyledHeader from "../styles/StyledHeader";
 import {pageNavLinks} from "./pageNavLinks";
 import TextArea from "../components/form-inputs/TextArea";
 import {useForm} from "react-hook-form";
-import StyledTextLink from "../styles/StyledTextLink";
 import StyledLink from "../styles/StyledLink";
 
 
@@ -53,7 +53,7 @@ export default function Travelstory() {
 
          <StyledHeader bgImage={imageUrl}/>
 
-         <Container bgColor={({theme}) => theme.colors.darkGray}>
+         <Container bgImage={grayAltitudeLines}>
             <StyledArticleHeader>
 
                <div className="article-header-titles">
@@ -64,14 +64,16 @@ export default function Travelstory() {
                </div>
 
                <div className="article-header-profile">
-                  <ProfileImage squareSize={150} profileImage={imageUrl}/>
-                  <StyledTextLink to={`/user/${userId}`}>
+                  <Link to={`/user/${userId}`}>
+                     <ProfileImage squareSize={150} profileImage={imageUrl}/>
                      <h3>{author}</h3>
-                  </StyledTextLink>
+                  </Link>
                   {isAuth ?
-                     <StyledLink to={`/travelstory/edit/${travelstory.id}`}>✏️ Edit</StyledLink>
+                     <StyledButton onClick={() => console.log("Like Story")}>Like
+                        Story</StyledButton>
                      :
-                     <StyledButton> ❤ 10 Likes</StyledButton>
+                     <StyledButton onClick={() => console.log("Like Story")}> ❤ 10
+                        Likes</StyledButton>
                   }
                </div>
 
@@ -81,7 +83,10 @@ export default function Travelstory() {
          <Container bgImage={whiteAltitudeLines} maxWidth={800}>
             <StyledArticle>
                <p>{article}</p>
-               <StyledButton onClick={() => navigate(-1)}>terug</StyledButton>
+               <div className="buttons">
+                  <StyledButton onClick={() => navigate(-1)}>terug</StyledButton>
+                  <StyledLink to={`/travelstory/edit/${travelstory.id}`}>✏️ Edit</StyledLink>
+               </div>
             </StyledArticle>
          </Container>
 
@@ -138,12 +143,12 @@ const StyledArticleHeader = styled.div`
     position: absolute;
     top: -70px;
     right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    text-align: center;
 
     a {
-
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-decoration: none;
 
       h3 {
@@ -155,8 +160,10 @@ const StyledArticleHeader = styled.div`
       }
 
       &:hover {
+
         h3 {
-          color: ${({theme: {colors}}) => colors.white};
+          text-decoration: underline;
+          color: ${({theme: {colors}}) => colors.lightGray};
         }
       }
     }
@@ -171,6 +178,11 @@ const StyledArticle = styled.article`
   p {
     white-space: pre-wrap;
     margin-bottom: 2rem;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
   }
 `
 
