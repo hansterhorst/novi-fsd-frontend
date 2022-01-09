@@ -31,4 +31,14 @@ export const pageNavLinks = {
          url: "/admin"
       },
    ],
+   admin: [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/travelstories"
+      }
+   ],
 }

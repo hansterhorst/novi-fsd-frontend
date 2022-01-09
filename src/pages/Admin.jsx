@@ -9,6 +9,7 @@ import StyledButton from "../styles/StyledButton";
 import StyledLink from "../styles/StyledLink";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import InputPassword from "../components/form-inputs/InputPassword";
+import {pageNavLinks} from "./pageNavLinks";
 
 export default function Admin() {
 
@@ -76,7 +77,7 @@ export default function Admin() {
 
 
    return (
-      <Layout>
+      <Layout navLinks={pageNavLinks.admin}>
          <Container bgImage={whiteAltitudeLines}>
             <StyledAdmin>
                <h1>Admin</h1>
