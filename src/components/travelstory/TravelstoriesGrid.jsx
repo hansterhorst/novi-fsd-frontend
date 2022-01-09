@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import TravelstoryCard from "./TravelstoryCard";
 import styled from "styled-components";
+import Container from "../Container";
 
 
-export default function TravelstoriesGrid({dataArray, title}) {
+export default function TravelstoriesGrid({dataArray, title, maxWidth, bgImage}) {
 
    const [travelstories, setTravelstories] = useState([])
 
@@ -29,16 +30,18 @@ export default function TravelstoriesGrid({dataArray, title}) {
    }, [dataArray])
 
    return (
-      <StyledTravelstoriesGrid>
-         <h1>{title}</h1>
-         {travelstories.map((rowsArray, index) => (
-            <StyledThreeColumnsGrid key={index} index={index}>
-               {rowsArray.map(travelstory => (
-                  <TravelstoryCard key={travelstory.id} travelstory={travelstory}/>
-               ))}
-            </StyledThreeColumnsGrid>
-         ))}
-      </StyledTravelstoriesGrid>
+      <Container maxWidth={maxWidth} bgImage={bgImage}>
+         <StyledTravelstoriesGrid>
+            <h1>{title}</h1>
+            {travelstories.map((rowsArray, index) => (
+               <StyledThreeColumnsGrid key={index} index={index}>
+                  {rowsArray.map(travelstory => (
+                     <TravelstoryCard key={travelstory.id} travelstory={travelstory} maxWidth={maxWidth}/>
+                  ))}
+               </StyledThreeColumnsGrid>
+            ))}
+         </StyledTravelstoriesGrid>
+      </Container>
    )
 }
 
