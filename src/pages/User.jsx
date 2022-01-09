@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
-import HeaderBgImage from "../components/HeaderBgImage";
 import altitudeLines from '../assets/images/white-altitude-lines.png'
 import grayAltitudeLines from '../assets/images/gray-altitude-lines.png'
 import styled from "styled-components";
@@ -12,6 +11,7 @@ import {useParams} from "react-router-dom";
 import {pageNavLinks} from "./pageNavLinks";
 import StyledLink from "../styles/StyledLink";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
+import StyledHeader from "../styles/StyledHeader";
 
 
 export default function User() {
@@ -75,7 +75,7 @@ export default function User() {
       <Layout navLinks={pageNavLinks.user}>
          <StyledUser>
 
-            <HeaderBgImage bgImage={imageUrl}/>
+            <StyledHeader bgImage={imageUrl}/>
 
             <Container maxWidth={750} bgImage={grayAltitudeLines}>
 
@@ -134,12 +134,6 @@ export default function User() {
 
 
 const StyledUser = styled.div`
-
-  h1 {
-    color: ${({theme: {colors}}) => colors.red};
-    text-align: center;
-    padding: 7rem 0 3rem;
-  }
 
   .profile-container {
     position: relative;
