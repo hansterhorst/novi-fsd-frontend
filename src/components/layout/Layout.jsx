@@ -16,9 +16,7 @@ export default function Layout({children, navLinks}) {
 }
 
 const StyledLayout = styled.div`
-
-  width: 100vw;
-
+  
   main {
     height: 100%;
   }
