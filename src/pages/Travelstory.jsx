@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -15,9 +15,12 @@ import {pageNavLinks} from "./pageNavLinks";
 import TextArea from "../components/form-inputs/TextArea";
 import {useForm} from "react-hook-form";
 import StyledLink from "../styles/StyledLink";
+import {AuthContext} from "../context/auth/AuthContext";
 
 
 export default function Travelstory() {
+
+   const {authUser} = useContext(AuthContext)
 
    const [travelstory, setTravelstory] = useState([])
    const {id} = useParams()
@@ -45,10 +48,21 @@ export default function Travelstory() {
       // eslint-disable-next-line
    }, [])
 
-   const {title, imageUrl, article, country, tripType, tripDate, author, userId} = travelstory
-   const isAuth = true
+   const {
+      title,
+      imageUrl,
+      article,
+      country,
+      tripType,
+      tripDate,
+      author,
+      userId,
+   } = travelstory
+
+   const {isAuth} = authUser
 
    return (
+
       <Layout navLinks={pageNavLinks.user}>
 
          <StyledHeader bgImage={imageUrl}/>
@@ -64,17 +78,30 @@ export default function Travelstory() {
                </div>
 
                <div className="article-header-profile">
-                  <Link to={`/user/${userId}`}>
-                     <ProfileImage squareSize={150} profileImage={imageUrl}/>
-                     <h3>{author}</h3>
-                  </Link>
+
                   {isAuth ?
+                     <div className="user-link">
+                        <Link to={`/user/${userId}`}>
+                           <ProfileImage squareSize={150} profileImage={imageUrl}/>
+                           <h3>{author}</h3>
+                        </Link>
+                     </div>
+                     :
+                     <div className="user-link">
+                        <ProfileImage squareSize={150} profileImage={imageUrl}/>
+                        <h3>{author}</h3>
+                     </div>
+                  }
+
+                  {/* if user is login and user is not the owner */}
+                  {isAuth && (travelstory.userId !== authUser.userId) ?
                      <StyledButton onClick={() => console.log("Like Story")}>Like
                         Story</StyledButton>
                      :
                      <StyledButton onClick={() => console.log("Like Story")}> ❤ 10
                         Likes</StyledButton>
                   }
+
                </div>
 
             </StyledArticleHeader>
@@ -84,39 +111,53 @@ export default function Travelstory() {
             <StyledArticle>
                <p>{article}</p>
                <div className="buttons">
+
                   <StyledButton onClick={() => navigate(-1)}>terug</StyledButton>
-                  <StyledLink to={`/travelstory/edit/${travelstory.id}`}>✏️ Edit</StyledLink>
+
+                  {/* user is login and user is the owner */}
+                  {(isAuth && (authUser.userId === travelstory.userId)) &&
+                     <StyledLink to={`/travelstory/edit/${travelstory.id}`}>✏️
+                        Edit</StyledLink>
+                  }
+
                </div>
             </StyledArticle>
          </Container>
 
-         <Container bgImage={greenAltitudeLines} maxWidth={800}>
+         {isAuth &&
+            <Container bgImage={greenAltitudeLines} maxWidth={800}>
 
-            <StyledForm onSubmit={handleSubmit(onSubmit)}>
-               <h3>Houd uw reactie beschaafd, constructief en inclusief, anders wordt uw reactie
-                  verwijderd.</h3>
+               <StyledForm onSubmit={handleSubmit(onSubmit)}>
+                  <h3>Houd uw reactie beschaafd, constructief en inclusief, anders wordt uw
+                     reactie
+                     verwijderd.</h3>
 
-               <TextArea labelTitle="Reactie" name="comment" register={register} height={100}/>
+                  <TextArea labelTitle="Reactie" name="comment" register={register}
+                            height={100}/>
 
-               <div className="form-footer">
-                  <StyledButton type="onsubmit">Verstuur reactie</StyledButton>
-               </div>
-            </StyledForm>
-
-            <StyledComments>
-               <ProfileImage profileImage={imageUrl}/>
-               <div className="comment">
-                  <div className="comment-profile">
-                     <h3>Hans ter Horst </h3>
-                     <h2>•</h2>
-                     <p>12 december 2021</p>
+                  <div className="form-footer">
+                     <StyledButton type="onsubmit">Verstuur reactie</StyledButton>
                   </div>
-                  <p>Het was vandaag een verrassende mooie dag. Normaal hou ik helemaal niet van
-                     asfalt fietsen maar heb vandaag toch wel genoten. Morgen het IJsselmeer
-                     over</p>
-               </div>
-            </StyledComments>
-         </Container>
+               </StyledForm>
+
+               <StyledComments>
+                  <ProfileImage profileImage={imageUrl}/>
+                  <div className="comment">
+                     <div className="comment-profile">
+                        <h3>Hans ter Horst </h3>
+                        <h2>•</h2>
+                        <p>12 december 2021</p>
+                     </div>
+                     <p>Het was vandaag een verrassende mooie dag. Normaal hou ik helemaal
+                        niet
+                        van
+                        asfalt fietsen maar heb vandaag toch wel genoten. Morgen het
+                        IJsselmeer
+                        over</p>
+                  </div>
+               </StyledComments>
+
+            </Container>}
       </Layout>
    )
 }
@@ -145,7 +186,7 @@ const StyledArticleHeader = styled.div`
     right: 0;
     text-align: center;
 
-    a {
+    .user-link, a {
       display: flex;
       flex-direction: column;
       align-items: center;

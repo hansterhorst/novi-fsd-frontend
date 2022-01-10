@@ -1,14 +1,18 @@
-import React from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import {AuthContext} from "../../context/auth/AuthContext";
 
 export default function TravelstoryCard({travelstory, maxWidth}) {
+
+   const {authUser} = useContext(AuthContext)
 
    const {title, country, author, imageUrl, article, id} = travelstory
 
    return (
       <StyledTravelstoryCard bgImage={imageUrl} maxWidth={maxWidth}>
-         <Link to={`/travelstory/${id}`}>
+         {/* route validation for public users */}
+         <Link to={authUser.isAuth ? `/travelstory/${id}` : `/public/travelstory/${id}`}>
             <div className="header">
                <h3>{country}</h3>
                <h2>{title}</h2>
@@ -27,7 +31,7 @@ const StyledTravelstoryCard = styled.div`
   background: rgba(0, 0, 0, 0.4) url(${({bgImage}) => bgImage}) no-repeat center;
   background-blend-mode: multiply;
   background-size: cover;
-  height: calc((${({maxWidth}) => maxWidth+"px"} / 2) / 4 * 3);
+  height: calc((${({maxWidth}) => maxWidth + "px"} / 2) / 4 * 3);
   position: relative;
   margin: 0.5rem;
   text-align: center;
