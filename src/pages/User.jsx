@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
 import grayAltitudeLines from '../assets/images/gray-altitude-lines.png'
 import whiteAltitudeLines from '../assets/images/white-altitude-lines.png'
@@ -12,9 +12,12 @@ import {pageNavLinks} from "./pageNavLinks";
 import StyledLink from "../styles/StyledLink";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import StyledHeader from "../styles/StyledHeader";
+import {AuthContext} from "../context/auth/AuthContext";
 
 
 export default function User() {
+
+   const {authUser} = useContext(AuthContext)
 
    const [user, setUser] = useState({})
    const [travelstories, setTravelstories] = useState([])
@@ -31,6 +34,8 @@ export default function User() {
          setUser(response.data)
          setTravelstories(response.data.travelstories)
          randomTravelstory(response.data.travelstories)
+
+         loadUser(response.data, authUser)
 
       } catch (error) {
          console.error(error);
@@ -49,6 +54,12 @@ export default function User() {
 
 
    useEffect(() => {
+      loadUser(user, authUser)
+      // eslint-disable-next-line
+   }, [user])
+
+
+   useEffect(() => {
       const interval = setInterval(() => {
          randomTravelstory(travelstories)
       }, 5000);
@@ -61,6 +72,12 @@ export default function User() {
    * METHODES
    * */
 
+   function loadUser(user, authUser) {
+      if (user.email === authUser.email) {
+         setUser({...authUser, isUser: true})
+      }
+   }
+
    function randomTravelstory(array) {
       const index = Math.floor(Math.random() * array.length)
       setTravelstory(array[index])
@@ -70,6 +87,7 @@ export default function User() {
 
    const {firstname, lastname} = user
 
+   const profileImage = user.profileImage ? user.profileImage : `https://robohash.org/${user.firstname}`
 
    return (
       <Layout navLinks={pageNavLinks.user}>
@@ -82,7 +100,7 @@ export default function User() {
                <div className="profile-container">
                   <div className="profile-image">
                      <ProfileImage squareSize={150}
-                                   profileImage={imageUrl}/>
+                                   profileImage={profileImage}/>
                   </div>
                </div>
 
@@ -90,6 +108,7 @@ export default function User() {
 
                   <h2>{`${firstname} ${lastname}`}</h2>
                   <h3>Delden • Nederland</h3>
+                  <p>{user.bio}</p>
                   <p>I’m originally from sleepy Suffolk in the UK. I’m a crazy dreamer and with an
                      insatiable desire for travel and adventure who could never settle for an
                      ordinary
@@ -113,17 +132,18 @@ export default function User() {
 
                <div className="profile-buttons">
 
-                  <StyledButton onClick={() => console.log("Follow")}>Volg mij</StyledButton>
+                  {!user.isUser ? <StyledButton onClick={() => console.log("Follow")}>Volg
+                     mij</StyledButton> : null}
                   <StyledLink to={`/travelstory/new/${userId}`}>✏️ TravelStory</StyledLink>
                   <StyledLink to={`/user/${user.id}`}>
-                     <ProfileImage squareSize={30} profileImage={imageUrl}/>
+                     <ProfileImage squareSize={30} profileImage={profileImage}/>
                      edit
                   </StyledLink>
                </div>
 
             </Container>
 
-               <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories} maxWidth={1000} bgImage={whiteAltitudeLines}/>
+            <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories} maxWidth={1000} bgImage={whiteAltitudeLines}/>
 
          </StyledUser>
       </Layout>
