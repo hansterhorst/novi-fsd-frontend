@@ -13,6 +13,7 @@ import CreateTravelstory from "./pages/CreateTravelstory";
 import EditTravelstory from "./pages/EditTravelstory";
 import Admin from "./pages/Admin";
 import {AuthContext} from "./context/auth/AuthContext";
+import PageNotFound from "./pages/PageNotFound";
 
 export default function App() {
 
@@ -38,6 +39,7 @@ export default function App() {
                <Route path="/admin" element={<Admin/>}/>
                <Route path="/admin/travelstory/:id" element={<EditTravelstory/>}/>
             </Route>
+            <Route path="*" element={<PageNotFound/>}/>
          </Routes>
       </StyledThemesProvider>
    );
@@ -56,7 +58,7 @@ function RequireAdminAuth({authUser}) {
 
 function RequireUserAuth({authUser}) {
 
-   if ( !(authUser.isAuth && (authUser.roles.includes('USER') || authUser.roles.includes('ADMIN')) ) )  {
+   if (!(authUser.isAuth && (authUser.roles.includes('USER') || authUser.roles.includes('ADMIN')))) {
       return <Navigate to="/login"/>;
    }
 
