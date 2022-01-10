@@ -33,6 +33,7 @@ export default function User() {
 
          setUser(response.data)
          setTravelstories(response.data.travelstories)
+
          randomTravelstory(response.data.travelstories)
 
          loadUser(response.data, authUser)
@@ -85,9 +86,8 @@ export default function User() {
 
    const {imageUrl} = travelstory
 
-   const {firstname, lastname} = user
+   const {firstname, lastname, profileImage} = user
 
-   const profileImage = user.profileImage ? user.profileImage : `https://robohash.org/${user.firstname}`
 
    return (
       <Layout navLinks={pageNavLinks.user}>
@@ -131,6 +131,7 @@ export default function User() {
                </div>
 
                <div className="profile-buttons">
+
                   {/* if user is the same as authUser */}
                   {user.isUser ?
                      <>
