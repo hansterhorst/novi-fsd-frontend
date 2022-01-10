@@ -56,7 +56,7 @@ export default function User() {
    useEffect(() => {
       loadUser(user, authUser)
       // eslint-disable-next-line
-   }, [user])
+   }, [authUser])
 
 
    useEffect(() => {
@@ -117,7 +117,7 @@ export default function User() {
 
                <div className="details">
                   <label>Travelstories
-                     <h3>10</h3>
+                     <h3>{travelstories.length}</h3>
                   </label>
                   <label>Followers
                      <h3>10</h3>
@@ -131,19 +131,26 @@ export default function User() {
                </div>
 
                <div className="profile-buttons">
-
-                  {!user.isUser ? <StyledButton onClick={() => console.log("Follow")}>Volg
-                     mij</StyledButton> : null}
-                  <StyledLink to={`/travelstory/new/${userId}`}>✏️ TravelStory</StyledLink>
-                  <StyledLink to={`/user/${user.id}`}>
-                     <ProfileImage squareSize={30} profileImage={profileImage}/>
-                     edit
-                  </StyledLink>
+                  {/* if user is the same as authUser */}
+                  {user.isUser ?
+                     <>
+                        {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>Volg
+                           mij</StyledButton>}
+                        <StyledLink to={`/travelstory/new/${userId}`}>✏️ TravelStory</StyledLink>
+                        <StyledLink to={`/user/${user.id}`}>
+                           <ProfileImage squareSize={30} profileImage={profileImage}/>
+                           edit
+                        </StyledLink>
+                     </>
+                     :
+                     <StyledButton onClick={() => console.log("Follow")}>Volg mij</StyledButton>
+                  }
                </div>
 
             </Container>
 
-            <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories} maxWidth={1000} bgImage={whiteAltitudeLines}/>
+            <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories} maxWidth={1000}
+                               bgImage={whiteAltitudeLines}/>
 
          </StyledUser>
       </Layout>
@@ -191,7 +198,7 @@ const StyledUser = styled.div`
     display: flex;
     justify-content: center;
     column-gap: 2rem;
-    padding: 4rem 0;
+    padding: 2rem 0;
   }
 
   .details {
