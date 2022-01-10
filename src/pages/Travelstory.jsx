@@ -6,16 +6,15 @@ import Layout from "../components/layout/Layout";
 import Container from "../components/Container";
 import dateToLocalString from "../utils/dateToLocalString";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
-import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
 import grayAltitudeLines from "../assets/images/gray-altitude-lines.png"
+import greenAltitudeLines from "../assets/images/green-altitude-lines.png";
 import StyledButton from "../styles/StyledButton";
 import ProfileImage from "../components/ProfileImage";
 import StyledHeader from "../styles/StyledHeader";
 import {pageNavLinks} from "./pageNavLinks";
-import TextArea from "../components/form-inputs/TextArea";
-import {useForm} from "react-hook-form";
 import StyledLink from "../styles/StyledLink";
 import {AuthContext} from "../context/auth/AuthContext";
+import Commit from "../components/Commit";
 
 
 export default function Travelstory() {
@@ -26,17 +25,11 @@ export default function Travelstory() {
    const {id} = useParams()
    const navigate = useNavigate()
 
-   const {register, handleSubmit} = useForm()
-
-   function onSubmit(data) {
-      console.log(data)
-   }
 
    const getTravelstoryById = async () => {
       try {
          const response = await axios.get(`http://localhost:8080/api/v1/travelstories/${id}`)
          setTravelstory(response.data)
-
       } catch (error) {
          console.error(error);
       }
@@ -48,6 +41,7 @@ export default function Travelstory() {
       // eslint-disable-next-line
    }, [])
 
+
    const {
       title,
       imageUrl,
@@ -57,6 +51,7 @@ export default function Travelstory() {
       tripDate,
       author,
       userId,
+      authorImage
    } = travelstory
 
    const {isAuth} = authUser
@@ -67,6 +62,7 @@ export default function Travelstory() {
 
          <StyledHeader bgImage={imageUrl}/>
 
+         {/* ARTICLE DETAILS*/}
          <Container bgImage={grayAltitudeLines}>
             <StyledArticleHeader>
 
@@ -82,13 +78,13 @@ export default function Travelstory() {
                   {isAuth ?
                      <div className="user-link">
                         <Link to={`/user/${userId}`}>
-                           <ProfileImage squareSize={150} profileImage={imageUrl}/>
+                           <ProfileImage squareSize={150} profileImage={authorImage}/>
                            <h3>{author}</h3>
                         </Link>
                      </div>
                      :
                      <div className="user-link">
-                        <ProfileImage squareSize={150} profileImage={imageUrl}/>
+                        <ProfileImage squareSize={150} profileImage={authorImage}/>
                         <h3>{author}</h3>
                      </div>
                   }
@@ -107,9 +103,12 @@ export default function Travelstory() {
             </StyledArticleHeader>
          </Container>
 
+         {/* ARTICLE */}
          <Container bgImage={whiteAltitudeLines} maxWidth={800}>
             <StyledArticle>
+
                <p>{article}</p>
+
                <div className="buttons">
 
                   <StyledButton onClick={() => navigate(-1)}>terug</StyledButton>
@@ -124,40 +123,11 @@ export default function Travelstory() {
             </StyledArticle>
          </Container>
 
-         {isAuth &&
-            <Container bgImage={greenAltitudeLines} maxWidth={800}>
+         {/* COMMENTS */}
+         <Container bgImage={greenAltitudeLines} maxWidth={800}>
+            <Commit travelstoryId={id}/>
+         </Container>
 
-               <StyledForm onSubmit={handleSubmit(onSubmit)}>
-                  <h3>Houd uw reactie beschaafd, constructief en inclusief, anders wordt uw
-                     reactie
-                     verwijderd.</h3>
-
-                  <TextArea labelTitle="Reactie" name="comment" register={register}
-                            height={100}/>
-
-                  <div className="form-footer">
-                     <StyledButton type="onsubmit">Verstuur reactie</StyledButton>
-                  </div>
-               </StyledForm>
-
-               <StyledComments>
-                  <ProfileImage profileImage={imageUrl}/>
-                  <div className="comment">
-                     <div className="comment-profile">
-                        <h3>Hans ter Horst </h3>
-                        <h2>•</h2>
-                        <p>12 december 2021</p>
-                     </div>
-                     <p>Het was vandaag een verrassende mooie dag. Normaal hou ik helemaal
-                        niet
-                        van
-                        asfalt fietsen maar heb vandaag toch wel genoten. Morgen het
-                        IJsselmeer
-                        over</p>
-                  </div>
-               </StyledComments>
-
-            </Container>}
       </Layout>
    )
 }
@@ -225,46 +195,5 @@ const StyledArticle = styled.article`
     display: flex;
     justify-content: space-between;
   }
-`
 
-const StyledForm = styled.form`
-  padding: 5rem 0 0;
-
-  h3 {
-    color: ${({theme: {colors}}) => colors.red};
-    font-weight: bold;
-    margin: 2rem 0;
-  }
-
-  .form-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin: 2rem 0;
-  }
-`
-
-const StyledComments = styled.section`
-  display: flex;
-  align-items: flex-start;
-  padding: 3rem 0;
-
-  .comment {
-    padding: 0 1rem;
-    width: 90%;
-
-    p {
-      font-size: 1.6rem;
-    }
-
-    .comment-profile {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-
-      h3 {
-        color: ${({theme: {colors}}) => colors.red};
-        font-weight: 900;
-      }
-    }
-  }
 `
