@@ -40,7 +40,7 @@ export default function CreateEditForm({onSubmit, register, submitButtonTitle}) 
          <div className="form-footer">
             <StyledLabel>* Verplichte velden</StyledLabel>
             <div className="form-buttons">
-               <StyledButton onClick={() => navigate(-1)}>Cancel</StyledButton>
+               <StyledButton type="button" onClick={() => navigate(-1)}>Cancel</StyledButton>
                <StyledButton type="onsubmit">{submitButtonTitle}</StyledButton>
             </div>
          </div>
