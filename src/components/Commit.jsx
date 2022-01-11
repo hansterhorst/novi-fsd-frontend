@@ -21,10 +21,8 @@ export default function Commit({travelstoryId}) {
       try {
 
          const response = await axios.get(`http://localhost:8080/api/v1/travelstories/${travelstoryId}/comments/`)
-         console.log(response)
 
          setComments(response.data)
-
 
       } catch (error) {
          console.log(error)
@@ -35,8 +33,11 @@ export default function Commit({travelstoryId}) {
    async function onSubmit(data) {
       try {
          const response = await axios.post(`http://localhost:8080/api/v1/travelstories/${travelstoryId}/comments/user/${authUser.userId}`, data)
-         console.log(response)
-         getComments()
+
+         if (response.status === 201) {
+            getComments()
+         }
+
       } catch (error) {
          console.log(error.response)
       }
@@ -45,7 +46,7 @@ export default function Commit({travelstoryId}) {
 
    useEffect(() => {
       getComments()
-      // eslint-disable-next-line 
+      // eslint-disable-next-line
    }, [])
 
    return (
@@ -64,8 +65,8 @@ export default function Commit({travelstoryId}) {
             </div>
          </StyledForm>
 
-         {comments && comments.map(({userProfile, fullname, createdAt, comment}) => (
-            <StyledComments>
+         {comments && comments.map(({id, userProfile, fullname, createdAt, comment}) => (
+            <StyledComments key={id}>
 
                <ProfileImage profileImage={userProfile}/>
 
@@ -81,6 +82,9 @@ export default function Commit({travelstoryId}) {
                </div>
             </StyledComments>
          ))}
+         <StyledComments>
+            {comments.length === 0 && <p>Nog geen reacties geplaatst, wees de eerste.</p>}
+         </StyledComments>
       </>
    )
 }
@@ -110,6 +114,10 @@ const StyledComments = styled.section`
   display: flex;
   align-items: flex-start;
   padding: 1rem 0;
+
+  &:last-child {
+    padding-bottom: 5rem;
+  }
 
   .comment {
     padding: 0 1rem;
