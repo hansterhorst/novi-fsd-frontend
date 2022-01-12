@@ -15,6 +15,7 @@ import {pageNavLinks} from "./pageNavLinks";
 import StyledLink from "../styles/StyledLink";
 import {AuthContext} from "../context/auth/AuthContext";
 import Commit from "../components/Commit";
+import userAlreadyLikedTravelstory from "../utils/userAlreadyLikedTravelstory";
 
 
 export default function Travelstory() {
@@ -22,6 +23,7 @@ export default function Travelstory() {
    const {authUser} = useContext(AuthContext)
 
    const [travelstory, setTravelstory] = useState([])
+   const [likes, setLikes] = useState([])
    const {id} = useParams()
    const navigate = useNavigate()
 
@@ -35,9 +37,43 @@ export default function Travelstory() {
       }
    }
 
+   async function handleLikeSubmit(userId) {
+
+      if (userAlreadyLikedTravelstory(likes, userId)) {
+
+         try {
+            const response = await axios.delete(`http://localhost:8080/api/v1/users/travelstory/${id}/likes/user/${userId}`)
+            if (response.status === 200) await getAllTravelstoryLikes()
+
+         } catch (error) {
+            console.log(error.response)
+         }
+
+      } else {
+
+         try {
+            const response = await axios.post(`http://localhost:8080/api/v1/users/travelstory/${id}/likes/user/${userId}`)
+            if (response.status === 201) await getAllTravelstoryLikes()
+
+         } catch (error) {
+            console.log(error.response)
+         }
+      }
+   }
+
+   async function getAllTravelstoryLikes() {
+      try {
+         const response = await axios.get(`http://localhost:8080/api/v1/users/travelstory/${id}/likes`)
+         setLikes(response.data)
+      } catch (error) {
+         console.log(error.response)
+      }
+   }
+
 
    useEffect(() => {
       getTravelstoryById()
+      getAllTravelstoryLikes()
       // eslint-disable-next-line
    }, [])
 
@@ -55,6 +91,7 @@ export default function Travelstory() {
    } = travelstory
 
    const {isAuth} = authUser
+
 
    return (
 
@@ -91,11 +128,11 @@ export default function Travelstory() {
 
                   {/* if user is login and user is not the owner */}
                   {isAuth && (travelstory.userId !== authUser.userId) ?
-                     <StyledButton onClick={() => console.log("Like Story")}>Like
-                        Story</StyledButton>
+
+                     <StyledButton type="button" onClick={() => handleLikeSubmit(authUser.userId)}>
+                        {userAlreadyLikedTravelstory(likes, authUser.userId) ? `❤ ${likes.length} Likes` : "Like Story"}</StyledButton>
                      :
-                     <StyledButton onClick={() => console.log("Like Story")}> ❤ 10
-                        Likes</StyledButton>
+                     <div className="like-count">{`❤ ${likes.length} Likes`}</div>
                   }
 
                </div>
@@ -179,6 +216,16 @@ const StyledArticleHeader = styled.div`
       }
     }
 
+    .like-count {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: ${({theme: {colors}}) => colors.white};
+      text-transform: uppercase;
+      padding: 1rem 1.6rem 0.8rem;
+      background-color: ${({theme: {colors}}) => colors.red};
+      border: 3px solid ${({theme: {colors}}) => colors.red};
+      display: inline-block;
+    }
   }
 
 `
