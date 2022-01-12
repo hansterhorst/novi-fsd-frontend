@@ -13,6 +13,7 @@ import StyledLink from "../styles/StyledLink";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import StyledHeader from "../styles/StyledHeader";
 import {AuthContext} from "../context/auth/AuthContext";
+import getTotalLikesFromUserTravelstories from "../utils/getTotalLikesUserTravelstories";
 
 
 export default function User() {
@@ -73,6 +74,7 @@ export default function User() {
    * METHODES
    * */
 
+
    function loadUser(user, authUser) {
       if (user.email === authUser.email) {
          setUser({...authUser, isUser: true})
@@ -123,7 +125,7 @@ export default function User() {
                      <h3>10</h3>
                   </label>
                   <label>Likes
-                     <h3>10</h3>
+                     <h3>{getTotalLikesFromUserTravelstories(travelstories)}</h3>
                   </label>
                   <label>images
                      <h3>10</h3>
