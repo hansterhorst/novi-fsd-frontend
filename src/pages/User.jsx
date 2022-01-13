@@ -14,6 +14,7 @@ import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import StyledHeader from "../styles/StyledHeader";
 import {AuthContext} from "../context/auth/AuthContext";
 import getTotalLikesFromUserTravelstories from "../utils/getTotalLikesUserTravelstories";
+import userAlreadyFollowingUser from "../utils/userAlreadyFollowing";
 
 
 export default function User() {
@@ -23,6 +24,7 @@ export default function User() {
    const [user, setUser] = useState({})
    const [travelstories, setTravelstories] = useState([])
    const [travelstory, setTravelstory] = useState({})
+   const [follows, setFollowers] = useState([])
 
    let {userId} = useParams()
 
@@ -35,15 +37,57 @@ export default function User() {
          setUser(response.data)
          setTravelstories(response.data.travelstories)
 
-         randomTravelstory(response.data.travelstories)
+         await randomTravelstory(response.data.travelstories)
 
-         loadUser(response.data, authUser)
+         await loadUser(response.data, authUser)
+
+         await getAllFollows()
 
       } catch (error) {
          console.error(error);
       }
    }
 
+
+   async function handleFollowUser(authUserId) {
+
+      console.log(follows)
+
+      if (userAlreadyFollowingUser(follows, authUserId)) {
+
+         try {
+            const response = await axios.delete(`http://localhost:8080/api/v1/users/${userId}/follow/${authUser.userId}`);
+
+            console.log("DELETE")
+            if (response.status === 200) await getAllFollows()
+
+         } catch (error) {
+            console.error(error);
+         }
+
+      } else {
+
+         try {
+            const response = await axios.post(`http://localhost:8080/api/v1/users/${userId}/follow/${authUser.userId}`);
+
+            console.log("POST")
+            if (response.status === 201) await getAllFollows()
+
+         } catch (error) {
+            console.error(error);
+         }
+
+      }
+   }
+
+   async function getAllFollows() {
+      try {
+         const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}/follow`)
+         if (response.status === 200) setFollowers(response.data)
+      } catch (error) {
+         console.log(error.response)
+      }
+   }
 
    /*
    * USE_EFFECTS
@@ -121,8 +165,8 @@ export default function User() {
                   <label>Travelstories
                      <h3>{travelstories.length}</h3>
                   </label>
-                  <label>Followers
-                     <h3>10</h3>
+                  <label>Volgers
+                     <h3>{follows.length}</h3>
                   </label>
                   <label>Likes
                      <h3>{getTotalLikesFromUserTravelstories(travelstories)}</h3>
@@ -146,7 +190,11 @@ export default function User() {
                         </StyledLink>
                      </>
                      :
-                     <StyledButton onClick={() => console.log("Follow")}>Volg mij</StyledButton>
+                     // follow user
+                     <StyledButton onClick={() => handleFollowUser(authUser.userId)}>
+                        {userAlreadyFollowingUser(follows, authUser.userId) ? `❤ ${follows.length} volgers` : "Volg mij"}
+                     </StyledButton>
+
                   }
                </div>
 
