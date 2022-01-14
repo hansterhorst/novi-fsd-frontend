@@ -10,9 +10,9 @@ const initialState = {
       email: 'hans@mail.com',
       username: 'hans@mail.com',
       password: '123',
+      profileImage:'https://i.pravatar.cc/150?img=60',
       bio: 'Kom uit het prachtige Twente, het plaatsje Delden dat omringd is met bossen van landgoed Twickel. Mijn hele leven al gek van fietsen, vooral op de mountainbike. Laatste jaren verken de wereld op een volgepakte fiets, dat mij na uitzonderlijke plaatsen brengt.',
-      profileImage: 'https://robohash.org/hans',
-      roles: ['USER', 'ADMIN'],
+      roles: ['USER'],
    }
 }
 
