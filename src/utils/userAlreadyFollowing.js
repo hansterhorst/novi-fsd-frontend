@@ -1,7 +1,7 @@
-export default function userAlreadyFollowingUser(follows, userId) {
+export default function userAlreadyFollowingUser(follows, authUserId) {
    let isTrue = false
-   follows.map(({followingId}) => {
-      return isTrue = followingId === userId;
+   follows.map((follow) => {
+      return isTrue = follow.authUserId === authUserId;
    })
    return isTrue
 }
