@@ -6,7 +6,8 @@ import {
    LOGIN_FAILED,
    LOGIN_SUCCESS,
    REGISTER_FAILED,
-   REGISTER_SUCCESS
+   REGISTER_SUCCESS,
+   LOGOUT
 } from "../types";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -111,6 +112,17 @@ export default function AuthContextProvider({children}) {
 
    }
 
+   async function logoutUser() {
+      console.log("logout")
+      dispatch({
+         type: LOGOUT,
+         payload: {
+            status: 200,
+            msg: "User logout"
+         }
+      })
+   }
+
 
    return (
       <AuthContext.Provider
@@ -124,6 +136,7 @@ export default function AuthContextProvider({children}) {
             registerUser,
             loginUser,
             loadUser,
+            logoutUser,
          }}>
          {children}
       </AuthContext.Provider>

@@ -3,7 +3,8 @@ import {
    REGISTER_FAILED,
    LOAD_USER,
    AUTH_ERROR,
-   LOGIN_SUCCESS
+   LOGIN_SUCCESS,
+   LOGOUT
 } from "../types"
 import jwt_decode from "jwt-decode"
 
@@ -40,6 +41,7 @@ export default function authReducer(state, action) {
          }
       case REGISTER_FAILED:
       case AUTH_ERROR:
+      case LOGOUT:
          localStorage.removeItem("token")
 
          return {
