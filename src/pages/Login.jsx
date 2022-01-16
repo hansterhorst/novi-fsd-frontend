@@ -1,7 +1,6 @@
 import React, {useContext, useEffect} from "react";
 import Layout from "../components/layout/Layout";
 import Container from "../components/Container";
-import {pageNavLinks} from "./pageNavLinks";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import InputField from "../components/form-inputs/InputField";
 import {useForm} from "react-hook-form";
@@ -15,15 +14,24 @@ export default function Login() {
 
    const {authUser, loginUser} = useContext(AuthContext)
    const navigate = useNavigate()
-
    const {register, handleSubmit} = useForm()
+
+   const navLinks = [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Register",
+         url: "/register"
+      }
+   ]
 
    function login(data) {
       loginUser(data)
    }
 
    useEffect(() => {
-      console.log(authUser)
       if (authUser.id) {
          navigate(`/users/user/${authUser.id}`)
       }
@@ -32,7 +40,7 @@ export default function Login() {
 
 
    return (
-      <Layout navLinks={pageNavLinks.home}>
+      <Layout navLinks={navLinks}>
          <Container maxWidth={500} bgImage={whiteAltitudeLines} fullHeight={true}>
 
             <LoginRegisterForm title="Login" submitButtonTitle="Login" orButtonTitle="Register"

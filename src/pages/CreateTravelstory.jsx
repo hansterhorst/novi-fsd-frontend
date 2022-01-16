@@ -1,27 +1,39 @@
-import React from "react";
+import React, {useContext} from "react";
 import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import Container from "../components/Container";
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
-import {pageNavLinks} from "./pageNavLinks";
 import {useForm} from "react-hook-form";
 import CreateEditForm from "../components/form-inputs/CreateEditForm";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import {USERS_BASE_URL} from "../utils/constants";
+import {AuthContext} from "../context/auth/AuthContext";
 
 
 export default function CreateTravelstory() {
 
+   const {isAuth} = useContext(AuthContext)
    const navigate = useNavigate()
    const {userId} = useParams()
-
    const {register, handleSubmit} = useForm({
       defaultValues: {
          isPublic: true
       }
    })
+
+   const navLinks = isAuth && [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+   ]
+
 
    async function createTravelstory(data) {
 
@@ -46,7 +58,7 @@ export default function CreateTravelstory() {
    }
 
    return (
-      <Layout navLinks={pageNavLinks.user}>
+      <Layout navLinks={navLinks}>
          <StyledCreateTravelstory>
 
             <Container maxWidth={900} bgImage={whiteAltitudeLines}>

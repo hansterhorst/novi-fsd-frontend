@@ -11,9 +11,10 @@ export default function TopNavbar({navLinks}) {
             <Navbar>
                <TravelStoriesLogo/>
                <NavUl>
-                  {navLinks && navLinks.map(link=>(
-                     <NavLi key={link.title}>
-                        <StyledNavLink to={link.url}>{link.title}</StyledNavLink>
+                  {navLinks && navLinks.map(({title, url, cta}) => (
+                     <NavLi key={title}>
+                        <StyledNavLink to={url}
+                                       onClick={cta}>{title}</StyledNavLink>
                      </NavLi>
                   ))}
                </NavUl>

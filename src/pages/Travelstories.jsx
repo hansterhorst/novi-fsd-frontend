@@ -1,19 +1,36 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import Layout from "../components/layout/Layout";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
-import {pageNavLinks} from "./pageNavLinks";
 import {Link} from "react-router-dom";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import TravelstoryHeader from "../components/travelstory/TravelstoryHeader";
 import {USERS_BASE_URL} from "../utils/constants";
+import {AuthContext} from "../context/auth/AuthContext";
 
 
 export default function Travelstories() {
 
+   const {isAuth, authUser, roles} = useContext(AuthContext)
    const [travelstories, setTravelstories] = useState([])
 
+   console.log(roles)
    const [travelstory, setTravelstory] = useState({})
+
+   const navLinks = isAuth && [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+      {
+         title: "Profile",
+         url: `/users/user/${authUser.id}`,
+      }
+   ]
 
    const fetchTravelstories = async () => {
 
@@ -69,7 +86,7 @@ export default function Travelstories() {
    const {id, imageUrl, country, title, author} = travelstory
 
    return (
-      <Layout navLinks={pageNavLinks.user}>
+      <Layout navLinks={navLinks}>
          <Link to={`/users/travelstory/${id}`}>
 
             <TravelstoryHeader bgImage={imageUrl} country={country} title={title} author={author}/>

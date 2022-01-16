@@ -11,7 +11,6 @@ import greenAltitudeLines from "../assets/images/green-altitude-lines.png";
 import StyledButton from "../styles/StyledButton";
 import ProfileImage from "../components/ProfileImage";
 import StyledHeader from "../styles/StyledHeader";
-import {pageNavLinks} from "./pageNavLinks";
 import StyledLink from "../styles/StyledLink";
 import {AuthContext} from "../context/auth/AuthContext";
 import Commit from "../components/Commit";
@@ -24,7 +23,6 @@ import {
 
 export default function Travelstory() {
 
-
    const {authUser, isAuth} = useContext(AuthContext)
 
    const [travelstory, setTravelstory] = useState([])
@@ -32,6 +30,20 @@ export default function Travelstory() {
    const {id} = useParams()
    const navigate = useNavigate()
 
+   const navLinks = isAuth && [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+      {
+         title: "Profile",
+         url: `/users/user/${authUser.id}`
+      },
+   ]
 
    const getTravelstoryById = async () => {
 
@@ -140,7 +152,7 @@ export default function Travelstory() {
 
    return (
 
-      <Layout navLinks={pageNavLinks.user}>
+      <Layout navLinks={navLinks}>
 
          <StyledHeader bgImage={imageUrl}/>
 
@@ -200,7 +212,7 @@ export default function Travelstory() {
 
                   {/* user is login and user is the owner */}
                   {(isAuth && (authUser.id === travelstory.userId)) &&
-                     <StyledLink to={`/users/travelstory/edit/${travelstory.id}`}>✏️
+                     <StyledLink to={`/users/travelstories/edit/${travelstory.id}`}>✏️
                         Edit</StyledLink>
                   }
 

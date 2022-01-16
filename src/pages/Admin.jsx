@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styled from "styled-components"
 import Layout from "../components/layout/Layout";
 import Container from "../components/Container";
@@ -9,13 +9,30 @@ import StyledButton from "../styles/StyledButton";
 import StyledLink from "../styles/StyledLink";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import InputPassword from "../components/form-inputs/InputPassword";
-import {pageNavLinks} from "./pageNavLinks";
 import {USERS_BASE_URL} from "../utils/constants";
+import {AuthContext} from "../context/auth/AuthContext";
 
 export default function Admin() {
 
+   const {logoutUser} = useContext(AuthContext)
    const [users, setUsers] = useState([]);
    const {register, handleSubmit, reset} = useForm()
+
+   const navLinks = [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+      {
+         title: "Logout",
+         url: "/login",
+         cta: logoutUser
+      },
+   ]
 
    async function getUsers() {
 
@@ -85,7 +102,7 @@ export default function Admin() {
 
 
    return (
-      <Layout navLinks={pageNavLinks.admin}>
+      <Layout navLinks={navLinks}>
          <Container bgImage={whiteAltitudeLines}>
             <StyledAdmin>
                <h1>Admin</h1>

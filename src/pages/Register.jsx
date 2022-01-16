@@ -2,7 +2,6 @@ import React, {useContext, useEffect} from "react";
 import Layout from "../components/layout/Layout";
 import Container from "../components/Container";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
-import {pageNavLinks} from "./pageNavLinks";
 import {useForm} from "react-hook-form";
 import InputField from "../components/form-inputs/InputField";
 import LoginRegisterForm from "../components/form-inputs/LoginRegisterForm";
@@ -17,6 +16,17 @@ export default function Register() {
    const {register, handleSubmit} = useForm()
 
    const {registerUser, message, authUser} = useContext(AuthContext)
+
+   const navLinks = [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Login",
+         url: "/login"
+      }
+   ]
 
    async function onSubmit(data) {
       registerUser(data)
@@ -41,7 +51,7 @@ export default function Register() {
 
 
    return (
-      <Layout navLinks={pageNavLinks.home}>
+      <Layout navLinks={navLinks}>
          <Container bgImage={whiteAltitudeLines} fullHeight={true} maxWidth={500}>
 
             <LoginRegisterForm title="Register" submitButtonTitle="Register" orButtonTitle="Login"

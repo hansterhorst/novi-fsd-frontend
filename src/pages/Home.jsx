@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
 import HeaderBgImage from "../components/HeaderBgImage";
 import Feature from "../components/Feature";
@@ -9,12 +9,12 @@ import ballonsImage from "../assets/images/balloons.png"
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import anthemImage from "../assets/images/anthem.png"
-import {pageNavLinks} from "./pageNavLinks";
 import axios from "axios";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import Container from "../components/Container";
 import StyledLink from "../styles/StyledLink";
 import {PUBLIC_BASE_URL} from "../utils/constants";
+import {AuthContext} from "../context/auth/AuthContext";
 
 const featureData = [
    {
@@ -35,14 +35,44 @@ const featureData = [
 
 export default function Home() {
 
-   const [apiData, setApiData] = useState([])
+   const [publicTravelstories, setPublicTravelstories] = useState([])
+   const {isAuth, logoutUser} = useContext(AuthContext)
+
+   const navLinks = isAuth ? [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+      {
+         title: "Logout",
+         url: "/login",
+         cta: logoutUser
+      },
+   ] : [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Register",
+         url: "/register"
+      },
+      {
+         title: "Login",
+         url: "/login"
+      },
+   ]
 
    async function getAllPublicTravelstories() {
       try {
 
          const response = await axios.get(`${PUBLIC_BASE_URL}/travelstories`)
 
-         setApiData(response.data)
+         setPublicTravelstories(response.data)
 
       } catch (error) {
          console.log(error.response)
@@ -55,7 +85,7 @@ export default function Home() {
 
 
    return (
-      <Layout navLinks={pageNavLinks.home}>
+      <Layout navLinks={navLinks}>
          <StyledHome>
 
             <HeaderBgImage bgImage={anthemImage}>
@@ -78,7 +108,8 @@ export default function Home() {
             <Feature data={featureData[1]} flexDirection="row-reverse"/>
          </Container>
 
-         <TravelstoriesGrid dataArray={apiData} title="De laatste TravelStories" maxWidth={1000}
+         <TravelstoriesGrid dataArray={publicTravelstories} title="De laatste TravelStories"
+                            maxWidth={1000}
                             bgImage={whiteAltitudeLines}/>
       </Layout>
    )

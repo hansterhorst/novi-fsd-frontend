@@ -1,27 +1,37 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import Container from "../components/Container";
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
-import {pageNavLinks} from "./pageNavLinks";
 import {useForm} from "react-hook-form";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import StyledTextButton from "../styles/StyledTextButton";
 import CreateEditForm from "../components/form-inputs/CreateEditForm";
 import {USERS_BASE_URL} from "../utils/constants";
+import {AuthContext} from "../context/auth/AuthContext";
 
 
 export default function EditTravelstory() {
 
+   const {isAuth} = useContext(AuthContext)
    const {id} = useParams()
    const navigate = useNavigate()
-
-
    const [apiData, setApiData] = useState({})
-
    const {register, handleSubmit, reset} = useForm()
+
+   const navLinks = isAuth && [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+
+   ]
 
    const editTravelstory = async () => {
 
@@ -117,7 +127,7 @@ export default function EditTravelstory() {
    }
 
    return (
-      <Layout navLinks={pageNavLinks.user}>
+      <Layout navLinks={navLinks}>
          <StyledCreateTravelstory>
             <Container maxWidth={900} bgImage={whiteAltitudeLines}>
                <h1>Verander jouw TravelStory voor een nog mooiere reisverhaal</h1>

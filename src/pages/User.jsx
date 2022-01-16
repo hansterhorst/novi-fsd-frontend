@@ -9,7 +9,6 @@ import axios from "axios";
 import Container from "../components/Container";
 import ProfileImage from "../components/ProfileImage";
 import {useParams} from "react-router-dom";
-import {pageNavLinks} from "./pageNavLinks";
 import StyledLink from "../styles/StyledLink";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import StyledHeader from "../styles/StyledHeader";
@@ -21,7 +20,7 @@ import {USERS_BASE_URL} from "../utils/constants";
 
 export default function User() {
 
-   const {authUser} = useContext(AuthContext)
+   const {authUser, isAuth, logoutUser, roles} = useContext(AuthContext)
 
    const [user, setUser] = useState({})
    const [travelstories, setTravelstories] = useState([])
@@ -29,6 +28,41 @@ export default function User() {
    const [follows, setFollowers] = useState([])
 
    let {id} = useParams()
+
+
+   const navLinks = isAuth && roles.includes("ROLE_ADMIN") ? [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+      {
+         title: "Logout",
+         url: "/",
+         cta: logoutUser
+      },
+      {
+         title: "Admin",
+         url: "/admin",
+      }
+   ] : [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+      {
+         title: "Logout",
+         url: "/",
+         cta: logoutUser
+      }
+   ]
 
 
    const getTravelstories = async () => {
@@ -153,7 +187,7 @@ export default function User() {
 
 
    return (
-      <Layout navLinks={pageNavLinks.user}>
+      <Layout navLinks={navLinks}>
 
          <StyledUser>
 
@@ -201,7 +235,7 @@ export default function User() {
                      <>
                         {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>Volg
                            mij</StyledButton>}
-                        <StyledLink to={`/users/travelstory/new/${authUser.id}`}>✏️
+                        <StyledLink to={`/users/travelstories/new/${authUser.id}`}>✏️
                            TravelStory</StyledLink>
                         <StyledLink to={`/users/user/${user.id}`}>
                            <ProfileImage squareSize={30} profileImage={user.profileImage}/>

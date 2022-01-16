@@ -12,7 +12,7 @@ export default function TravelstoryCard({travelstory, maxWidth}) {
    return (
       <StyledTravelstoryCard bgImage={imageUrl} maxWidth={maxWidth}>
          {/* route validation for public users */}
-         <Link to={isAuth ? `/users/travelstory/${id}` : `/public/travelstory/${id}`}>
+         <Link to={isAuth ? `/users/travelstories/${id}` : `/public/travelstories/${id}`}>
             <div className="header">
                <h3>{country}</h3>
                <h2>{title}</h2>
