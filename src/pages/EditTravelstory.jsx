@@ -10,6 +10,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import StyledTextButton from "../styles/StyledTextButton";
 import CreateEditForm from "../components/form-inputs/CreateEditForm";
+import {USERS_BASE_URL} from "../utils/constants";
 
 
 export default function EditTravelstory() {
@@ -17,14 +18,22 @@ export default function EditTravelstory() {
    const {id} = useParams()
    const navigate = useNavigate()
 
+
    const [apiData, setApiData] = useState({})
 
    const {register, handleSubmit, reset} = useForm()
 
    const editTravelstory = async () => {
 
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
-         const response = await axios.get(`http://localhost:8080/api/v1/travelstories/${id}`);
+         const response = await axios.get(`${USERS_BASE_URL}/travelstories/${id}`, config);
 
          const data = {
             ...response.data,
@@ -53,16 +62,23 @@ export default function EditTravelstory() {
 
    async function onSubmit(data) {
 
+
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
-         const response = await axios.put(`http://localhost:8080/api/v1/travelstories/${id}`, data)
-         console.log(response)
+         const response = await axios.put(`${USERS_BASE_URL}/travelstories/${id}`, data, config)
 
          if (response.status === 200) {
-            navigate(`/travelstory/${id}`)
+            navigate(-1)
          }
 
       } catch (error) {
-         console.log(error)
+         console.log(error.response)
       }
 
       console.log(data)
@@ -72,16 +88,23 @@ export default function EditTravelstory() {
 
       const userId = apiData.userId
 
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
-         const response = await axios.delete(`http://localhost:8080/api/v1/travelstories/${id}`)
+         const response = await axios.delete(`${USERS_BASE_URL}/travelstories/${id}`, config)
          console.log(response)
 
          if (response.status === 200) {
-            navigate(`/user/${userId}`)
+            navigate(`/users/user/${userId}`)
          }
 
       } catch (error) {
-         console.log(error)
+         console.log(error.response)
       }
    }
 

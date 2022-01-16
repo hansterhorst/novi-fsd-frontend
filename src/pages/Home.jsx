@@ -14,6 +14,7 @@ import axios from "axios";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import Container from "../components/Container";
 import StyledLink from "../styles/StyledLink";
+import {PUBLIC_BASE_URL} from "../utils/constants";
 
 const featureData = [
    {
@@ -39,7 +40,7 @@ export default function Home() {
    async function getAllPublicTravelstories() {
       try {
 
-         const response = await axios.get('http://localhost:8080/api/v1/travelstories/public')
+         const response = await axios.get(`${PUBLIC_BASE_URL}/travelstories`)
 
          setApiData(response.data)
 

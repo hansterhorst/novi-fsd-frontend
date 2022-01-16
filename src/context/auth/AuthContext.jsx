@@ -1,20 +1,26 @@
 import {createContext, useReducer} from "react";
 import authReducer from "./authReducer";
+import {
+   AUTH_ERROR,
+   LOAD_USER,
+   LOGIN_FAILED,
+   LOGIN_SUCCESS,
+   REGISTER_FAILED,
+   REGISTER_SUCCESS
+} from "../types";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import {BASE_URL, USERS_BASE_URL} from "../../utils/constants";
 
 const initialState = {
-   user: {
-      isAuth: true,
-      userId: 11,
-      firstname: 'Hans',
-      lastname: 'ter Horst',
-      email: 'hans@mail.com',
-      username: 'hans@mail.com',
-      password: '123',
-      profileImage:'https://i.pravatar.cc/150?img=60',
-      bio: 'Kom uit het prachtige Twente, het plaatsje Delden dat omringd is met bossen van landgoed Twickel. Mijn hele leven al gek van fietsen, vooral op de mountainbike. Laatste jaren verken de wereld op een volgepakte fiets, dat mij na uitzonderlijke plaatsen brengt.',
-      roles: ['USER'],
-   }
+   isAuth: false,
+   isLoading: true,
+   roles: [],
+   token: localStorage.getItem("token"),
+   message: {status: null, msg: ''},
+   authUser: {}
 }
+
 
 export const AuthContext = createContext(initialState)
 
@@ -22,9 +28,103 @@ export default function AuthContextProvider({children}) {
 
    const [state, dispatch] = useReducer(authReducer, initialState)
 
+
+   // load user
+   async function loadUser() {
+
+      const email = jwt_decode(localStorage.getItem('token')).sub
+
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         },
+         params: {
+            email
+         }
+      }
+
+      try {
+         const response = await axios.get(`${USERS_BASE_URL}/user`, config)
+
+         console.log(response)
+
+         dispatch({
+            type: LOAD_USER,
+            payload: response
+         })
+
+
+      } catch (error) {
+
+         dispatch({
+            type: AUTH_ERROR,
+            payload: error.response
+         })
+      }
+   }
+
+   // register user
+   async function registerUser(formData) {
+
+      try {
+         const response = await axios.post(`${BASE_URL}/auth/register`, formData)
+         console.log(response)
+
+         dispatch({
+            type: REGISTER_SUCCESS,
+            payload: response
+         })
+
+
+      } catch (error) {
+
+         dispatch({
+            type: REGISTER_FAILED,
+            payload: error.response
+         })
+      }
+   }
+
+   // login user
+   async function loginUser(formData) {
+
+      try {
+         const response = await axios.post(`${BASE_URL}/auth/login`, formData);
+
+         dispatch({
+            type: LOGIN_SUCCESS,
+            payload: response
+         })
+
+         await loadUser()
+
+
+      } catch (error) {
+         console.log(error.response)
+
+         dispatch({
+            type: LOGIN_FAILED,
+            payload: error.response
+         })
+      }
+
+   }
+
+
    return (
       <AuthContext.Provider
-         value={{authUser: state.user}}>
+         value={{
+            authUser: state.authUser,
+            token: state.token,
+            isAuth: state.isAuth,
+            isLoading: state.isLoading,
+            message: state.message,
+            roles: state.roles,
+            registerUser,
+            loginUser,
+            loadUser,
+         }}>
          {children}
       </AuthContext.Provider>
    )

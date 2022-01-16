@@ -14,31 +14,36 @@ import EditTravelstory from "./pages/EditTravelstory";
 import Admin from "./pages/Admin";
 import {AuthContext} from "./context/auth/AuthContext";
 import PageNotFound from "./pages/PageNotFound";
+import {ROLE_ADMIN, ROLE_USER} from "./utils/constants";
 
 export default function App() {
 
-   const {authUser} = useContext(AuthContext)
+   const {isAuth, roles} = useContext(AuthContext)
 
    return (
       <StyledThemesProvider>
          <ResetCSS/>
          <StyledTypography/>
          <Routes>
+            {/* PUBLIC ROUTES */}
             <Route path="/" element={<Home/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/public/travelstory/:id" element={<Travelstory/>}/>
-            <Route element={<RequireUserAuth authUser={authUser}/>}>
-               <Route path="/travelstories" element={<Travelstories/>}/>
-               <Route path="/travelstory/new/:userId" element={<CreateTravelstory/>}/>
-               <Route path="/travelstory/:id" element={<Travelstory/>}/>
-               <Route path="/travelstory/edit/:id" element={<EditTravelstory/>}/>
-               <Route path="/user/:userId" element={<User/>}/>
+            {/* USERS AUTHENTICATION ROUTES */}
+            <Route element={<RequireUserAuth isAuth={isAuth} roles={roles}/>}>
+               <Route path="/users/travelstories" element={<Travelstories/>}/>
+               <Route path="/users/travelstory/new/:userId" element={<CreateTravelstory/>}/>
+               <Route path="/users/travelstory/:id" element={<Travelstory/>}/>
+               <Route path="/users/travelstory/edit/:id" element={<EditTravelstory/>}/>
+               <Route path="/users/user/:id" element={<User/>}/>
             </Route>
-            <Route element={<RequireAdminAuth authUser={authUser}/>}>
+            {/* ADMIN AUTHENTICATION ROUTES */}
+            <Route element={<RequireAdminAuth isAuth={isAuth} roles={roles}/>}>
                <Route path="/admin" element={<Admin/>}/>
                <Route path="/admin/travelstory/:id" element={<EditTravelstory/>}/>
             </Route>
+            {/* PAGE NOT FOUND ROUTE*/}
             <Route path="*" element={<PageNotFound/>}/>
          </Routes>
       </StyledThemesProvider>
@@ -46,9 +51,9 @@ export default function App() {
 }
 
 
-function RequireAdminAuth({authUser}) {
+function RequireAdminAuth({isAuth, roles}) {
 
-   if (!(authUser.isAuth && authUser.roles.includes('ADMIN'))) {
+   if (!(isAuth && roles.includes(ROLE_ADMIN))) {
       return <Navigate to="/login"/>;
    }
 
@@ -56,9 +61,9 @@ function RequireAdminAuth({authUser}) {
 }
 
 
-function RequireUserAuth({authUser}) {
+function RequireUserAuth({isAuth, roles}) {
 
-   if (!(authUser.isAuth && (authUser.roles.includes('USER') || authUser.roles.includes('ADMIN')))) {
+   if (!(isAuth && (roles.includes(ROLE_USER) || roles.includes(ROLE_ADMIN)))) {
       return <Navigate to="/login"/>;
    }
 

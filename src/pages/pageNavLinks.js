@@ -6,7 +6,7 @@ export const pageNavLinks = {
       },
       {
          title: "Travelstories",
-         url: "/travelstories"
+         url: "/users/travelstories"
       },
       {
          title: "Register",
@@ -24,7 +24,7 @@ export const pageNavLinks = {
       },
       {
          title: "Travelstories",
-         url: "/travelstories"
+         url: "/users/travelstories"
       },
       {
          title: "Admin",
@@ -38,7 +38,7 @@ export const pageNavLinks = {
       },
       {
          title: "Travelstories",
-         url: "/travelstories"
+         url: "/users/travelstories"
       }
    ],
 }

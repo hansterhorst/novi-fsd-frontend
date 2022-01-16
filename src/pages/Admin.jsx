@@ -10,6 +10,7 @@ import StyledLink from "../styles/StyledLink";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import InputPassword from "../components/form-inputs/InputPassword";
 import {pageNavLinks} from "./pageNavLinks";
+import {USERS_BASE_URL} from "../utils/constants";
 
 export default function Admin() {
 
@@ -18,8 +19,15 @@ export default function Admin() {
 
    async function getUsers() {
 
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
-         const response = await axios.get("http://localhost:8080/api/v1/users")
+         const response = await axios.get(`${USERS_BASE_URL}`, config)
 
          setUsers(response.data)
 

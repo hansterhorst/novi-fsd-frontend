@@ -16,11 +16,16 @@ import StyledLink from "../styles/StyledLink";
 import {AuthContext} from "../context/auth/AuthContext";
 import Commit from "../components/Commit";
 import userAlreadyLikedTravelstory from "../utils/userAlreadyLikedTravelstory";
+import {
+   PUBLIC_BASE_URL,
+   USERS_BASE_URL,
+} from "../utils/constants";
 
 
 export default function Travelstory() {
 
-   const {authUser} = useContext(AuthContext)
+
+   const {authUser, isAuth} = useContext(AuthContext)
 
    const [travelstory, setTravelstory] = useState([])
    const [likes, setLikes] = useState([])
@@ -29,20 +34,48 @@ export default function Travelstory() {
 
 
    const getTravelstoryById = async () => {
-      try {
-         const response = await axios.get(`http://localhost:8080/api/v1/travelstories/${id}`)
-         setTravelstory(response.data)
-      } catch (error) {
-         console.error(error);
+
+      if (isAuth) {
+         try {
+            const response = await axios.get(`${USERS_BASE_URL}/travelstories/${id}`,
+               {
+                  headers: {
+                     'Content-Type': 'application/json',
+                     Authorization: `Bearer ${localStorage.getItem('token')}`,
+                  },
+               }
+            )
+            setTravelstory(response.data)
+         } catch (error) {
+            console.error(error.response);
+         }
+
+      } else {
+
+         try {
+            console.log("PUBLIC")
+            const response = await axios.get(`${PUBLIC_BASE_URL}/travelstories/${id}`)
+            setTravelstory(response.data)
+         } catch (error) {
+            console.error(error.response);
+         }
       }
    }
 
-   async function handleLikeSubmit(userId) {
+   async function handleLikeSubmit(authUserId) {
 
-      if (userAlreadyLikedTravelstory(likes, userId)) {
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
+      if (isAuth && userAlreadyLikedTravelstory(likes, authUserId)) {
 
          try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/users/travelstory/${id}/likes/user/${userId}`)
+            const response = await axios.delete(`${USERS_BASE_URL}/travelstories/${id}/likes/user/${authUserId}`, config
+            )
             if (response.status === 200) await getAllTravelstoryLikes()
 
          } catch (error) {
@@ -52,7 +85,9 @@ export default function Travelstory() {
       } else {
 
          try {
-            const response = await axios.post(`http://localhost:8080/api/v1/users/travelstory/${id}/likes/user/${userId}`)
+            const response = await axios.post(`${USERS_BASE_URL}/travelstories/${id}/likes/user/${authUserId}`, null,
+               config
+            )
             if (response.status === 201) await getAllTravelstoryLikes()
 
          } catch (error) {
@@ -62,11 +97,23 @@ export default function Travelstory() {
    }
 
    async function getAllTravelstoryLikes() {
-      try {
-         const response = await axios.get(`http://localhost:8080/api/v1/users/travelstory/${id}/likes`)
-         setLikes(response.data)
-      } catch (error) {
-         console.log(error.response)
+
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
+      if (isAuth) {
+         try {
+            const response = await axios.get(`${USERS_BASE_URL}/travelstories/${id}/likes`,
+               config
+            )
+            setLikes(response.data)
+         } catch (error) {
+            console.log(error.response)
+         }
       }
    }
 
@@ -90,8 +137,6 @@ export default function Travelstory() {
       authorImage
    } = travelstory
 
-   const {isAuth} = authUser
-
 
    return (
 
@@ -114,7 +159,7 @@ export default function Travelstory() {
 
                   {isAuth ?
                      <div className="user-link">
-                        <Link to={`/user/${userId}`}>
+                        <Link to={`/users/user/${userId}`}>
                            <ProfileImage squareSize={150} profileImage={authorImage}/>
                            <h3>{author}</h3>
                         </Link>
@@ -127,10 +172,13 @@ export default function Travelstory() {
                   }
 
                   {/* if user is login and user is not the owner */}
-                  {isAuth && (travelstory.userId !== authUser.userId) ?
+                  {isAuth && (travelstory.userId !== authUser.id) ?
 
-                     <StyledButton type="button" onClick={() => handleLikeSubmit(authUser.userId)}>
-                        {userAlreadyLikedTravelstory(likes, authUser.userId) ? `❤ ${likes.length} Likes` : "Like Story"}</StyledButton>
+                     <StyledButton type="button" onClick={() => handleLikeSubmit(authUser.id)}>
+
+                        {likes && userAlreadyLikedTravelstory(likes, authUser.id) ? `Unlike Story` : "Like Story"}
+
+                     </StyledButton>
                      :
                      <div className="like-count">{`❤ ${likes.length} Likes`}</div>
                   }
@@ -151,8 +199,8 @@ export default function Travelstory() {
                   <StyledButton onClick={() => navigate(-1)}>terug</StyledButton>
 
                   {/* user is login and user is the owner */}
-                  {(isAuth && (authUser.userId === travelstory.userId)) &&
-                     <StyledLink to={`/travelstory/edit/${travelstory.id}`}>✏️
+                  {(isAuth && (authUser.id === travelstory.userId)) &&
+                     <StyledLink to={`/users/travelstory/edit/${travelstory.id}`}>✏️
                         Edit</StyledLink>
                   }
 
@@ -161,9 +209,11 @@ export default function Travelstory() {
          </Container>
 
          {/* COMMENTS */}
-         <Container bgImage={greenAltitudeLines} maxWidth={800}>
-            <Commit travelstoryId={id}/>
-         </Container>
+         {isAuth &&
+            <Container bgImage={greenAltitudeLines} maxWidth={800}>
+               <Commit travelstoryId={id}/>
+            </Container>
+         }
 
       </Layout>
    )

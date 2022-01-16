@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
 import grayAltitudeLines from '../assets/images/gray-altitude-lines.png'
 import whiteAltitudeLines from '../assets/images/white-altitude-lines.png'
+import anthem from "../assets/images/anthem.png"
 import styled from "styled-components";
 import StyledButton from "../styles/StyledButton";
 import axios from "axios";
@@ -15,6 +16,7 @@ import StyledHeader from "../styles/StyledHeader";
 import {AuthContext} from "../context/auth/AuthContext";
 import getTotalLikesFromUserTravelstories from "../utils/getTotalLikesUserTravelstories";
 import userAlreadyFollowingUser from "../utils/userAlreadyFollowing";
+import {USERS_BASE_URL} from "../utils/constants";
 
 
 export default function User() {
@@ -26,16 +28,25 @@ export default function User() {
    const [travelstory, setTravelstory] = useState({})
    const [follows, setFollowers] = useState([])
 
-   let {userId} = useParams()
+   let {id} = useParams()
 
 
    const getTravelstories = async () => {
 
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
-         const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}`);
+         const response = await axios.get(`${USERS_BASE_URL}/${id}`, config);
 
          setUser(response.data)
+
          setTravelstories(response.data.travelstories)
+
 
          await randomTravelstory(response.data.travelstories)
 
@@ -44,21 +55,25 @@ export default function User() {
          await getAllFollows()
 
       } catch (error) {
-         console.error(error);
+         console.error(error.response);
       }
    }
 
 
    async function handleFollowUser(authUserId) {
 
-      console.log(follows)
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
 
       if (userAlreadyFollowingUser(follows, authUserId)) {
 
          try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/users/${userId}/follow/${authUser.userId}`);
+            const response = await axios.delete(`${USERS_BASE_URL}/${id}/follow/${authUser.id}`, config);
 
-            console.log("DELETE")
             if (response.status === 200) await getAllFollows()
 
          } catch (error) {
@@ -68,9 +83,8 @@ export default function User() {
       } else {
 
          try {
-            const response = await axios.post(`http://localhost:8080/api/v1/users/${userId}/follow/${authUser.userId}`);
+            const response = await axios.post(`${USERS_BASE_URL}/${id}/follow/${authUser.id}`, null, config);
 
-            console.log("POST")
             if (response.status === 201) await getAllFollows()
 
          } catch (error) {
@@ -81,8 +95,16 @@ export default function User() {
    }
 
    async function getAllFollows() {
+
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
-         const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}/follow`)
+         const response = await axios.get(`${USERS_BASE_URL}/${id}/follow`, config)
          if (response.status === 200) setFollowers(response.data)
       } catch (error) {
          console.log(error.response)
@@ -118,7 +140,6 @@ export default function User() {
    * METHODES
    * */
 
-
    function loadUser(user, authUser) {
       if (user.email === authUser.email) {
          setUser({...authUser, isUser: true})
@@ -130,29 +151,26 @@ export default function User() {
       setTravelstory(array[index])
    }
 
-   const {imageUrl} = travelstory
-
-   const {firstname, lastname, profileImage} = user
-
 
    return (
       <Layout navLinks={pageNavLinks.user}>
+
          <StyledUser>
 
-            <StyledHeader bgImage={imageUrl}/>
+            <StyledHeader bgImage={travelstory ? travelstory.imageUrl : anthem}/>
 
             <Container maxWidth={750} bgImage={grayAltitudeLines}>
 
                <div className="profile-container">
                   <div className="profile-image">
                      <ProfileImage squareSize={150}
-                                   profileImage={profileImage}/>
+                                   profileImage={user.profileImage}/>
                   </div>
                </div>
 
                <div className="profile-bio">
 
-                  <h2>{`${firstname} ${lastname}`}</h2>
+                  <h2>{`${user.firstname} ${user.lastname}`}</h2>
                   <h3>Delden • Nederland</h3>
                   <p>{user.bio}</p>
                   <p>I’m originally from sleepy Suffolk in the UK. I’m a crazy dreamer and with an
@@ -163,10 +181,10 @@ export default function User() {
 
                <div className="details">
                   <label>Travelstories
-                     <h3>{travelstories.length}</h3>
+                     <h3>{travelstories && travelstories.length}</h3>
                   </label>
                   <label>Volgers
-                     <h3>{follows.length}</h3>
+                     <h3>{follows && follows.length}</h3>
                   </label>
                   <label>Likes
                      <h3>{getTotalLikesFromUserTravelstories(travelstories)}</h3>
@@ -183,16 +201,17 @@ export default function User() {
                      <>
                         {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>Volg
                            mij</StyledButton>}
-                        <StyledLink to={`/travelstory/new/${userId}`}>✏️ TravelStory</StyledLink>
-                        <StyledLink to={`/user/${user.id}`}>
-                           <ProfileImage squareSize={30} profileImage={profileImage}/>
+                        <StyledLink to={`/users/travelstory/new/${authUser.id}`}>✏️
+                           TravelStory</StyledLink>
+                        <StyledLink to={`/users/user/${user.id}`}>
+                           <ProfileImage squareSize={30} profileImage={user.profileImage}/>
                            edit
                         </StyledLink>
                      </>
                      :
                      // follow user
-                     <StyledButton onClick={() => handleFollowUser(authUser.userId)}>
-                        {userAlreadyFollowingUser(follows, authUser.userId) ? `❤ ${follows.length} volgers` : "Volg mij"}
+                     <StyledButton onClick={() => handleFollowUser(authUser.id)}>
+                        {userAlreadyFollowingUser(follows, authUser.id) ? `Niet volgen` : "Volg mij"}
                      </StyledButton>
 
                   }

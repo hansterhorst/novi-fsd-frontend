@@ -5,14 +5,14 @@ import {AuthContext} from "../../context/auth/AuthContext";
 
 export default function TravelstoryCard({travelstory, maxWidth}) {
 
-   const {authUser} = useContext(AuthContext)
+   const {isAuth} = useContext(AuthContext)
 
    const {title, country, author, imageUrl, article, id} = travelstory
 
    return (
       <StyledTravelstoryCard bgImage={imageUrl} maxWidth={maxWidth}>
          {/* route validation for public users */}
-         <Link to={authUser.isAuth ? `/travelstory/${id}` : `/public/travelstory/${id}`}>
+         <Link to={isAuth ? `/users/travelstory/${id}` : `/public/travelstory/${id}`}>
             <div className="header">
                <h3>{country}</h3>
                <h2>{title}</h2>

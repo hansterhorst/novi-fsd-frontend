@@ -7,10 +7,11 @@ import {AuthContext} from "../context/auth/AuthContext";
 import {useForm} from "react-hook-form";
 import axios from "axios";
 import dateToLocalString from "../utils/dateToLocalString";
+import {USERS_BASE_URL} from "../utils/constants";
 
 export default function Commit({travelstoryId}) {
 
-   const {authUser} = useContext(AuthContext)
+   const {isAuth, authUser} = useContext(AuthContext)
 
    const {register, handleSubmit} = useForm()
 
@@ -18,24 +19,40 @@ export default function Commit({travelstoryId}) {
 
 
    async function getComments() {
+
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
 
-         const response = await axios.get(`http://localhost:8080/api/v1/travelstories/${travelstoryId}/comments/`)
+         const response = await axios.get(`${USERS_BASE_URL}/travelstories/${travelstoryId}/comments/`, config)
 
          setComments(response.data)
 
       } catch (error) {
-         console.log(error)
+         console.log(error.response)
       }
    }
 
 
    async function onSubmit(data) {
+
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
-         const response = await axios.post(`http://localhost:8080/api/v1/travelstories/${travelstoryId}/comments/user/${authUser.userId}`, data)
+         const response = await axios.post(`${USERS_BASE_URL}/travelstories/${travelstoryId}/comments/user/${authUser.id}`, data, config)
 
          if (response.status === 201) {
-            getComments()
+            await getComments()
          }
 
       } catch (error) {
@@ -50,8 +67,7 @@ export default function Commit({travelstoryId}) {
    }, [])
 
    return (
-      authUser.isAuth &&
-      <>
+      isAuth && <>
          <StyledForm onSubmit={handleSubmit(onSubmit)}>
             <h3>Houd uw reactie beschaafd, constructief en inclusief, anders wordt uw
                reactie

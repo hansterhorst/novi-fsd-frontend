@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import Layout from "../components/layout/Layout";
 import Container from "../components/Container";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
@@ -7,14 +7,37 @@ import {useForm} from "react-hook-form";
 import InputField from "../components/form-inputs/InputField";
 import LoginRegisterForm from "../components/form-inputs/LoginRegisterForm";
 import InputPassword from "../components/form-inputs/InputPassword";
+import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../context/auth/AuthContext";
 
 export default function Register() {
 
+   const navigate = useNavigate()
+
    const {register, handleSubmit} = useForm()
 
-   function onSubmit(data) {
-      console.log(data)
+   const {registerUser, message, authUser} = useContext(AuthContext)
+
+   async function onSubmit(data) {
+      registerUser(data)
    }
+
+
+   useEffect(() => {
+      if (message && message.status === 201) {
+         navigate('/login')
+      }
+      // eslint-disable-next-line
+   }, [message])
+
+
+   useEffect(() => {
+      console.log(authUser)
+      if (authUser.id) {
+         navigate(`/users/user/${authUser.id}`)
+      }
+      // eslint-disable-next-line
+   }, [authUser])
 
 
    return (
@@ -32,10 +55,10 @@ export default function Register() {
                            register={register}/>
 
                <InputPassword labelTitle="* Wachtwoord" name="password" type="password"
-                           register={register}/>
+                              register={register}/>
 
                <InputPassword labelTitle="* Bevestig wachtwoord" name="password2" type="password"
-                           register={register}/>
+                              register={register}/>
 
             </LoginRegisterForm>
 

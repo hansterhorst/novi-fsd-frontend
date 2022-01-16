@@ -9,6 +9,7 @@ import {useForm} from "react-hook-form";
 import CreateEditForm from "../components/form-inputs/CreateEditForm";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
+import {USERS_BASE_URL} from "../utils/constants";
 
 
 export default function CreateTravelstory() {
@@ -24,19 +25,24 @@ export default function CreateTravelstory() {
 
    async function createTravelstory(data) {
 
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
       try {
 
-         const response = await axios.post(`http://localhost:8080/api/v1/travelstories/${userId}`, data)
-         console.log(response)
+         const response = await axios.post(`${USERS_BASE_URL}/travelstories/user/${userId}`, data, config)
 
          const storyId = response.data.id
-         if (response.status === 201) return navigate(`/travelstory/${storyId}`)
+         if (response.status === 201) return navigate(`/users/travelstory/${storyId}`)
 
       } catch (error) {
          console.log(error.response)
       }
 
-      console.log(data)
    }
 
    return (

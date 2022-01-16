@@ -6,6 +6,7 @@ import {pageNavLinks} from "./pageNavLinks";
 import {Link} from "react-router-dom";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import TravelstoryHeader from "../components/travelstory/TravelstoryHeader";
+import {USERS_BASE_URL} from "../utils/constants";
 
 
 export default function Travelstories() {
@@ -16,15 +17,23 @@ export default function Travelstories() {
 
    const fetchTravelstories = async () => {
 
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
+
       try {
-         const response = await axios.get('http://localhost:8080/api/v1/travelstories/');
+         const response = await axios.get(`${USERS_BASE_URL}/travelstories`, config);
 
          setTravelstories(response.data)
 
          randomTravelstory(response.data)
 
       } catch (error) {
-         console.error(error);
+         console.error(error.response);
       }
    }
 
@@ -61,7 +70,7 @@ export default function Travelstories() {
 
    return (
       <Layout navLinks={pageNavLinks.user}>
-         <Link to={`/travelstory/${id}`}>
+         <Link to={`/users/travelstory/${id}`}>
 
             <TravelstoryHeader bgImage={imageUrl} country={country} title={title} author={author}/>
 
