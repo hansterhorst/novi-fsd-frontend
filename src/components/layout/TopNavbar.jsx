@@ -1,12 +1,32 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Container from "../Container";
 import styled from "styled-components";
 import StyledNavLink from "../../styles/StyledNavLink";
 import TravelStoriesLogo from "../../assets/svg/TravelStoriesLogo";
 
 export default function TopNavbar({navLinks}) {
+
+   const MAX_SCROLL_HEIGHT = 100;
+   const [hasScrolled, setHasScrolled] = useState(false);
+
+   const handleScroll = (e) => {
+      const scrollTop = e.target.scrollingElement.scrollTop;
+      if (scrollTop > MAX_SCROLL_HEIGHT) {
+         setHasScrolled(true);
+      } else {
+         setHasScrolled(false);
+      }
+   };
+
+   useEffect(() => {
+      console.log("scroll")
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+   }, []);
+
+
    return (
-      <StyledNavbar>
+      <StyledNavbar hasScrolled={hasScrolled}>
          <Container>
             <Navbar>
                <TravelStoriesLogo/>
@@ -26,9 +46,18 @@ export default function TopNavbar({navLinks}) {
 
 const StyledNavbar = styled.nav`
   position: fixed;
-  margin-top: 50px;
+  top: 20px;
   width: 100%;
-  height: 96px;
+  transition: 0.3s ease-in-out;
+  background-color: transparent;
+  z-index: 100;
+
+  ${({hasScrolled}) => hasScrolled === true && `
+      background-color: #232F2F;
+      top: 0;
+      `
+  };
+
 `;
 
 const Navbar = styled.div`
@@ -39,7 +68,6 @@ const Navbar = styled.div`
 const NavUl = styled.ul`
   display: flex;
   align-items: center;
-
 `;
 
 const NavLi = styled.li`
