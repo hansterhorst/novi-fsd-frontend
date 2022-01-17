@@ -27,7 +27,8 @@ const StyledPasswordLabel = styled(StyledLabel)`
     font-weight: normal;
     font-size: 1.4rem;
     margin: 0 auto;
-
+    background-color: transparent;
+    cursor: pointer;
   }
 `
 

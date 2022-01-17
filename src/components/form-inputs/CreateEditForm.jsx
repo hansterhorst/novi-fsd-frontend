@@ -54,10 +54,6 @@ const StyledForm = styled.form`
 
   padding: 3rem 0 1rem;
 
-  p {
-    margin-bottom: 3rem;
-  }
-
   label {
     color: ${({theme: {colors}}) => colors.white};
   }

@@ -13,7 +13,7 @@ export default function InputOption({
 
    return (
       <StyledLabel>{labelTitle}
-         <StyledSelect type="option" {...register(`${name}`)} required={required}>
+         <StyledSelect {...register(`${name}`)} required={required}>
             <option value="Trip">{placeholder}</option>
             {options.map((option, index) => (
                <option key={index} value={option}>{option}</option>
@@ -21,7 +21,6 @@ export default function InputOption({
          </StyledSelect>
       </StyledLabel>
    )
-
 }
 
 const StyledSelect = styled.select`
@@ -33,4 +32,5 @@ const StyledSelect = styled.select`
   width: 100%;
   background-color: ${({theme: {colors}}) => colors.white};
   margin-bottom: 1.5rem;
+  height: 50px;
 `

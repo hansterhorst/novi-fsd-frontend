@@ -315,6 +315,7 @@ const StyledUser = styled.div`
       color: ${({theme: {colors}}) => colors.red};
       text-align: center;
       margin: 1rem 0 1rem;
+      text-transform: uppercase;
     }
   }
 `
