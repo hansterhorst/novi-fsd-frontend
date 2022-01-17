@@ -30,7 +30,7 @@ export default function Travelstory() {
    const {id} = useParams()
    const navigate = useNavigate()
 
-   const navLinks = isAuth && [
+   const navLinks = isAuth ? [
       {
          title: "Home",
          url: "/"
@@ -42,6 +42,19 @@ export default function Travelstory() {
       {
          title: "Profile",
          url: `/users/user/${authUser.id}`
+      },
+   ] : [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Register",
+         url: "/register"
+      },
+      {
+         title: "Login",
+         url: "/login"
       },
    ]
 
