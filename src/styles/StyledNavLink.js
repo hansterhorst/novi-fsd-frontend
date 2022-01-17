@@ -10,6 +10,12 @@ const StyledNavLink = styled(NavLink)`
   background-color: ${({theme}) => theme.colors.green};
   text-transform: uppercase;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  
+  span {
+    margin-right: 1rem;
+  }
 
   &[aria-current=page] {
     background: ${({theme}) => theme.colors.red};

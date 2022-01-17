@@ -3,6 +3,7 @@ import Container from "../Container";
 import styled from "styled-components";
 import StyledNavLink from "../../styles/StyledNavLink";
 import TravelStoriesLogo from "../../assets/svg/TravelStoriesLogo";
+import ProfileImage from "../ProfileImage";
 
 export default function TopNavbar({navLinks}) {
 
@@ -31,10 +32,13 @@ export default function TopNavbar({navLinks}) {
             <Navbar>
                <TravelStoriesLogo/>
                <NavUl>
-                  {navLinks && navLinks.map(({title, url, cta}) => (
+                  {navLinks && navLinks.map(({title, url, cta, image}) => (
                      <NavLi key={title}>
                         <StyledNavLink to={url}
-                                       onClick={cta}>{title}</StyledNavLink>
+                                       onClick={cta}>{image &&
+                           <span><ProfileImage profileImage={image} squareSize={16}/></span>}
+                           {title}
+                        </StyledNavLink>
                      </NavLi>
                   ))}
                </NavUl>

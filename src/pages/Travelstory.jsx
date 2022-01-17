@@ -40,8 +40,9 @@ export default function Travelstory() {
          url: "/users/travelstories"
       },
       {
-         title: "Profile",
-         url: `/users/user/${authUser.id}`
+         title: authUser.firstname,
+         url: `/users/user/${authUser.id}`,
+         image: authUser.profileImage
       },
    ] : [
       {

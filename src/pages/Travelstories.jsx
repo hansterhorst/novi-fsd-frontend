@@ -27,9 +27,10 @@ export default function Travelstories() {
          url: "/users/travelstories"
       },
       {
-         title: "Profile",
+         title: authUser.firstname,
          url: `/users/user/${authUser.id}`,
-      }
+         image: authUser.profileImage
+      },
    ]
 
    const fetchTravelstories = async () => {

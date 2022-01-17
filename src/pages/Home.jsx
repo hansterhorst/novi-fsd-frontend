@@ -36,7 +36,7 @@ const featureData = [
 export default function Home() {
 
    const [publicTravelstories, setPublicTravelstories] = useState([])
-   const {isAuth, logoutUser} = useContext(AuthContext)
+   const {isAuth, authUser} = useContext(AuthContext)
 
    const navLinks = isAuth ? [
       {
@@ -48,9 +48,9 @@ export default function Home() {
          url: "/users/travelstories"
       },
       {
-         title: "Logout",
-         url: "/login",
-         cta: logoutUser
+         title: authUser.firstname,
+         url: `/users/user/${authUser.id}`,
+         image: authUser.profileImage
       },
    ] : [
       {
