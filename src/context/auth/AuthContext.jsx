@@ -12,6 +12,8 @@ import {
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import {BASE_URL, USERS_BASE_URL} from "../../utils/constants";
+import Loading from "../../components/loading/Loading";
+import LoadingIcon from "../../components/loading/LoadingIcon";
 
 const initialState = {
    isAuth: false,
@@ -157,7 +159,8 @@ export default function AuthContextProvider({children}) {
             loadUser,
             logoutUser,
          }}>
-         {(!state.isLoading) ? children : <p>Loading</p> }
+         {(!state.isLoading) ? children :
+            <Loading><LoadingIcon /></Loading>}
 
       </AuthContext.Provider>
    )
