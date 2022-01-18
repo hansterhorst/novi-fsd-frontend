@@ -1,4 +1,4 @@
-import {createContext, useReducer} from "react";
+import {createContext, useEffect, useReducer} from "react";
 import authReducer from "./authReducer";
 import {
    AUTH_ERROR,
@@ -30,37 +30,57 @@ export default function AuthContextProvider({children}) {
    const [state, dispatch] = useReducer(authReducer, initialState)
 
 
+   useEffect(() => {
+      loadUser()
+   }, [])
+
+
    // load user
    async function loadUser() {
 
-      const email = jwt_decode(localStorage.getItem('token')).sub
+      const token = localStorage.getItem('token')
 
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         },
-         params: {
-            email
+      if (token) {
+
+         const tokenData = jwt_decode(token)
+         const email = tokenData.sub
+         const roles = tokenData.roles
+
+         console.log(tokenData)
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            params: {
+               email
+            }
          }
-      }
 
-      try {
-         const response = await axios.get(`${USERS_BASE_URL}/user`, config)
+         try {
+            const response = await axios.get(`${USERS_BASE_URL}/user`, config)
 
-         console.log(response)
+            dispatch({
+               type: LOAD_USER,
+               payload: {response, roles}
+            })
 
-         dispatch({
-            type: LOAD_USER,
-            payload: response
-         })
+         } catch (error) {
 
+            console.log(error.response)
 
-      } catch (error) {
+            dispatch({
+               type: AUTH_ERROR,
+               payload: error
+            })
+         }
+
+      } else {
 
          dispatch({
             type: AUTH_ERROR,
-            payload: error.response
+            payload: {data: "Invalid Token"}
          })
       }
    }
@@ -100,7 +120,6 @@ export default function AuthContextProvider({children}) {
 
          await loadUser()
 
-
       } catch (error) {
          console.log(error.response)
 
@@ -138,7 +157,8 @@ export default function AuthContextProvider({children}) {
             loadUser,
             logoutUser,
          }}>
-         {children}
+         {(!state.isLoading) ? children : <p>Loading</p> }
+
       </AuthContext.Provider>
    )
 }

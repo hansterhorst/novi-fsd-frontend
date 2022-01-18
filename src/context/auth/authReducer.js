@@ -21,16 +21,17 @@ export default function authReducer(state, action) {
             }
          }
       case LOGIN_SUCCESS:
-         localStorage.setItem("token", action.payload.data.accessToken)
+         const token = action.payload.data.accessToken
 
-         const decodeData = jwt_decode(action.payload.data.accessToken)
+         localStorage.setItem("token", token)
+         const decodeData = jwt_decode(token)
 
          return {
             ...state,
             isAuth: true,
             isLoading: false,
             roles: decodeData.roles,
-            token: action.payload.data.accessToken,
+            token: token,
             message: {
                status: action.payload.status,
                msg: action.payload.data
@@ -39,6 +40,7 @@ export default function authReducer(state, action) {
                email: decodeData.sub,
             },
          }
+
       case REGISTER_FAILED:
       case AUTH_ERROR:
       case LOGOUT:
@@ -51,23 +53,25 @@ export default function authReducer(state, action) {
             roles: [],
             token: null,
             message: {
-               status: action.payload.status,
+               status: action.payload.status || 500,
                msg: action.payload.data
             },
             authUser: {},
          }
 
       case LOAD_USER:
-         console.log(action.payload)
 
          return {
             ...state,
+            isAuth: true,
+            isLoading: false,
+            roles: action.payload.roles,
             message: {
-               status: action.payload.status,
-               msg: action.payload.data
+               status: action.payload.response.status,
+               msg: action.payload.response.statusText
             },
             authUser: {
-               ...action.payload.data
+               ...action.payload.response.data
             },
          }
 
