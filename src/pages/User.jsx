@@ -84,7 +84,7 @@ export default function User() {
 
          await randomTravelstory(response.data.travelstories)
 
-         await loadUser(response.data, authUser)
+         await isUserTheSameAuthUser(response.data, authUser)
 
          await getAllFollows()
 
@@ -156,7 +156,7 @@ export default function User() {
 
 
    useEffect(() => {
-      loadUser(user, authUser)
+      isUserTheSameAuthUser(user, authUser)
       // eslint-disable-next-line
    }, [authUser])
 
@@ -176,7 +176,7 @@ export default function User() {
 
 
    // TODO is user the same as authUser
-   function loadUser(user, authUser) {
+   function isUserTheSameAuthUser(user, authUser) {
       if (user.email === authUser.email) {
          setUser({...authUser, isUser: true})
       }
