@@ -11,10 +11,9 @@ import {AuthContext} from "../context/auth/AuthContext";
 
 export default function Travelstories() {
 
-   const {isAuth, authUser, roles} = useContext(AuthContext)
+   const {isAuth, authUser} = useContext(AuthContext)
    const [travelstories, setTravelstories] = useState([])
 
-   console.log(roles)
    const [travelstory, setTravelstory] = useState({})
 
    const navLinks = isAuth && [

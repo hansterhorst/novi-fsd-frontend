@@ -1,6 +1,5 @@
 import React, {useContext} from "react";
 import StyledThemesProvider from "./styles/StyledThemeProvider";
-import ResetCSS from "./styles/ResetCSS";
 import StyledTypography from "./styles/StyledTypography";
 import Home from "./pages/Home";
 import {Routes, Route, Navigate, Outlet} from "react-router-dom";
@@ -23,7 +22,6 @@ export default function App() {
 
    return (
       <StyledThemesProvider>
-         <ResetCSS/>
          <StyledTypography/>
          <Routes>
             {/* PUBLIC ROUTES */}
@@ -54,8 +52,12 @@ export default function App() {
 
 
 function RequireAdminAuth({isAuth, roles}) {
-   if (!(isAuth && roles.includes(ROLE_ADMIN))) {
+   if (!isAuth && !roles.includes(ROLE_ADMIN)) {
       return <Navigate to="/login"/>;
+   }
+
+   if(!roles.includes(ROLE_ADMIN)){
+      return <Navigate to="/users/travelstories"/>;
    }
 
    return <Outlet/>;
