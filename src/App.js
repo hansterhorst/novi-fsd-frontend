@@ -15,6 +15,7 @@ import Admin from "./pages/Admin";
 import {AuthContext} from "./context/auth/AuthContext";
 import PageNotFound from "./pages/PageNotFound";
 import {ROLE_ADMIN, ROLE_USER} from "./utils/constants";
+import EditProfile from "./pages/EditProfile";
 
 export default function App() {
 
@@ -37,6 +38,7 @@ export default function App() {
                <Route path="/users/travelstories/:id" element={<Travelstory/>}/>
                <Route path="/users/travelstories/edit/:id" element={<EditTravelstory/>}/>
                <Route path="/users/user/:id" element={<User/>}/>
+               <Route path="/users/user/:id/edit" element={<EditProfile/>}/>
             </Route>
             {/* ADMIN AUTHENTICATION ROUTES */}
             <Route element={<RequireAdminAuth isAuth={isAuth} roles={roles}/>}>
@@ -52,7 +54,6 @@ export default function App() {
 
 
 function RequireAdminAuth({isAuth, roles}) {
-
    if (!(isAuth && roles.includes(ROLE_ADMIN))) {
       return <Navigate to="/login"/>;
    }

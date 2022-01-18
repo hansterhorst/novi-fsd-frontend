@@ -75,7 +75,7 @@ export default function User() {
       }
 
       try {
-         const response = await axios.get(`${USERS_BASE_URL}/${id}`, config);
+         const response = await axios.get(`${USERS_BASE_URL}/user/${id}`, config);
 
          setUser(response.data)
 
@@ -174,6 +174,8 @@ export default function User() {
    * METHODES
    * */
 
+
+   // TODO is user the same as authUser
    function loadUser(user, authUser) {
       if (user.email === authUser.email) {
          setUser({...authUser, isUser: true})
@@ -203,14 +205,9 @@ export default function User() {
                </div>
 
                <div className="profile-bio">
-
                   <h2>{`${user.firstname} ${user.lastname}`}</h2>
-                  <h3>Delden • Nederland</h3>
+                  <h3>{user.city} • {user.country}</h3>
                   <p>{user.bio}</p>
-                  <p>I’m originally from sleepy Suffolk in the UK. I’m a crazy dreamer and with an
-                     insatiable desire for travel and adventure who could never settle for an
-                     ordinary
-                     life or conform with the norm.</p>
                </div>
 
                <div className="details">
@@ -233,21 +230,22 @@ export default function User() {
                   {/* if user is the same as authUser */}
                   {user.isUser ?
                      <>
+                        {/* CREATE TRAVELSTORY */}
                         {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>Volg
                            mij</StyledButton>}
                         <StyledLink to={`/users/travelstories/new/${authUser.id}`}>✏️
                            TravelStory</StyledLink>
-                        <StyledLink to={`/users/user/${user.id}`}>
+                        {/* EDIT PROFILE*/}
+                        {user.isUser && <StyledLink to={`/users/user/${user.id}/edit`}>
                            <ProfileImage squareSize={30} profileImage={user.profileImage}/>
                            edit
-                        </StyledLink>
+                        </StyledLink>}
                      </>
                      :
                      // follow user
                      <StyledButton onClick={() => handleFollowUser(authUser.id)}>
                         {userAlreadyFollowingUser(follows, authUser.id) ? `Niet volgen` : "Volg mij"}
                      </StyledButton>
-
                   }
                </div>
 
