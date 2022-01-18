@@ -20,7 +20,6 @@ export default function TopNavbar({navLinks}) {
    };
 
    useEffect(() => {
-      console.log("scroll")
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
    }, []);

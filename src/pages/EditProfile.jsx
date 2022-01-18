@@ -164,6 +164,10 @@ const StyledEditProfile = styled.div`
     color: ${({theme: {colors}}) => colors.red};
     text-align: center;
   }
+  
+  label{
+    color: ${({theme: {colors}}) => colors.green};
+  }
 
   .delete-button {
     display: flex;
