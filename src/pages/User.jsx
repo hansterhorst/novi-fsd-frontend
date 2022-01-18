@@ -174,8 +174,6 @@ export default function User() {
    * METHODES
    * */
 
-
-   // TODO is user the same as authUser
    function isUserTheSameAuthUser(user, authUser) {
       if (user.email === authUser.email) {
          setUser({...authUser, isUser: true})
