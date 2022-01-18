@@ -191,9 +191,12 @@ export default function Travelstory() {
                         </Link>
                      </div>
                      :
+                     /* REDIRECT PUBLIC USERS */
                      <div className="user-link">
-                        <ProfileImage squareSize={150} profileImage={authorImage}/>
-                        <h3>{author}</h3>
+                        <Link to={`/login`}>
+                           <ProfileImage squareSize={150} profileImage={authorImage}/>
+                           <h3>{author}</h3>
+                        </Link>
                      </div>
                   }
 
