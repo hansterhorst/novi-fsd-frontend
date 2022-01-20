@@ -12,6 +12,7 @@ import axios from "axios";
 import {USERS_BASE_URL} from "../utils/constants";
 import StyledTextButton from "../styles/StyledTextButton";
 import SubmitForm from "../components/form-inputs/SubmitForm";
+import ProfileImage from "../components/ProfileImage";
 
 
 export default function EditProfile() {
@@ -43,7 +44,6 @@ export default function EditProfile() {
       try {
 
          const response = await axios.get(`${USERS_BASE_URL}/user/${id}`, config);
-         console.log(response.data)
 
          const userData = {
             firstname: response.data.firstname,
@@ -62,18 +62,50 @@ export default function EditProfile() {
    }
 
    async function updateUser(data) {
-      console.log(data)
-
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         }
-      }
 
       try {
 
-         const response = await axios.put(`${USERS_BASE_URL}/user/${id}`, data, config);
+         const profileImage = data.profileImage[0]
+         const formData = new FormData();
+         formData.append("file", profileImage);
+
+         const config = {
+            headers: {
+               "Content-Type": "multipart/formData",
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.post(`${USERS_BASE_URL}/user/${authUser.id}/profile-image/upload`,
+            formData, config)
+         console.log(response)
+
+         console.log("File successfully uploaded.")
+
+      } catch (error) {
+         console.log("ERROR!!! " + error.response)
+      }
+
+
+      try {
+
+         const updateUser = {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            email: data.email,
+            city: data.city,
+            country: data.country,
+            bio: data.bio,
+         }
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.put(`${USERS_BASE_URL}/user/${id}`, updateUser, config);
          console.log(response.data)
 
          if (response.status === 200) {
@@ -108,7 +140,6 @@ export default function EditProfile() {
             logoutUser()
          }
 
-
       } catch (error) {
          console.log(error.response)
       }
@@ -135,9 +166,14 @@ export default function EditProfile() {
             <StyledEditProfile>
 
                <h1>Verander jouw Profiel</h1>
+
                <SubmitForm onSubmit={handleSubmit(updateUser)} register={register}
                            submitButtonTitle="Update Profiel">
 
+                  {/* PROFILE IMAGE UPLOAD */}
+                  <ProfileImage squareSize={200}/>
+                  <InputField labelTitle='Upload profiel foto' name="profileImage" type="file"
+                              register={register}/>
                   <InputField labelTitle="Voornaam" name="firstname" register={register}/>
                   <InputField labelTitle="Achternaam" name="lastname" register={register}/>
                   <InputField labelTitle="Email" name="email" type="email" register={register}/>
@@ -161,11 +197,12 @@ export default function EditProfile() {
 const StyledEditProfile = styled.div`
 
   h1 {
+    margin-top: 20rem;
     color: ${({theme: {colors}}) => colors.red};
     text-align: center;
   }
-  
-  label{
+
+  label {
     color: ${({theme: {colors}}) => colors.green};
   }
 
