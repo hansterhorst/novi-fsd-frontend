@@ -7,6 +7,7 @@ import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import TravelstoryHeader from "../components/travelstory/TravelstoryHeader";
 import {USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
 
 
 export default function Travelstories() {
@@ -28,7 +29,7 @@ export default function Travelstories() {
       {
          title: authUser.firstname,
          url: `/users/user/${authUser.id}`,
-         image: authUser.profileImage
+         image: awsGetProfileImage(authUser.id)
       },
    ]
 

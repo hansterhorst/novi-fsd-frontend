@@ -8,6 +8,7 @@ import {useForm} from "react-hook-form";
 import axios from "axios";
 import dateToLocalString from "../utils/dateToLocalString";
 import {USERS_BASE_URL} from "../utils/constants";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
 
 export default function Commit({travelstoryId}) {
 
@@ -81,10 +82,10 @@ export default function Commit({travelstoryId}) {
             </div>
          </StyledForm>
 
-         {comments && comments.map(({id, userProfile, fullname, createdAt, comment}) => (
+         {comments && comments.map(({id, userId, fullname, createdAt, comment}) => (
             <StyledComments key={id}>
 
-               <ProfileImage profileImage={userProfile}/>
+               <ProfileImage profileImage={awsGetProfileImage(userId)}/>
 
                <div className="comment">
                   <div className="comment-profile">

@@ -1,29 +1,14 @@
-import React, {useContext} from "react";
+import React from "react";
 import profileImageMask from "../assets/svg/profileImageMask.svg";
 import styled from "styled-components";
-import {AuthContext} from "../context/auth/AuthContext";
-import {PUBLIC_BASE_URL} from "../utils/constants";
 
 
-export default function ProfileImage({squareSize = 100}) {
-
-   const {authUser} = useContext(AuthContext)
-
-   console.log(authUser);
-
-   //   check user profile image link
-   let image
-   if (authUser.profileImage.includes("https")){
-      image = authUser.profileImage
-   } else {
-      image = `${PUBLIC_BASE_URL}/user/${authUser.id}/profile-image/download`
-   }
-
+export default function ProfileImage({squareSize = 100, profileImage }) {
 
    return (
       <StyledProfileImage mask={profileImageMask} squareSize={squareSize}>
          <div className="mask">
-            <img src={image} alt="profile"/>
+            <img src={profileImage} alt="profile"/>
          </div>
       </StyledProfileImage>
    )

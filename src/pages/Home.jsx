@@ -15,6 +15,7 @@ import Container from "../components/Container";
 import StyledLink from "../styles/StyledLink";
 import {PUBLIC_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
 
 const featureData = [
    {
@@ -50,7 +51,7 @@ export default function Home() {
       {
          title: authUser.firstname,
          url: `/users/user/${authUser.id}`,
-         image: authUser.profileImage
+         image: awsGetProfileImage(authUser.id)
       },
    ] : [
       {

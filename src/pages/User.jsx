@@ -16,6 +16,7 @@ import {AuthContext} from "../context/auth/AuthContext";
 import getTotalLikesFromUserTravelstories from "../utils/getTotalLikesUserTravelstories";
 import userAlreadyFollowingUser from "../utils/userAlreadyFollowing";
 import {USERS_BASE_URL} from "../utils/constants";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
 
 
 export default function User() {
@@ -198,7 +199,7 @@ export default function User() {
                <div className="profile-container">
                   <div className="profile-image">
                      <ProfileImage squareSize={150}
-                                   profileImage={user.profileImage}/>
+                                   profileImage={awsGetProfileImage(user.id)}/>
                   </div>
                </div>
 
@@ -235,7 +236,7 @@ export default function User() {
                            TravelStory</StyledLink>
                         {/* EDIT PROFILE*/}
                         {user.isUser && <StyledLink to={`/users/user/${user.id}/edit`}>
-                           <ProfileImage squareSize={30} profileImage={user.profileImage}/>
+                           <ProfileImage squareSize={30} profileImage={awsGetProfileImage(authUser.id)}/>
                            edit
                         </StyledLink>}
                      </>

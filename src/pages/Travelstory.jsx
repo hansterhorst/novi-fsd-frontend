@@ -19,6 +19,7 @@ import {
    PUBLIC_BASE_URL,
    USERS_BASE_URL,
 } from "../utils/constants";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
 
 
 export default function Travelstory() {
@@ -42,7 +43,7 @@ export default function Travelstory() {
       {
          title: authUser.firstname,
          url: `/users/user/${authUser.id}`,
-         image: authUser.profileImage
+         image: awsGetProfileImage(authUser.id)
       },
    ] : [
       {
@@ -160,7 +161,6 @@ export default function Travelstory() {
       tripDate,
       author,
       userId,
-      authorImage
    } = travelstory
 
 
@@ -186,7 +186,7 @@ export default function Travelstory() {
                   {isAuth ?
                      <div className="user-link">
                         <Link to={`/users/user/${userId}`}>
-                           <ProfileImage squareSize={150} profileImage={authorImage}/>
+                           <ProfileImage squareSize={150} profileImage={userId && awsGetProfileImage(userId)}/>
                            <h3>{author}</h3>
                         </Link>
                      </div>
@@ -194,7 +194,7 @@ export default function Travelstory() {
                      /* REDIRECT PUBLIC USERS */
                      <div className="user-link">
                         <Link to={`/login`}>
-                           <ProfileImage squareSize={150} profileImage={authorImage}/>
+                           <ProfileImage squareSize={150} profileImage={userId && awsGetProfileImage(userId)}/>
                            <h3>{author}</h3>
                         </Link>
                      </div>
