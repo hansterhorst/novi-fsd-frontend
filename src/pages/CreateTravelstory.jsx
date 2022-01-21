@@ -5,23 +5,34 @@ import Container from "../components/Container";
 import greenAltitudeLines from "../assets/images/green-altitude-lines.png"
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import {useForm} from "react-hook-form";
-import CreateEditForm from "../components/form-inputs/CreateEditForm";
 import axios from "axios";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
+import SubmitForm from "../components/form-inputs/SubmitForm";
+import InputField from "../components/form-inputs/InputField";
+import InputOption from "../components/form-inputs/InputOption";
+import InputCheckbox from "../components/form-inputs/InputCheckbox";
+import TextArea from "../components/form-inputs/TextArea";
+import InputImageUpload from "../components/form-inputs/InputImageUpload";
 
 
 export default function CreateTravelstory() {
 
-   const {isAuth} = useContext(AuthContext)
+   const {isAuth, authUser} = useContext(AuthContext)
    const navigate = useNavigate()
-   const {userId} = useParams()
-   const {register, handleSubmit} = useForm({
-      defaultValues: {
-         isPublic: true
-      }
-   })
+
+   const defaultValues = {
+      isPublic: true,
+      article: "",
+      country: "",
+      imageOne: {},
+      imageUrl: "",
+      title: "",
+      tripDate: "",
+      tripType: undefined,
+   }
+   const {register, handleSubmit} = useForm({defaultValues})
 
    const navLinks = isAuth && [
       {
@@ -37,25 +48,57 @@ export default function CreateTravelstory() {
 
    async function createTravelstory(data) {
 
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         }
-      }
-
       try {
 
-         const response = await axios.post(`${USERS_BASE_URL}/travelstories/user/${userId}`, data, config)
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.post(`${USERS_BASE_URL}/travelstories/user/${authUser.id}`, data, config)
 
          const storyId = response.data.id
-         if (response.status === 201) return navigate(`/users/travelstory/${storyId}`)
+
+
+         if (response.status === 201) {
+
+            try {
+
+               const imageOne = data.imageOne[0]
+               const formData = new FormData();
+               formData.append("file", imageOne);
+
+               const config = {
+                  headers: {
+                     "Content-Type": "multipart/formData",
+                     Authorization: `Bearer ${localStorage.getItem('token')}`,
+                  }
+               }
+
+               const response = await axios.post(`${USERS_BASE_URL}/user/${authUser.id}/travelstory/${storyId}/images/upload`,
+                  formData, config)
+
+               console.log(response)
+
+               if (response.status === 200) {
+                  navigate(`/users/travelstories/${storyId}`)
+                  console.log("Image successfully uploaded.")
+               }
+
+
+            } catch (error) {
+               console.log(error.response)
+            }
+
+         }
 
       } catch (error) {
          console.log(error.response)
       }
-
    }
+
 
    return (
       <Layout navLinks={navLinks}>
@@ -75,8 +118,35 @@ export default function CreateTravelstory() {
                   foto’s
                   over deze trip.</p>
 
-               <CreateEditForm onSubmit={handleSubmit(createTravelstory)} register={register}
-                               submitButtonTitle="Verstuur Travelstory"/>
+               <SubmitForm onSubmit={handleSubmit(createTravelstory)} register={register}
+                           submitButtonTitle="Verstuur Travelstory">
+
+                  <InputField labelTitle="* Titel Reisverhaal" name="title" register={register}/>
+
+                  <InputField labelTitle="* Welk land" name="country" register={register}/>
+
+                  <div className="input-container">
+                     <InputField labelTitle="* Datum Reis" type="date" name="tripDate"
+                                 register={register}/>
+
+                     <InputOption labelTitle="* Wat voor trip was het??" name="tripType"
+                                  checked={true} register={register}
+                                  placeholder="-- Kies een reis type --"
+                                  options={["Bikepacking", "Roadtrip", "Stedentrip", "Vakantie", "Weekend"]}/>
+                  </div>
+
+                  <InputCheckbox labelTitle="Mag iedereen uw reisverhaal lezen?" name="isPublic"
+                                 checked={true} register={register}/>
+
+                  <TextArea labelTitle="* Reisverhaal" name="article" register={register}
+                            height={400}/>
+
+                  {/* IMAGE UPLOAD */}
+                  <div className="preview-images">
+                     <InputImageUpload labelTitle="* Foto 1" name="imageOne" register={register}/>
+                  </div>
+
+               </SubmitForm>
 
                <div className="padding"/>
             </Container>

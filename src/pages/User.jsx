@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
 import grayAltitudeLines from '../assets/images/gray-altitude-lines.png'
 import whiteAltitudeLines from '../assets/images/white-altitude-lines.png'
-import anthem from "../assets/images/anthem.png"
 import styled from "styled-components";
 import StyledButton from "../styles/StyledButton";
 import axios from "axios";
@@ -17,6 +16,7 @@ import getTotalLikesFromUserTravelstories from "../utils/getTotalLikesUserTravel
 import userAlreadyFollowingUser from "../utils/userAlreadyFollowing";
 import {USERS_BASE_URL} from "../utils/constants";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
 
 
 export default function User() {
@@ -28,7 +28,8 @@ export default function User() {
    const [travelstory, setTravelstory] = useState({})
    const [follows, setFollowers] = useState([])
 
-   let {id} = useParams()
+   //   react-router
+   let {userId} = useParams()
 
 
    const navLinks = isAuth && roles.includes("ROLE_ADMIN") ? [
@@ -68,22 +69,18 @@ export default function User() {
 
    const getTravelstories = async () => {
 
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         }
-      }
-
       try {
-         const response = await axios.get(`${USERS_BASE_URL}/user/${id}`, config);
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.get(`${USERS_BASE_URL}/user/${userId}`, config);
 
          setUser(response.data)
-
-         setTravelstories(response.data.travelstories)
-
-
-         await randomTravelstory(response.data.travelstories)
 
          await isUserTheSameAuthUser(response.data, authUser)
 
@@ -107,7 +104,8 @@ export default function User() {
       if (userAlreadyFollowingUser(follows, authUserId)) {
 
          try {
-            const response = await axios.delete(`${USERS_BASE_URL}/${id}/follow/${authUser.id}`, config);
+
+            const response = await axios.delete(`${USERS_BASE_URL}/${userId}/follow/${authUser.id}`, config);
 
             if (response.status === 200) await getAllFollows()
 
@@ -118,33 +116,62 @@ export default function User() {
       } else {
 
          try {
-            const response = await axios.post(`${USERS_BASE_URL}/${id}/follow/${authUser.id}`, null, config);
+            const response = await axios.post(`${USERS_BASE_URL}/${userId}/follow/${authUser.id}`, null, config);
 
             if (response.status === 201) await getAllFollows()
 
          } catch (error) {
             console.error(error);
          }
-
       }
    }
 
-   async function getAllFollows() {
 
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         }
-      }
+   async function getAllUserTravelstories(userId) {
 
       try {
-         const response = await axios.get(`${USERS_BASE_URL}/${id}/follow`, config)
-         if (response.status === 200) setFollowers(response.data)
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+         const response = await axios.get(`${USERS_BASE_URL}/travelstories/user/${userId}`, config)
+
+         if (response.status === 200) {
+
+            setTravelstories(response.data)
+            await randomTravelstory(response.data)
+
+         }
       } catch (error) {
          console.log(error.response)
       }
    }
+
+
+   async function getAllFollows() {
+
+      try {
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.get(`${USERS_BASE_URL}/${userId}/follow`, config)
+         if (response.status === 200) {
+            setFollowers(response.data)
+         }
+
+      } catch (error) {
+         console.log(error.response)
+      }
+   }
+
 
    /*
    * USE_EFFECTS
@@ -152,6 +179,7 @@ export default function User() {
 
    useEffect(() => {
       getTravelstories()
+      getAllUserTravelstories(userId)
       // eslint-disable-next-line
    }, [])
 
@@ -192,7 +220,10 @@ export default function User() {
 
          <StyledUser>
 
-            <StyledHeader bgImage={travelstory ? travelstory.imageUrl : anthem}/>
+            {travelstory.imageUrl && travelstory.imageUrl.includes("http") ?
+               <StyledHeader bgImage={travelstory.imageUrl}/> :
+               <StyledHeader bgImage={awsGetTravelstoryImage(travelstory.userId, travelstory.id)}/>
+            }
 
             <Container maxWidth={750} bgImage={grayAltitudeLines}>
 
@@ -232,15 +263,18 @@ export default function User() {
                         {/* CREATE TRAVELSTORY */}
                         {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>Volg
                            mij</StyledButton>}
-                        <StyledLink to={`/users/travelstories/new/${authUser.id}`}>✏️
+                        <StyledLink to={`/users/travelstories/new/`}>✏️
                            TravelStory</StyledLink>
+
                         {/* EDIT PROFILE*/}
                         {user.isUser && <StyledLink to={`/users/user/${user.id}/edit`}>
                            <ProfileImage squareSize={30} profileImage={awsGetProfileImage(authUser.id)}/>
                            edit
                         </StyledLink>}
                      </>
+
                      :
+
                      // follow user
                      <StyledButton onClick={() => handleFollowUser(authUser.id)}>
                         {userAlreadyFollowingUser(follows, authUser.id) ? `Niet volgen` : "Volg mij"}

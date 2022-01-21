@@ -32,11 +32,11 @@ export default function App() {
             {/* USERS AUTHENTICATION ROUTES */}
             <Route element={<RequireUserAuth isAuth={isAuth} roles={roles}/>}>
                <Route path="/users/travelstories" element={<Travelstories/>}/>
-               <Route path="/users/travelstories/new/:userId" element={<CreateTravelstory/>}/>
-               <Route path="/users/travelstories/:id" element={<Travelstory/>}/>
-               <Route path="/users/travelstories/edit/:id" element={<EditTravelstory/>}/>
-               <Route path="/users/user/:id" element={<User/>}/>
-               <Route path="/users/user/:id/edit" element={<EditProfile/>}/>
+               <Route path="/users/travelstories/new/" element={<CreateTravelstory/>}/>
+               <Route path="/users/travelstories/:travelstoryId" element={<Travelstory/>}/>
+               <Route path="/users/travelstories/edit/:travelstoryId" element={<EditTravelstory/>}/>
+               <Route path="/users/user/:userId" element={<User/>}/>
+               <Route path="/users/user/:userId/edit" element={<EditProfile/>}/>
             </Route>
             {/* ADMIN AUTHENTICATION ROUTES */}
             <Route element={<RequireAdminAuth isAuth={isAuth} roles={roles}/>}>

@@ -8,7 +8,7 @@ export default function ProfileImage({squareSize = 100, profileImage }) {
    return (
       <StyledProfileImage mask={profileImageMask} squareSize={squareSize}>
          <div className="mask">
-            <img src={profileImage} alt="profile"/>
+            {profileImage && <img src={profileImage} alt="profile"/>}
          </div>
       </StyledProfileImage>
    )

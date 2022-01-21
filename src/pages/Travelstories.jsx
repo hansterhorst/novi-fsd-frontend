@@ -35,15 +35,15 @@ export default function Travelstories() {
 
    const fetchTravelstories = async () => {
 
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         }
-      }
-
-
       try {
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
          const response = await axios.get(`${USERS_BASE_URL}/travelstories`, config);
 
          setTravelstories(response.data)
@@ -51,6 +51,7 @@ export default function Travelstories() {
          randomTravelstory(response.data)
 
       } catch (error) {
+
          console.error(error.response);
       }
    }
@@ -88,7 +89,7 @@ export default function Travelstories() {
 
    return (
       <Layout navLinks={navLinks}>
-         <Link to={`/users/travelstory/${id}`}>
+         <Link to={`/users/travelstories/${id}`}>
 
             <TravelstoryHeader bgImage={imageUrl} country={country} title={title} author={author}/>
 

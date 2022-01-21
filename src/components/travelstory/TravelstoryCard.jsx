@@ -2,27 +2,45 @@ import React, {useContext} from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context/auth/AuthContext";
+import awsGetTravelstoryImage from "../../utils/awsGetTravelstoryImage";
 
 export default function TravelstoryCard({travelstory, maxWidth}) {
 
    const {isAuth} = useContext(AuthContext)
-
-   const {title, country, author, imageUrl, article, id} = travelstory
+   const {title, country, author, imageUrl, article, id, userId} = travelstory
 
    return (
-      <StyledTravelstoryCard bgImage={imageUrl} maxWidth={maxWidth}>
-         {/* route validation for public users */}
-         <Link to={isAuth ? `/users/travelstories/${id}` : `/public/travelstories/${id}`}>
-            <div className="header">
-               <h3>{country}</h3>
-               <h2>{title}</h2>
-               <h4>by {author}</h4>
-            </div>
-            <div className="content">
-               <p>{article}</p>
-            </div>
-         </Link>
-      </StyledTravelstoryCard>
+      <>
+         {imageUrl && imageUrl.includes("http") ?
+            <StyledTravelstoryCard bgImage={imageUrl} maxWidth={maxWidth}>
+               {/* route validation for public users */}
+               <Link to={isAuth ? `/users/travelstories/${id}` : `/public/travelstories/${id}`}>
+                  <div className="header">
+                     <h3>{country}</h3>
+                     <h2>{title}</h2>
+                     <h4>by {author}</h4>
+                  </div>
+                  <div className="content">
+                     <p>{article}</p>
+                  </div>
+               </Link>
+            </StyledTravelstoryCard>
+            :
+            <StyledTravelstoryCard bgImage={awsGetTravelstoryImage(userId, id)} maxWidth={maxWidth}>
+               {/* route validation for public users */}
+               <Link to={isAuth ? `/users/travelstories/${id}` : `/public/travelstories/${id}`}>
+                  <div className="header">
+                     <h3>{country}</h3>
+                     <h2>{title}</h2>
+                     <h4>by {author}</h4>
+                  </div>
+                  <div className="content">
+                     <p>{article}</p>
+                  </div>
+               </Link>
+            </StyledTravelstoryCard>
+         }
+      </>
    )
 }
 

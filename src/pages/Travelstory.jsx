@@ -20,6 +20,7 @@ import {
    USERS_BASE_URL,
 } from "../utils/constants";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
 
 
 export default function Travelstory() {
@@ -28,7 +29,9 @@ export default function Travelstory() {
 
    const [travelstory, setTravelstory] = useState([])
    const [likes, setLikes] = useState([])
-   const {id} = useParams()
+
+   // react-router-dom
+   const {travelstoryId} = useParams()
    const navigate = useNavigate()
 
    const navLinks = isAuth ? [
@@ -60,19 +63,22 @@ export default function Travelstory() {
       },
    ]
 
+
    const getTravelstoryById = async () => {
 
       if (isAuth) {
          try {
-            const response = await axios.get(`${USERS_BASE_URL}/travelstories/${id}`,
-               {
-                  headers: {
-                     'Content-Type': 'application/json',
-                     Authorization: `Bearer ${localStorage.getItem('token')}`,
-                  },
-               }
-            )
+
+            const config = {
+               headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+               },
+            }
+
+            const response = await axios.get(`${USERS_BASE_URL}/travelstories/${travelstoryId}`, config)
             setTravelstory(response.data)
+
          } catch (error) {
             console.error(error.response);
          }
@@ -81,8 +87,9 @@ export default function Travelstory() {
 
          try {
             console.log("PUBLIC")
-            const response = await axios.get(`${PUBLIC_BASE_URL}/travelstories/${id}`)
+            const response = await axios.get(`${PUBLIC_BASE_URL}/travelstories/${travelstoryId}`)
             setTravelstory(response.data)
+
          } catch (error) {
             console.error(error.response);
          }
@@ -101,9 +108,11 @@ export default function Travelstory() {
       if (isAuth && userAlreadyLikedTravelstory(likes, authUserId)) {
 
          try {
-            const response = await axios.delete(`${USERS_BASE_URL}/travelstories/${id}/likes/user/${authUserId}`, config
-            )
-            if (response.status === 200) await getAllTravelstoryLikes()
+            const response = await axios.delete(`${USERS_BASE_URL}/travelstories/${travelstoryId}/likes/user/${authUserId}`, config)
+
+            if (response.status === 200) {
+               await getAllTravelstoryLikes()
+            }
 
          } catch (error) {
             console.log(error.response)
@@ -112,10 +121,12 @@ export default function Travelstory() {
       } else {
 
          try {
-            const response = await axios.post(`${USERS_BASE_URL}/travelstories/${id}/likes/user/${authUserId}`, null,
-               config
-            )
-            if (response.status === 201) await getAllTravelstoryLikes()
+
+            const response = await axios.post(`${USERS_BASE_URL}/travelstories/${travelstoryId}/likes/user/${authUserId}`, null, config)
+
+            if (response.status === 201) {
+               await getAllTravelstoryLikes()
+            }
 
          } catch (error) {
             console.log(error.response)
@@ -125,19 +136,20 @@ export default function Travelstory() {
 
    async function getAllTravelstoryLikes() {
 
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         }
-      }
-
       if (isAuth) {
          try {
-            const response = await axios.get(`${USERS_BASE_URL}/travelstories/${id}/likes`,
-               config
-            )
+
+            const config = {
+               headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+               }
+            }
+
+            const response = await axios.get(`${USERS_BASE_URL}/travelstories/${travelstoryId}/likes`, config)
+
             setLikes(response.data)
+
          } catch (error) {
             console.log(error.response)
          }
@@ -168,7 +180,11 @@ export default function Travelstory() {
 
       <Layout navLinks={navLinks}>
 
-         <StyledHeader bgImage={imageUrl}/>
+         {imageUrl && imageUrl.includes("http") ?
+            <StyledHeader bgImage={imageUrl}/> :
+            <StyledHeader bgImage={awsGetTravelstoryImage(travelstory.userId, travelstory.id)}/>
+         }
+
 
          {/* ARTICLE DETAILS*/}
          <Container bgImage={grayAltitudeLines}>
@@ -227,7 +243,7 @@ export default function Travelstory() {
 
                   <StyledButton onClick={() => navigate(-1)}>terug</StyledButton>
 
-                  {/* user is login and user is the owner */}
+                  {/* EDIT ARTICLE user is login and user is the owner */}
                   {(isAuth && (authUser.id === travelstory.userId)) &&
                      <StyledLink to={`/users/travelstories/edit/${travelstory.id}`}>✏️
                         Edit</StyledLink>
@@ -240,7 +256,7 @@ export default function Travelstory() {
          {/* COMMENTS */}
          {isAuth &&
             <Container bgImage={greenAltitudeLines} maxWidth={800}>
-               <Commit travelstoryId={id}/>
+               <Commit travelstoryId={travelstoryId}/>
             </Container>
          }
 

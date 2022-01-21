@@ -8,18 +8,37 @@ import {useForm} from "react-hook-form";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import StyledTextButton from "../styles/StyledTextButton";
-import CreateEditForm from "../components/form-inputs/CreateEditForm";
 import {USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
+import SubmitForm from "../components/form-inputs/SubmitForm";
+import InputField from "../components/form-inputs/InputField";
+import InputOption from "../components/form-inputs/InputOption";
+import InputCheckbox from "../components/form-inputs/InputCheckbox";
+import TextArea from "../components/form-inputs/TextArea";
+import InputImageUpload from "../components/form-inputs/InputImageUpload";
 
 
 export default function EditTravelstory() {
 
    const {isAuth} = useContext(AuthContext)
-   const {id} = useParams()
+
+   //  react-router-dom
+   const {travelstoryId} = useParams()
    const navigate = useNavigate()
-   const [apiData, setApiData] = useState({})
-   const {register, handleSubmit, reset} = useForm()
+
+   const defaultValues = {
+      isPublic: true,
+      article: "",
+      country: "",
+      imageOne: undefined,
+      imageUrl: "",
+      title: "",
+      tripDate: "",
+      tripType: "",
+   }
+   const [apiData, setApiData] = useState(defaultValues)
+
+   const {register, handleSubmit, reset} = useForm({defaultValues})
 
    const navLinks = isAuth && [
       {
@@ -33,21 +52,23 @@ export default function EditTravelstory() {
 
    ]
 
-   const editTravelstory = async () => {
-
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-         }
-      }
+   const getTravelstory = async () => {
 
       try {
-         const response = await axios.get(`${USERS_BASE_URL}/travelstories/${id}`, config);
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.get(`${USERS_BASE_URL}/travelstories/${travelstoryId}`, config);
 
          const data = {
             ...response.data,
             tripDate: covertDateToInputDate(response.data.tripDate),
+            imageOne: response.data.imageUrl
          }
 
          setApiData(data)
@@ -57,8 +78,9 @@ export default function EditTravelstory() {
       }
    }
 
+
    useEffect(() => {
-      editTravelstory()
+      getTravelstory()
       // eslint-disable-next-line
    }, [])
 
@@ -70,18 +92,51 @@ export default function EditTravelstory() {
    }, [apiData])
 
 
-   async function onSubmit(data) {
+   async function updateTravelstory(data) {
+
+      if (data.imageOne !== data.imageUrl) {
+
+         try {
+
+            const imageOne = data.imageOne[0]
+            const formData = new FormData();
+            formData.append("file", imageOne);
+
+            const config = {
+               headers: {
+                  "Content-Type": "multipart/formData",
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+               }
+            }
+
+            data = {
+               ...data,
+               imageUrl: data.imageOne[0].name
+            }
+
+            const response = await axios.post(`${USERS_BASE_URL}/user/${apiData.userId}/travelstory/${travelstoryId}/images/upload`,
+               formData, config)
+
+            console.log(response)
+
+            console.log("Image successfully uploaded.")
 
 
-      const config = {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         } catch (error) {
+            console.log(error.response)
          }
       }
 
       try {
-         const response = await axios.put(`${USERS_BASE_URL}/travelstories/${id}`, data, config)
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.put(`${USERS_BASE_URL}/travelstories/${travelstoryId}`, data, config)
 
          if (response.status === 200) {
             navigate(-1)
@@ -91,8 +146,8 @@ export default function EditTravelstory() {
          console.log(error.response)
       }
 
-      console.log(data)
    }
+
 
    async function deleteTravelstory() {
 
@@ -106,8 +161,7 @@ export default function EditTravelstory() {
       }
 
       try {
-         const response = await axios.delete(`${USERS_BASE_URL}/travelstories/${id}`, config)
-         console.log(response)
+         const response = await axios.delete(`${USERS_BASE_URL}/travelstories/${travelstoryId}`, config)
 
          if (response.status === 200) {
             navigate(`/users/user/${userId}`)
@@ -118,6 +172,7 @@ export default function EditTravelstory() {
       }
    }
 
+
    function covertDateToInputDate(date) {
       if (date !== "") {
          return new Date(date).toISOString().split('T')[0]
@@ -125,6 +180,7 @@ export default function EditTravelstory() {
          return null
       }
    }
+
 
    return (
       <Layout navLinks={navLinks}>
@@ -137,8 +193,35 @@ export default function EditTravelstory() {
                   inputveld om daar jouw wijzigingen door te voeren. Vervolgens klik je op
                   button "UPDATE TRAVELSTORY"</p>
 
-               <CreateEditForm onSubmit={handleSubmit(onSubmit)} register={register}
-                               submitButtonTitle="Update Travelstory"/>
+               <SubmitForm onSubmit={handleSubmit(updateTravelstory)} submitButtonTitle="Update Travelstory">
+
+                  <InputField labelTitle="* Titel Reisverhaal" name="title" register={register}/>
+
+                  <InputField labelTitle="* Welk land" name="country" register={register}/>
+
+                  <div className="input-container">
+                     <InputField labelTitle="* Datum Reis" type="date" name="tripDate"
+                                 register={register}/>
+
+                     <InputOption labelTitle="* Wat voor trip was het??" name="tripType"
+                                  checked={true} register={register}
+                                  placeholder="-- Kies een reis type --"
+                                  options={["Bikepacking", "Roadtrip", "Stedentrip", "Vakantie", "Weekend"]}/>
+                  </div>
+
+                  <InputCheckbox labelTitle="Mag iedereen uw reisverhaal lezen?" name="isPublic"
+                                 checked={true} register={register}/>
+
+                  <TextArea labelTitle="* Reisverhaal" name="article" register={register}
+                            height={400}/>
+
+                  {/* IMAGE UPLOAD */}
+                  <div className="preview-images">
+                     <InputImageUpload labelTitle="* Foto 1" name="imageOne" register={register}
+                                       travelstoryId={travelstoryId} userId={apiData.userId}/>
+                  </div>
+
+               </SubmitForm>
 
                <div className="delete-button">
                   <StyledTextButton type="button" onClick={deleteTravelstory}>

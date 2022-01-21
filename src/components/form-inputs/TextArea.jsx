@@ -21,4 +21,5 @@ const StyledTextArea = styled.textarea`
   background-color: ${({theme: {colors}}) => colors.white};
   display: block;
   height: ${({height}) => `${height}px`};
+  margin-bottom: 1.5rem;
 `
