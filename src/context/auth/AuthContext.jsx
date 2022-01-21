@@ -48,7 +48,6 @@ export default function AuthContextProvider({children}) {
          const email = tokenData.sub
          const roles = tokenData.roles
 
-         console.log(tokenData)
 
          const config = {
             headers: {
@@ -92,7 +91,6 @@ export default function AuthContextProvider({children}) {
 
       try {
          const response = await axios.post(`${BASE_URL}/auth/register`, formData)
-         console.log(response)
 
          dispatch({
             type: REGISTER_SUCCESS,

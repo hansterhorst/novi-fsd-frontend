@@ -42,7 +42,6 @@ export default function Register() {
 
 
    useEffect(() => {
-      console.log(authUser)
       if (authUser.id) {
          navigate(`/users/user/${authUser.id}`)
       }

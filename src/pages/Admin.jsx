@@ -59,15 +59,9 @@ export default function Admin() {
    }, []);
 
 
+   // TODO add delete and update
    function updateUser(data) {
-      const user = {
-         firstname: data.firstname,
-         lastname: data.lastname,
-         email: data.email,
-         username: data.email,
-         password: data.password
-      }
-      console.log(user)
+      console.log(data.id)
    }
 
    function deleteUser(data) {
