@@ -28,7 +28,7 @@ export default function App() {
             <Route path="/" element={<Home/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
-            <Route path="/public/travelstories/:id" element={<Travelstory/>}/>
+            <Route path="/public/travelstories/:travelstoryId" element={<Travelstory/>}/>
             {/* USERS AUTHENTICATION ROUTES */}
             <Route element={<RequireUserAuth isAuth={isAuth} roles={roles}/>}>
                <Route path="/users/travelstories" element={<Travelstories/>}/>

@@ -33,7 +33,6 @@ export default function LoginRegisterForm({
 
 const StyledForm = styled.form`
 
-  padding: 3rem 0;
 
   h1 {
     color: ${({theme: {colors}}) => colors.red};
@@ -52,7 +51,7 @@ const StyledForm = styled.form`
   }
 
   .or-register {
-    margin: 3rem 0;
+    padding: 3rem 0;
     text-align: center;
   }
 

@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import Layout from "../components/layout/Layout";
 import grayAltitudeLines from '../assets/images/gray-altitude-lines.png'
 import whiteAltitudeLines from '../assets/images/white-altitude-lines.png'
+import anthem from "../assets/images/anthem.png"
 import styled from "styled-components";
 import StyledButton from "../styles/StyledButton";
 import axios from "axios";
@@ -16,7 +17,6 @@ import getTotalLikesFromUserTravelstories from "../utils/getTotalLikesUserTravel
 import userAlreadyFollowingUser from "../utils/userAlreadyFollowing";
 import {USERS_BASE_URL} from "../utils/constants";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
-import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
 
 
 export default function User() {
@@ -220,10 +220,7 @@ export default function User() {
 
          <StyledUser>
 
-            {travelstory.imageUrl && travelstory.imageUrl.includes("http") ?
-               <StyledHeader bgImage={travelstory.imageUrl}/> :
-               <StyledHeader bgImage={awsGetTravelstoryImage(travelstory.userId, travelstory.id)}/>
-            }
+            <StyledHeader bgImage={travelstory ? travelstory.imageUrl : anthem}/>
 
             <Container maxWidth={750} bgImage={grayAltitudeLines}>
 

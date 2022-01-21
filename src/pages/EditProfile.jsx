@@ -163,7 +163,7 @@ export default function EditProfile() {
 
    return (
       <Layout navLinks={navLinks}>
-         <Container fullHeight={true} bgImage={whiteAltitudeLines} maxWidth={800}>
+         <Container bgImage={whiteAltitudeLines} maxWidth={800}>
 
             <StyledEditProfile>
 
@@ -197,9 +197,11 @@ export default function EditProfile() {
 }
 
 const StyledEditProfile = styled.div`
+  
+  padding-bottom: 3rem;
 
   h1 {
-    margin-top: 20rem;
+    padding-top: 20rem;
     color: ${({theme: {colors}}) => colors.red};
     text-align: center;
   }
