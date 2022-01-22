@@ -17,6 +17,7 @@ import getTotalLikesFromUserTravelstories from "../utils/getTotalLikesUserTravel
 import userAlreadyFollowingUser from "../utils/userAlreadyFollowing";
 import {USERS_BASE_URL} from "../utils/constants";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
 
 
 export default function User() {
@@ -220,14 +221,14 @@ export default function User() {
 
          <StyledUser>
 
-            <StyledHeader bgImage={travelstory ? travelstory.imageUrl : anthem}/>
+            {travelstory ? <StyledHeader bgImage={awsGetTravelstoryImage(userId, travelstory.id)}/> :
+               <StyledHeader bgImage={anthem}/>}
 
             <Container maxWidth={750} bgImage={grayAltitudeLines}>
 
                <div className="profile-container">
                   <div className="profile-image">
-                     <ProfileImage squareSize={150}
-                                   profileImage={awsGetProfileImage(user.id)}/>
+                     <ProfileImage squareSize={150} profileImage={awsGetProfileImage(authUser.id)}/>
                   </div>
                </div>
 
@@ -302,6 +303,7 @@ const StyledUser = styled.div`
   .profile-image {
     position: absolute;
     top: -70px;
+    //text-align: center;
   }
 
   .profile-bio {

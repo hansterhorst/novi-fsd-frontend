@@ -8,6 +8,7 @@ import TravelstoryHeader from "../components/travelstory/TravelstoryHeader";
 import {USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
 
 
 export default function Travelstories() {
@@ -85,13 +86,13 @@ export default function Travelstories() {
       setTravelstory(array[index])
    }
 
-   const {id, imageUrl, country, title, author} = travelstory
+   const {id, country, title, author, userId} = travelstory
 
    return (
       <Layout navLinks={navLinks}>
          <Link to={`/users/travelstories/${id}`}>
 
-            <TravelstoryHeader bgImage={imageUrl} country={country} title={title} author={author}/>
+            <TravelstoryHeader bgImage={awsGetTravelstoryImage(userId, id)} country={country} title={title} author={author}/>
 
          </Link>
 

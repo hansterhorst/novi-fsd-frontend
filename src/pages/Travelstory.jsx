@@ -166,7 +166,6 @@ export default function Travelstory() {
 
    const {
       title,
-      imageUrl,
       article,
       country,
       tripType,
@@ -180,10 +179,7 @@ export default function Travelstory() {
 
       <Layout navLinks={navLinks}>
 
-         {imageUrl && imageUrl.includes("http") ?
-            <StyledHeader bgImage={imageUrl}/> :
-            <StyledHeader bgImage={awsGetTravelstoryImage(travelstory.userId, travelstory.id)}/>
-         }
+         <StyledHeader bgImage={awsGetTravelstoryImage(travelstory.userId, travelstory.id)}/>
 
 
          {/* ARTICLE DETAILS*/}
