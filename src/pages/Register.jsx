@@ -8,14 +8,19 @@ import LoginRegisterForm from "../components/form-inputs/LoginRegisterForm";
 import InputPassword from "../components/form-inputs/InputPassword";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../context/auth/AuthContext";
+import Alert from "../components/layout/Alert";
+import {AlertContext} from "../context/alert/AlertContext";
 
 export default function Register() {
 
    const navigate = useNavigate()
 
-   const {register, handleSubmit} = useForm()
+   // react hook form
+   const defaultValues = {email: "", firstname: "", lastname: "", password: "", password2: ""}
+   const {register, handleSubmit} = useForm({defaultValues})
 
    const {registerUser, message, authUser} = useContext(AuthContext)
+   const {setAlert} = useContext(AlertContext)
 
    const navLinks = [
       {
@@ -28,14 +33,20 @@ export default function Register() {
       }
    ]
 
-   async function onSubmit(data) {
-      registerUser(data)
-   }
-
 
    useEffect(() => {
-      if (message && message.status === 201) {
-         navigate('/login')
+      console.log(message)
+      switch (message.status) {
+         case 201:
+            navigate('/login')
+            setAlert(message.message, message.status)
+            return
+         case 500:
+         case 400:
+            setAlert(message.message, message.status, true)
+            return
+         default:
+            return
       }
       // eslint-disable-next-line
    }, [message])
@@ -49,9 +60,21 @@ export default function Register() {
    }, [authUser])
 
 
+   async function onSubmit(data) {
+
+      if (data.password !== data.password2) {
+         setAlert("Wachtwoorden komen niet overeen", 500, true)
+      } else {
+         registerUser(data)
+      }
+   }
+
+
    return (
       <Layout navLinks={navLinks}>
          <Container bgImage={whiteAltitudeLines} fullHeight={true} maxWidth={500}>
+
+            <Alert/>
 
             <LoginRegisterForm title="Register" submitButtonTitle="Register" orButtonTitle="Login"
                                onSubmit={handleSubmit(onSubmit)}>
