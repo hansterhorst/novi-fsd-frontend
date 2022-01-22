@@ -20,7 +20,7 @@ const initialState = {
    isLoading: true,
    roles: [],
    token: localStorage.getItem("token"),
-   message: {status: null, msg: ''},
+   response: {status: null, message: ''},
    authUser: {}
 }
 
@@ -132,12 +132,11 @@ export default function AuthContextProvider({children}) {
    }
 
    async function logoutUser() {
-      console.log("logout")
       dispatch({
          type: LOGOUT,
          payload: {
             status: 200,
-            msg: "User logout"
+            message: "Gebruiker  uitgelogd"
          }
       })
    }
@@ -150,7 +149,7 @@ export default function AuthContextProvider({children}) {
             token: state.token,
             isAuth: state.isAuth,
             isLoading: state.isLoading,
-            message: state.message,
+            message: state.response,
             roles: state.roles,
             registerUser,
             loginUser,

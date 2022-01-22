@@ -4,7 +4,7 @@ import {
    LOAD_USER,
    AUTH_ERROR,
    LOGIN_SUCCESS,
-   LOGOUT
+   LOGOUT, LOGIN_FAILED
 } from "../types"
 import jwt_decode from "jwt-decode"
 
@@ -15,9 +15,9 @@ export default function authReducer(state, action) {
          return {
             ...state,
             isLoading: false,
-            message: {
+            response: {
                status: action.payload.status,
-               msg: action.payload.data
+               message: action.payload.data
             }
          }
       case LOGIN_SUCCESS:
@@ -32,9 +32,9 @@ export default function authReducer(state, action) {
             isLoading: false,
             roles: decodeData.roles,
             token: token,
-            message: {
+            response: {
                status: action.payload.status,
-               msg: action.payload.data
+               message: action.payload.data
             },
             authUser: {
                email: decodeData.sub,
@@ -52,13 +52,28 @@ export default function authReducer(state, action) {
             isLoading: false,
             roles: [],
             token: null,
-            message: {
+            response: {
                status: action.payload.status || 500,
-               msg: action.payload.data
+               message: action.payload.data
             },
             authUser: {},
          }
 
+      case LOGIN_FAILED:
+         localStorage.removeItem("token")
+
+         return {
+            ...state,
+            isAuth: false,
+            isLoading: false,
+            roles: [],
+            token: null,
+            response: {
+               status: action.payload.status,
+               message: action.payload.data.message
+            },
+            authUser: {},
+         }
       case LOAD_USER:
 
          return {
@@ -66,9 +81,9 @@ export default function authReducer(state, action) {
             isAuth: true,
             isLoading: false,
             roles: action.payload.roles,
-            message: {
+            response: {
                status: action.payload.response.status,
-               msg: action.payload.response.statusText
+               message: action.payload.response.statusText
             },
             authUser: {
                ...action.payload.response.data
