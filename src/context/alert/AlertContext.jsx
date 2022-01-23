@@ -12,7 +12,7 @@ export function AlertContextProvider({children}) {
    const [state, dispatch] = useReducer(alertReducer, INITIAL_STATE);
 
 
-   function setAlert(message, statusCode = 200, isError = false) {
+   function setAlert(message = [], statusCode = 200, isError = false) {
       const id = UUIDv4()
       dispatch({
          type: SET_ALERT,

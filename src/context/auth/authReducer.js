@@ -4,7 +4,9 @@ import {
    LOAD_USER,
    AUTH_ERROR,
    LOGIN_SUCCESS,
-   LOGOUT, LOGIN_FAILED
+   LOGOUT,
+   LOGIN_FAILED,
+   CLEAR_ERRORS
 } from "../types"
 import jwt_decode from "jwt-decode"
 
@@ -53,8 +55,8 @@ export default function authReducer(state, action) {
             roles: [],
             token: null,
             response: {
-               status: action.payload.status || 500,
-               message: action.payload.data
+               status: action.payload.status,
+               message: action.payload.message
             },
             authUser: {},
          }
@@ -70,7 +72,7 @@ export default function authReducer(state, action) {
             token: null,
             response: {
                status: action.payload.status,
-               message: action.payload.data.message
+               message: action.payload.message
             },
             authUser: {},
          }
@@ -88,6 +90,12 @@ export default function authReducer(state, action) {
             authUser: {
                ...action.payload.response.data
             },
+         }
+
+      case CLEAR_ERRORS:
+         return {
+            ...state,
+            response: action.payload
          }
 
       default:

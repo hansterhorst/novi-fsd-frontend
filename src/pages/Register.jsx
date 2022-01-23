@@ -19,7 +19,7 @@ export default function Register() {
    const defaultValues = {email: "", firstname: "", lastname: "", password: "", password2: ""}
    const {register, handleSubmit} = useForm({defaultValues})
 
-   const {registerUser, message, authUser} = useContext(AuthContext)
+   const {registerUser, message, authUser, clearErrors} = useContext(AuthContext)
    const {setAlert} = useContext(AlertContext)
 
    const navLinks = [
@@ -35,21 +35,24 @@ export default function Register() {
 
 
    useEffect(() => {
-      console.log(message)
+
+
       switch (message.status) {
          case 201:
             navigate('/login')
             setAlert(message.message, message.status)
+            clearErrors()
             return
-         case 500:
          case 400:
             setAlert(message.message, message.status, true)
+            clearErrors()
             return
          default:
+            clearErrors()
             return
       }
       // eslint-disable-next-line
-   }, [message])
+   }, [message.status])
 
 
    useEffect(() => {
@@ -63,7 +66,7 @@ export default function Register() {
    async function onSubmit(data) {
 
       if (data.password !== data.password2) {
-         setAlert("Wachtwoorden komen niet overeen", 500, true)
+         setAlert(["Wachtwoorden komen niet overeen"], 500, true)
       } else {
          registerUser(data)
       }

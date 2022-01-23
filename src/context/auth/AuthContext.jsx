@@ -7,7 +7,8 @@ import {
    LOGIN_SUCCESS,
    REGISTER_FAILED,
    REGISTER_SUCCESS,
-   LOGOUT
+   LOGOUT,
+   CLEAR_ERRORS
 } from "../types";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -102,7 +103,7 @@ export default function AuthContextProvider({children}) {
 
          dispatch({
             type: REGISTER_FAILED,
-            payload: error.response
+            payload: error.response.data
          })
       }
    }
@@ -125,7 +126,7 @@ export default function AuthContextProvider({children}) {
 
          dispatch({
             type: LOGIN_FAILED,
-            payload: error.response
+            payload: error.response.data
          })
       }
 
@@ -136,8 +137,15 @@ export default function AuthContextProvider({children}) {
          type: LOGOUT,
          payload: {
             status: 200,
-            message: "Gebruiker  uitgelogd"
+            message: "Gebruiker uitgelogd"
          }
+      })
+   }
+
+   function clearErrors() {
+      dispatch({
+         type: CLEAR_ERRORS,
+         payload: []
       })
    }
 
@@ -155,9 +163,10 @@ export default function AuthContextProvider({children}) {
             loginUser,
             loadUser,
             logoutUser,
+            clearErrors
          }}>
          {(!state.isLoading) ? children :
-            <Loading><LoadingIcon /></Loading>}
+            <Loading><LoadingIcon/></Loading>}
 
       </AuthContext.Provider>
    )

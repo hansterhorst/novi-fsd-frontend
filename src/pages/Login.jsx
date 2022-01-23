@@ -14,7 +14,7 @@ import Alert from "../components/layout/Alert";
 
 export default function Login() {
 
-   const {authUser, loginUser, message} = useContext(AuthContext)
+   const {authUser, loginUser, message, clearErrors} = useContext(AuthContext)
    const {setAlert} = useContext(AlertContext)
 
    const navigate = useNavigate()
@@ -39,20 +39,25 @@ export default function Login() {
    }, [authUser])
 
    useEffect(() => {
-
       switch (message.status) {
-         case 401:
-            setAlert("Email of wachtwoord niet correct", 401, true)
-            return;
-         case 404:
+         case 400:
             setAlert(message.message, message.status, true)
+            clearErrors()
+            return
+         case 401:
+            setAlert([message.message], message.status, true)
+            clearErrors()
+            return
+         case 404:
+            setAlert([message.message], message.status, true)
+            clearErrors()
             return
          default:
+            clearErrors()
             return;
       }
       // eslint-disable-next-line
-   }, [message])
-
+   }, [message.status])
 
 
    function login(data) {
