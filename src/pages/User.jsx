@@ -228,7 +228,7 @@ export default function User() {
 
                <div className="profile-container">
                   <div className="profile-image">
-                     <ProfileImage squareSize={150} profileImage={awsGetProfileImage(authUser.id)}/>
+                     <ProfileImage squareSize={150} profileImage={awsGetProfileImage(userId)}/>
                   </div>
                </div>
 

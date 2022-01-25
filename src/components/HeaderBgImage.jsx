@@ -17,6 +17,7 @@ const StyledHeaderBgImage = styled.header`
   background-size: cover;
   width: 100%;
   aspect-ratio: 16/9;
+  height: calc(100vw /16 * 9); // fallback safari browser
   display: flex;
   flex-direction: column;
   align-items:center;

@@ -21,19 +21,20 @@ const StyledTravelstoryHeader = styled.header`
   background-size: cover;
   width: 100%;
   aspect-ratio: 16/9;
+  height: calc(100vw / 16 * 9); // fallback safari browser
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 3rem 0;
   text-align: center;
-  
+
 
   h2 {
     font-size: 4rem;
     font-weight: 900;
   }
-  
-  h3{
+
+  h3 {
     font-size: 3rem;
   }
 
