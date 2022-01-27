@@ -32,8 +32,25 @@ export default function User() {
    //   react-router
    let {userId} = useParams()
 
-
    const navLinks = isAuth && roles.includes("ROLE_ADMIN") ? [
+      {
+         title: "Home",
+         url: "/"
+      },
+      {
+         title: "Travelstories",
+         url: "/users/travelstories"
+      },
+      {
+         title: "Admin",
+         url: "/admin",
+      },
+      {
+         title: authUser.firstname,
+         url: `/users/user/${authUser.id}`,
+         image: awsGetProfileImage(authUser.id)
+      },
+   ] : (user.id === authUser.id) ? [
       {
          title: "Home",
          url: "/"
@@ -46,10 +63,6 @@ export default function User() {
          title: "Logout",
          url: "/",
          cta: logoutUser
-      },
-      {
-         title: "Admin",
-         url: "/admin",
       }
    ] : [
       {
@@ -68,7 +81,29 @@ export default function User() {
    ]
 
 
-   const getTravelstories = async () => {
+   useEffect(() => {
+      getTravelstories()
+      getAllUserTravelstories(userId)
+      // eslint-disable-next-line
+   }, [])
+
+
+   useEffect(() => {
+      isUserTheSameAuthUser(user, authUser)
+      // eslint-disable-next-line
+   }, [authUser])
+
+
+   useEffect(() => {
+      const interval = setInterval(() => {
+         randomTravelstory(travelstories)
+      }, 5000);
+      return () => clearInterval(interval)
+      // eslint-disable-next-line
+   }, [travelstory])
+
+
+   async function getTravelstories() {
 
       try {
 
@@ -173,36 +208,6 @@ export default function User() {
       }
    }
 
-
-   /*
-   * USE_EFFECTS
-   * */
-
-   useEffect(() => {
-      getTravelstories()
-      getAllUserTravelstories(userId)
-      // eslint-disable-next-line
-   }, [])
-
-
-   useEffect(() => {
-      isUserTheSameAuthUser(user, authUser)
-      // eslint-disable-next-line
-   }, [authUser])
-
-
-   useEffect(() => {
-      const interval = setInterval(() => {
-         randomTravelstory(travelstories)
-      }, 5000);
-      return () => clearInterval(interval)
-      // eslint-disable-next-line
-   }, [travelstory])
-
-
-   /*
-   * METHODES
-   * */
 
    function isUserTheSameAuthUser(user, authUser) {
       if (user.email === authUser.email) {

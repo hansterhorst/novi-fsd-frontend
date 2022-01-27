@@ -30,7 +30,7 @@ export default function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/public/travelstories/:travelstoryId" element={<Travelstory/>}/>
             {/* USERS AUTHENTICATION ROUTES */}
-            <Route element={<RequireUserAuth isAuth={isAuth} roles={roles}/>}>
+            <Route element={<RequireUserAuthentication isAuth={isAuth} roles={roles}/>}>
                <Route path="/users/travelstories" element={<Travelstories/>}/>
                <Route path="/users/travelstories/new/" element={<CreateTravelstory/>}/>
                <Route path="/users/travelstories/:travelstoryId" element={<Travelstory/>}/>
@@ -39,9 +39,9 @@ export default function App() {
                <Route path="/users/user/:userId/edit" element={<EditProfile/>}/>
             </Route>
             {/* ADMIN AUTHENTICATION ROUTES */}
-            <Route element={<RequireAdminAuth isAuth={isAuth} roles={roles}/>}>
+            <Route element={<RequireAdminAuthentication isAuth={isAuth} roles={roles}/>}>
                <Route path="/admin" element={<Admin/>}/>
-               <Route path="/admin/travelstory/:id" element={<EditTravelstory/>}/>
+               <Route path="/admin/travelstory/:travelstoryId" element={<EditTravelstory/>}/>
             </Route>
             {/* PAGE NOT FOUND ROUTE*/}
             <Route path="*" element={<PageNotFound/>}/>
@@ -51,20 +51,21 @@ export default function App() {
 }
 
 
-function RequireAdminAuth({isAuth, roles}) {
+function RequireAdminAuthentication({isAuth, roles}) {
    if (!isAuth && !roles.includes(ROLE_ADMIN)) {
       return <Navigate to="/login"/>;
    }
 
-   if(!roles.includes(ROLE_ADMIN)){
+   if (!roles.includes(ROLE_ADMIN)) {
       return <Navigate to="/users/travelstories"/>;
    }
 
+   // renders the next match
    return <Outlet/>;
 }
 
 
-function RequireUserAuth({isAuth, roles}) {
+function RequireUserAuthentication({isAuth, roles}) {
 
    if (!(isAuth && (roles.includes(ROLE_USER) || roles.includes(ROLE_ADMIN)))) {
       return <Navigate to="/login"/>;

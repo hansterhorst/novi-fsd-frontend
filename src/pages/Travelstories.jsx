@@ -8,14 +8,13 @@ import TravelstoryHeader from "../components/travelstory/TravelstoryHeader";
 import {USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
-import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
 
 
 export default function Travelstories() {
 
    const {isAuth, authUser} = useContext(AuthContext)
-   const [travelstories, setTravelstories] = useState([])
 
+   const [travelstories, setTravelstories] = useState([])
    const [travelstory, setTravelstory] = useState({})
 
    const navLinks = isAuth && [
@@ -34,7 +33,23 @@ export default function Travelstories() {
       },
    ]
 
-   const fetchTravelstories = async () => {
+
+   useEffect(() => {
+      getTravelstories()
+      // eslint-disable-next-line
+   }, [])
+
+
+   useEffect(() => {
+      const interval = setInterval(() => {
+         randomTravelstory(travelstories)
+      }, 5000);
+      return () => clearInterval(interval)
+      // eslint-disable-next-line
+   }, [travelstory])
+
+
+   async function getTravelstories() {
 
       try {
 
@@ -58,41 +73,17 @@ export default function Travelstories() {
    }
 
 
-   /*
-   * USE_EFFECTS
-   * */
-
-   useEffect(() => {
-      fetchTravelstories()
-      // eslint-disable-next-line
-   }, [])
-
-
-   useEffect(() => {
-      const interval = setInterval(() => {
-         randomTravelstory(travelstories)
-      }, 5000);
-      return () => clearInterval(interval)
-      // eslint-disable-next-line
-   }, [travelstory])
-
-
-   /*
-   * METHODES
-   * */
-
    function randomTravelstory(array) {
       const index = Math.floor(Math.random() * array.length)
       setTravelstory(array[index])
    }
 
-   const {id, country, title, author, userId} = travelstory
 
    return (
       <Layout navLinks={navLinks}>
-         <Link to={`/users/travelstories/${id}`}>
+         <Link to={`/users/travelstories/${travelstory.id}`}>
 
-            <TravelstoryHeader bgImage={awsGetTravelstoryImage(userId, id)} country={country} title={title} author={author}/>
+            <TravelstoryHeader travelstory={travelstory}/>
 
          </Link>
 

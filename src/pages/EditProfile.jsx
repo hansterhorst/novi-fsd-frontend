@@ -9,16 +9,20 @@ import TextArea from "../components/form-inputs/TextArea";
 import {useNavigate, useParams} from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import {USERS_BASE_URL} from "../utils/constants";
+import {ADMIN_BASE_URL, ROLE_ADMIN, USERS_BASE_URL} from "../utils/constants";
 import StyledTextButton from "../styles/StyledTextButton";
 import SubmitForm from "../components/form-inputs/SubmitForm";
-import ProfileImage from "../components/ProfileImage";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import {AlertContext} from "../context/alert/AlertContext";
+import Alert from "../components/layout/Alert";
+import InputImageUpload from "../components/form-inputs/InputImageUpload";
 
 
 export default function EditProfile() {
 
-   const {authUser, loadUser, logoutUser} = useContext(AuthContext)
+   const {authUser, loadUser, logoutUser, roles, isAuth} = useContext(AuthContext)
+   const {setAlert} = useContext(AlertContext)
+
    const [userData, setUserData] = useState({})
 
    //  react-router-dom
@@ -34,6 +38,20 @@ export default function EditProfile() {
       {title: "Home", url: "/"},
       {title: authUser.firstname, url: `/users/user/${authUser.id}`, image: awsGetProfileImage(authUser.id)}
    ]
+
+
+   //  reset form with the data from the database
+   useEffect(() => {
+      reset(userData)
+      // eslint-disable-next-line
+   }, [userData])
+
+
+   useEffect(() => {
+      getUserById()
+      // eslint-disable-next-line
+   }, [])
+
 
    async function getUserById() {
 
@@ -64,45 +82,46 @@ export default function EditProfile() {
       }
    }
 
+
    async function updateUser(data) {
 
       try {
 
-         const profileImage = data.profileImage[0]
-         const formData = new FormData();
-         formData.append("file", profileImage);
-
          const config = {
             headers: {
-               "Content-Type": "multipart/formData",
+               'Content-Type': 'application/json',
                Authorization: `Bearer ${localStorage.getItem('token')}`,
             }
          }
 
-         const response = await axios.post(`${USERS_BASE_URL}/user/${authUser.id}/profile-image/upload`,
-            formData, config)
+         const updateUser = {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            email: data.email,
+            city: data.city,
+            country: data.country,
+            bio: data.bio,
+         }
 
-         if (response.status === 200) {
+         const response = await axios.put(`${USERS_BASE_URL}/user/${userId}`, updateUser, config);
+
+         if (response.status === 200 && data.profileImage[0] !== undefined) {
 
             try {
 
-               const updateUser = {
-                  firstname: data.firstname,
-                  lastname: data.lastname,
-                  email: data.email,
-                  city: data.city,
-                  country: data.country,
-                  bio: data.bio,
-               }
+               const profileImage = data.profileImage[0]
+               const formData = new FormData();
+               formData.append("file", profileImage);
 
                const config = {
                   headers: {
-                     'Content-Type': 'application/json',
+                     "Content-Type": "multipart/formData",
                      Authorization: `Bearer ${localStorage.getItem('token')}`,
                   }
                }
 
-               const response = await axios.put(`${USERS_BASE_URL}/user/${userId}`, updateUser, config);
+               const response = await axios.post(`${USERS_BASE_URL}/user/${authUser.id}/profile-image/upload`,
+                  formData, config)
 
                if (response.status === 200) {
                   await loadUser()
@@ -112,17 +131,30 @@ export default function EditProfile() {
                }
 
             } catch (error) {
-               console.error(error);
+               console.error(error.response + " 134");
             }
+
+         } else {
+            await loadUser()
+            reset(defaultValues)
+            navigate(-1)
          }
 
-
       } catch (error) {
-         console.log("ERROR!!! " + error.response)
+
+         const status = error.response.data.status
+         const message = error.response.data.message
+
+         switch (status) {
+            case 400:
+               setAlert(message, status, true)
+               return
+            default:
+               return;
+         }
       }
-
-
    }
+
 
    async function deleteUser() {
 
@@ -135,7 +167,7 @@ export default function EditProfile() {
             }
          }
 
-         const response = await axios.delete(`${USERS_BASE_URL}/user/${userId}`, config)
+         const response = await axios.delete(`${ADMIN_BASE_URL}/user/${userId}`, config)
 
          if (response.status === 200) {
             navigate("/")
@@ -148,19 +180,6 @@ export default function EditProfile() {
    }
 
 
-   //  reset form with the data from the database
-   useEffect(() => {
-      reset(userData)
-      // eslint-disable-next-line
-   }, [userData])
-
-
-   useEffect(() => {
-      getUserById()
-      // eslint-disable-next-line
-   }, [])
-
-
    return (
       <Layout navLinks={navLinks}>
          <Container bgImage={whiteAltitudeLines} maxWidth={800}>
@@ -169,13 +188,13 @@ export default function EditProfile() {
 
                <h1>Verander jouw Profiel</h1>
 
+               <Alert/>
+
                <SubmitForm onSubmit={handleSubmit(updateUser)} register={register}
                            submitButtonTitle="Update Profiel">
 
-                  {/* PROFILE IMAGE UPLOAD */}
-                  <ProfileImage squareSize={200} profileImage={awsGetProfileImage(authUser.id)}/>
-                  <InputField labelTitle='Upload profiel foto' name="profileImage" type="file"
-                              register={register}/>
+                  <InputImageUpload labelTitle="Verander profiel foto" name="profileImage" register={register}
+                                    image={awsGetProfileImage(authUser.id)}/>
                   <InputField labelTitle="Voornaam" name="firstname" register={register}/>
                   <InputField labelTitle="Achternaam" name="lastname" register={register}/>
                   <InputField labelTitle="Email" name="email" type="email" register={register}/>
@@ -185,10 +204,9 @@ export default function EditProfile() {
 
                </SubmitForm>
                <div className="delete-button">
-                  <StyledTextButton type="button"
-                                    onClick={deleteUser}>
+                  {(isAuth && roles.includes(ROLE_ADMIN)) && <StyledTextButton type="button" onClick={deleteUser}>
                      of Verwijder account
-                  </StyledTextButton>
+                  </StyledTextButton>}
                </div>
             </StyledEditProfile>
          </Container>
@@ -197,7 +215,7 @@ export default function EditProfile() {
 }
 
 const StyledEditProfile = styled.div`
-  
+
   padding-bottom: 3rem;
 
   h1 {

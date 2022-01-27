@@ -15,11 +15,16 @@ import InputOption from "../components/form-inputs/InputOption";
 import InputCheckbox from "../components/form-inputs/InputCheckbox";
 import TextArea from "../components/form-inputs/TextArea";
 import InputImageUpload from "../components/form-inputs/InputImageUpload";
+import {AlertContext} from "../context/alert/AlertContext";
+import Alert from "../components/layout/Alert";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
 
 
 export default function CreateTravelstory() {
 
    const {isAuth, authUser} = useContext(AuthContext)
+   const {setAlert} = useContext(AlertContext)
+
    const navigate = useNavigate()
 
    const defaultValues = {
@@ -36,18 +41,18 @@ export default function CreateTravelstory() {
 
    const navLinks = isAuth && [
       {
-         title: "Home",
-         url: "/"
-      },
-      {
          title: "Travelstories",
          url: "/users/travelstories"
+      },
+      {
+         title: authUser.firstname,
+         url: `/users/user/${authUser.id}`,
+         image: awsGetProfileImage(authUser.id)
       },
    ]
 
 
    async function createTravelstory(data) {
-
       try {
 
          const config = {
@@ -61,41 +66,44 @@ export default function CreateTravelstory() {
 
          const storyId = response.data.id
 
+         // status code from the database, if image is set
+         if (response.status === 201 && data.imageOne[0]) {
 
-         if (response.status === 201) {
+            const imageOne = data.imageOne[0]
+            const formData = new FormData();
+            formData.append("file", imageOne);
 
-            try {
-
-               const imageOne = data.imageOne[0]
-               const formData = new FormData();
-               formData.append("file", imageOne);
-
-               const config = {
-                  headers: {
-                     "Content-Type": "multipart/formData",
-                     Authorization: `Bearer ${localStorage.getItem('token')}`,
-                  }
+            const config = {
+               headers: {
+                  "Content-Type": "multipart/formData",
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
                }
-
-               const response = await axios.post(`${USERS_BASE_URL}/user/${authUser.id}/travelstory/${storyId}/images/upload`,
-                  formData, config)
-
-               console.log(response)
-
-               if (response.status === 200) {
-                  navigate(`/users/travelstories/${storyId}`)
-                  console.log("Image successfully uploaded.")
-               }
-
-
-            } catch (error) {
-               console.log(error.response)
             }
 
+            const response = await axios.post(`${USERS_BASE_URL}/user/${authUser.id}/travelstory/${storyId}/images/upload`,
+               formData, config)
+
+            if (response.status === 200) {
+               navigate(`/users/travelstories/${storyId}`)
+               console.log("Image successfully uploaded.")
+            }
+
+         } else {
+            setAlert(["Eén foto is verplicht"], 400, true)
          }
 
       } catch (error) {
-         console.log(error.response)
+
+         const status = error.response.data.status
+         const message = error.response.data.message
+
+         switch (status) {
+            case 400:
+               setAlert(message, status, true)
+               return
+            default:
+               return;
+         }
       }
    }
 
@@ -110,13 +118,17 @@ export default function CreateTravelstory() {
 
             <Container maxWidth={900} bgImage={greenAltitudeLines}>
 
-               <p>Gebruik het formulier hieronder om jouw reisverhaal te maken. Om een
-                  reisverhaal
-                  te maken, geef het een titel, de datum van wanneer de trip is gemaakt, in welk
-                  land was de trip en wat voor trip was het, (road-, fiets-, steden- of dagtrip).
-                  Vervolgens schrijf je je reisverhaal en upload je maximaal 6 van je mooiste
-                  foto’s
-                  over deze trip.</p>
+               <div className="description">
+                  <p>Gebruik het formulier hieronder om jouw reisverhaal te maken. Om een
+                     reisverhaal
+                     te maken, geef het een titel, de datum van wanneer de trip is gemaakt, in welk
+                     land was de trip en wat voor trip was het, (road-, fiets-, steden- of dagtrip).
+                     Vervolgens schrijf je je reisverhaal en upload je maximaal 6 van je mooiste
+                     foto’s
+                     over deze trip.</p>
+               </div>
+
+               <Alert/>
 
                <SubmitForm onSubmit={handleSubmit(createTravelstory)} register={register}
                            submitButtonTitle="Verstuur Travelstory">
@@ -164,7 +176,7 @@ const StyledCreateTravelstory = styled.div`
     text-align: center;
   }
 
-  p {
+  .description {
     padding-top: 5rem;
   }
 

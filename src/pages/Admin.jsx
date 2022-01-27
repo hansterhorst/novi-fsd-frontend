@@ -8,14 +8,16 @@ import {useForm} from "react-hook-form";
 import StyledButton from "../styles/StyledButton";
 import StyledLink from "../styles/StyledLink";
 import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
-import InputPassword from "../components/form-inputs/InputPassword";
-import {USERS_BASE_URL} from "../utils/constants";
+import {ADMIN_BASE_URL, USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
 
 export default function Admin() {
 
-   const {logoutUser} = useContext(AuthContext)
+   const {authUser} = useContext(AuthContext)
    const [users, setUsers] = useState([]);
+
+   // react hook form
    const {register, handleSubmit, reset} = useForm()
 
    const navLinks = [
@@ -28,11 +30,17 @@ export default function Admin() {
          url: "/users/travelstories"
       },
       {
-         title: "Logout",
-         url: "/login",
-         cta: logoutUser
-      },
+         title: authUser.firstname,
+         url: `/users/user/${authUser.id}`,
+         image: awsGetProfileImage(authUser.id)
+      }
    ]
+
+
+   useEffect(() => {
+      getUsers()
+   }, []);
+
 
    async function getUsers() {
 
@@ -54,24 +62,40 @@ export default function Admin() {
    }
 
 
-   useEffect(() => {
-      getUsers()
-   }, []);
-
-
-   // TODO add delete and update
-   function updateUser(data) {
+   // TODO add update
+   async function updateUser(data) {
       console.log(data.id)
+
    }
 
-   function deleteUser(data) {
+   async function deleteUser(data) {
       console.log(data.id)
+
+      try {
+
+         const config = {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+         }
+
+         const response = await axios.delete(`${ADMIN_BASE_URL}/user/${data.id}`, config)
+
+         if (response.status === 200) {
+            await getUsers()
+         }
+
+      } catch (error) {
+         console.log(error.response)
+      }
    }
 
 
-   const handleCollapseList = (id, users) => {
+   function handleCollapseList(id, users) {
       const usersData = users.map((user) => {
          if (user.id === id) {
+            // react hook form, reset the form data
             reset(user)
             if (user.isUserCollapse === true) {
                return {
@@ -122,9 +146,6 @@ export default function Admin() {
 
                            <InputField labelTitle="Email" name="email" type="email"
                                        register={register}/>
-
-                           <InputPassword labelTitle="Wachtwoord" name="password" type="password"
-                                          register={register}/>
 
                            <div className="buttons">
                               <StyledButton type="submit"

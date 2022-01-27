@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import awsGetTravelstoryImage from "../../utils/awsGetTravelstoryImage";
 
-export default function TravelstoryHeader({bgImage, country, title, author}) {
+export default function TravelstoryHeader({travelstory}) {
 
    return (
-      <StyledTravelstoryHeader bgImage={bgImage}>
+      <StyledTravelstoryHeader bgImage={awsGetTravelstoryImage(travelstory.userId, travelstory.id)}>
          <div>
-            <h3>{country}</h3>
-            <h2>{title}</h2>
-            <h4>{author}</h4>
+            <h3>{travelstory.country}</h3>
+            <h2>{travelstory.title}</h2>
+            <h4>{travelstory.author}</h4>
          </div>
       </StyledTravelstoryHeader>
    )

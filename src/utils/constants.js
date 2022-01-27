@@ -1,3 +1,4 @@
+export const ADMIN_BASE_URL = "http://localhost:8080/api/v1/admin"
 export const USERS_BASE_URL = "http://localhost:8080/api/v1/users"
 export const PUBLIC_BASE_URL = "http://localhost:8080/api/v1/public"
 export const BASE_URL = "http://localhost:8080/api/v1"

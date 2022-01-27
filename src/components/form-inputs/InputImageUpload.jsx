@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import StyledLabel from "../../styles/StyledLabel";
-import awsGetTravelstoryImage from "../../utils/awsGetTravelstoryImage";
 
 export default function InputImageUpload({
                                             labelTitle,
                                             type = "file",
                                             name,
                                             required = false,
-                                            register, userId, travelstoryId
-
+                                            register,
+                                            image
                                          }) {
 
    const [selectedFile, setSelectedFile] = useState()
@@ -31,18 +30,19 @@ export default function InputImageUpload({
    }, [selectedFile])
 
 
-   const onSelectFile = e => {
+   function onSelectFile(e) {
       if (e.target.files || e.target.files.length !== 0) {
          setSelectedFile(e.target.files[0])
       }
    }
+
 
    return (
       <StyledPreview>
          <StyledLabel>{labelTitle}
             <StyledInput type={type} {...register(`${name}`)} required={required} onChange={onSelectFile}/>
             {selectedFile ? <img src={preview} alt="preview"/> :
-               <img src={awsGetTravelstoryImage(userId, travelstoryId)} alt="preview"/>}
+               <img src={image} alt="preview"/>}
          </StyledLabel>
       </StyledPreview>
    )

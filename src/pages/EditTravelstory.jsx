@@ -16,11 +16,16 @@ import InputOption from "../components/form-inputs/InputOption";
 import InputCheckbox from "../components/form-inputs/InputCheckbox";
 import TextArea from "../components/form-inputs/TextArea";
 import InputImageUpload from "../components/form-inputs/InputImageUpload";
+import Alert from "../components/layout/Alert";
+import {AlertContext} from "../context/alert/AlertContext";
+import awsGetProfileImage from "../utils/awsGetProfileImage";
+import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
 
 
 export default function EditTravelstory() {
 
-   const {isAuth} = useContext(AuthContext)
+   const {isAuth, authUser} = useContext(AuthContext)
+   const {setAlert} = useContext(AlertContext)
 
    //  react-router-dom
    const {travelstoryId} = useParams()
@@ -35,24 +40,39 @@ export default function EditTravelstory() {
       title: "",
       tripDate: "",
       tripType: "",
+      userId: undefined
    }
-   const [apiData, setApiData] = useState(defaultValues)
+   const [apiTravelstoryData, setApiTravelstoryData] = useState(defaultValues)
 
    const {register, handleSubmit, reset} = useForm({defaultValues})
 
    const navLinks = isAuth && [
       {
-         title: "Home",
-         url: "/"
-      },
-      {
          title: "Travelstories",
          url: "/users/travelstories"
       },
-
+      {
+         title: authUser.firstname,
+         url: `/users/user/${authUser.id}`,
+         image: awsGetProfileImage(authUser.id)
+      },
    ]
 
-   const getTravelstory = async () => {
+
+   useEffect(() => {
+      getTravelstory()
+      // eslint-disable-next-line
+   }, [])
+
+
+   //   reset form with the data from the database
+   useEffect(() => {
+      reset(apiTravelstoryData)
+      // eslint-disable-next-line
+   }, [apiTravelstoryData])
+
+
+   async function getTravelstory() {
 
       try {
 
@@ -71,25 +91,12 @@ export default function EditTravelstory() {
             imageOne: response.data.imageUrl
          }
 
-         setApiData(data)
+         setApiTravelstoryData(data)
 
       } catch (error) {
          console.error(error);
       }
    }
-
-
-   useEffect(() => {
-      getTravelstory()
-      // eslint-disable-next-line
-   }, [])
-
-
-   //   reset form with the data from the database
-   useEffect(() => {
-      reset(apiData)
-      // eslint-disable-next-line
-   }, [apiData])
 
 
    async function updateTravelstory(data) {
@@ -114,13 +121,10 @@ export default function EditTravelstory() {
                imageUrl: data.imageOne[0].name
             }
 
-            const response = await axios.post(`${USERS_BASE_URL}/user/${apiData.userId}/travelstory/${travelstoryId}/images/upload`,
+            await axios.post(`${USERS_BASE_URL}/user/${apiTravelstoryData.userId}/travelstory/${travelstoryId}/images/upload`,
                formData, config)
 
-            console.log(response)
-
             console.log("Image successfully uploaded.")
-
 
          } catch (error) {
             console.log(error.response)
@@ -139,19 +143,29 @@ export default function EditTravelstory() {
          const response = await axios.put(`${USERS_BASE_URL}/travelstories/${travelstoryId}`, data, config)
 
          if (response.status === 200) {
-            navigate(-1)
+            navigate(`/users/travelstories/${travelstoryId}`)
          }
 
       } catch (error) {
          console.log(error.response)
-      }
 
+         const status = error.response.data.status
+         const message = error.response.data.message
+
+         switch (status) {
+            case 400:
+               setAlert(message, status, true)
+               return
+            default:
+               return;
+         }
+      }
    }
 
 
    async function deleteTravelstory() {
 
-      const userId = apiData.userId
+      const userId = apiTravelstoryData.userId
 
       const config = {
          headers: {
@@ -189,9 +203,14 @@ export default function EditTravelstory() {
                <h1>Verander jouw TravelStory voor een nog mooiere reisverhaal</h1>
             </Container>
             <Container maxWidth={900} bgImage={greenAltitudeLines}>
-               <p>Gebruik het formulier hieronder om jouw reisverhaal te verbeteren. Ga na de
-                  inputveld om daar jouw wijzigingen door te voeren. Vervolgens klik je op
-                  button "UPDATE TRAVELSTORY"</p>
+
+               <div className="description">
+                  <p>Gebruik het formulier hieronder om jouw reisverhaal te verbeteren. Ga na de
+                     inputvelden om daar jouw wijzigingen door te voeren. Vervolgens klik je op
+                     "UPDATE TRAVELSTORY"</p>
+               </div>
+
+               <Alert/>
 
                <SubmitForm onSubmit={handleSubmit(updateTravelstory)} submitButtonTitle="Update Travelstory">
 
@@ -218,7 +237,7 @@ export default function EditTravelstory() {
                   {/* IMAGE UPLOAD */}
                   <div className="preview-images">
                      <InputImageUpload labelTitle="* Foto 1" name="imageOne" register={register}
-                                       travelstoryId={travelstoryId} userId={apiData.userId}/>
+                                       image={awsGetTravelstoryImage(apiTravelstoryData.userId, travelstoryId)}/>
                   </div>
 
                </SubmitForm>
@@ -242,7 +261,7 @@ const StyledCreateTravelstory = styled.div`
     text-align: center;
   }
 
-  p {
+  .description {
     padding-top: 5rem;
   }
 

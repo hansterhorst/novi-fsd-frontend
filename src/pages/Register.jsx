@@ -35,13 +35,11 @@ export default function Register() {
 
 
    useEffect(() => {
-
-
       switch (message.status) {
          case 201:
-            navigate('/login')
-            setAlert(message.message, message.status)
+            setAlert([message.message], message.status)
             clearErrors()
+            navigate('/login')
             return
          case 400:
             setAlert(message.message, message.status, true)
