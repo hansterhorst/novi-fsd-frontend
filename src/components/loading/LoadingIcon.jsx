@@ -19,9 +19,10 @@ export default function LoadingIcon({viewWidth=40}) {
 const StyledLoadingIcon = styled.div`
   position: relative;
   display: flex;
-
+  justify-content: center;
+  
   img {
-    width: ${({viewWidth}) => `${viewWidth}vw`};
+    width: ${({viewWidth}) => `${viewWidth}%`};
   }
 
   .rotated-needles {
