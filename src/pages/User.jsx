@@ -8,7 +8,7 @@ import StyledButton from "../styles/StyledButton";
 import axios from "axios";
 import Container from "../components/Container";
 import ProfileImage from "../components/ProfileImage";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import StyledLink from "../styles/StyledLink";
 import TravelstoriesGrid from "../components/travelstory/TravelstoriesGrid";
 import StyledHeader from "../styles/StyledHeader";
@@ -30,7 +30,8 @@ export default function User() {
    const [follows, setFollowers] = useState([])
 
    //   react-router
-   let {userId} = useParams()
+   const {userId} = useParams()
+   const navigate = useNavigate()
 
    const navLinks = isAuth && roles.includes("ROLE_ADMIN") ? [
       {
@@ -46,10 +47,10 @@ export default function User() {
          url: "/admin",
       },
       {
-         title: authUser.firstname,
-         url: `/users/user/${authUser.id}`,
-         image: awsGetProfileImage(authUser.id)
-      },
+         title: "Logout",
+         url: "/",
+         cta: logoutUser
+      }
    ] : (user.id === authUser.id) ? [
       {
          title: "Home",
@@ -82,8 +83,12 @@ export default function User() {
 
 
    useEffect(() => {
-      getTravelstories()
-      getAllUserTravelstories(userId)
+      if (authUser.bio !== null) {
+         getTravelstories()
+         getAllUserTravelstories(userId)
+      } else {
+         navigate(`/users/user/${userId}/edit`)
+      }
       // eslint-disable-next-line
    }, [])
 
@@ -91,16 +96,16 @@ export default function User() {
    useEffect(() => {
       isUserTheSameAuthUser(user, authUser)
       // eslint-disable-next-line
-   }, [authUser])
+   }, [authUser.id])
 
 
-   useEffect(() => {
-      const interval = setInterval(() => {
-         randomTravelstory(travelstories)
-      }, 5000);
-      return () => clearInterval(interval)
-      // eslint-disable-next-line
-   }, [travelstory])
+   // useEffect(() => {
+   //    const interval = setInterval(() => {
+   //       randomTravelstory(travelstories)
+   //    }, 5000);
+   //    return () => clearInterval(interval)
+   //    // eslint-disable-next-line
+   // }, [travelstory])
 
 
    async function getTravelstories() {
@@ -143,7 +148,7 @@ export default function User() {
 
             const response = await axios.delete(`${USERS_BASE_URL}/${userId}/follow/${authUser.id}`, config);
 
-            if (response.status === 200) await getAllFollows()
+            if (response.status === 200) await getAllFollows(userId)
 
          } catch (error) {
             console.error(error);
@@ -154,7 +159,7 @@ export default function User() {
          try {
             const response = await axios.post(`${USERS_BASE_URL}/${userId}/follow/${authUser.id}`, null, config);
 
-            if (response.status === 201) await getAllFollows()
+            if (response.status === 201) await getAllFollows(userId)
 
          } catch (error) {
             console.error(error);
@@ -308,7 +313,6 @@ const StyledUser = styled.div`
   .profile-image {
     position: absolute;
     top: -70px;
-    //text-align: center;
   }
 
   .profile-bio {

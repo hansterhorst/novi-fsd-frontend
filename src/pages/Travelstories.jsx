@@ -40,13 +40,13 @@ export default function Travelstories() {
    }, [])
 
 
-   useEffect(() => {
-      const interval = setInterval(() => {
-         randomTravelstory(travelstories)
-      }, 5000);
-      return () => clearInterval(interval)
-      // eslint-disable-next-line
-   }, [travelstory])
+   // useEffect(() => {
+   //    const interval = setInterval(() => {
+   //       randomTravelstory(travelstories)
+   //    }, 5000);
+   //    return () => clearInterval(interval)
+   //    // eslint-disable-next-line
+   // }, [travelstory])
 
 
    async function getTravelstories() {
@@ -89,7 +89,6 @@ export default function Travelstories() {
 
          <TravelstoriesGrid dataArray={travelstories} bgImage={whiteAltitudeLines} maxWidth={1200}
                             title="Laatste TravelStories"/>
-
       </Layout>
    );
 }

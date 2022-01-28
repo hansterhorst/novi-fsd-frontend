@@ -17,6 +17,6 @@ export default function PageNotFound() {
    )
 }
 
-const StyledPageNotFound = styled.div`
+const StyledPageNotFound = styled.section`
 
 `

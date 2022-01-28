@@ -18,7 +18,9 @@ export default function Login() {
    const {setAlert} = useContext(AlertContext)
 
    const navigate = useNavigate()
-   const {register, handleSubmit} = useForm()
+
+   const defaultValues = {usernameOrEmail: "", password: ""}
+   const {register, handleSubmit} = useForm({defaultValues})
 
    const navLinks = [
       {

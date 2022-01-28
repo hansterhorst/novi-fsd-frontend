@@ -68,6 +68,12 @@ export default function Home() {
       },
    ]
 
+
+   useEffect(() => {
+      getAllPublicTravelstories()
+   }, [])
+
+
    async function getAllPublicTravelstories() {
       try {
 
@@ -80,16 +86,12 @@ export default function Home() {
       }
    }
 
-   useEffect(() => {
-      getAllPublicTravelstories()
-   }, [])
-
 
    return (
       <Layout navLinks={navLinks}>
-         <StyledHome>
 
-            <HeaderBgImage bgImage={anthemImage}>
+         <HeaderBgImage bgImage={anthemImage}>
+            <StyledHome>
                <Container>
                   <h2>Schrijf verhalen over jouw reizen en deel ze met andere personen</h2>
                   <div className="buttons">
@@ -97,9 +99,9 @@ export default function Home() {
                      <StyledTextLink to="/login">or LOGIN</StyledTextLink>
                   </div>
                </Container>
-            </HeaderBgImage>
+            </StyledHome>
+         </HeaderBgImage>
 
-         </StyledHome>
 
          <Container bgImage={whiteAltitudeLines}>
             <Feature data={featureData[0]}/>

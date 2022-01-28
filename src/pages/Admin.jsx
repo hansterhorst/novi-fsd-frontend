@@ -62,12 +62,6 @@ export default function Admin() {
    }
 
 
-   // TODO add update
-   async function updateUser(data) {
-      console.log(data.id)
-
-   }
-
    async function deleteUser(data) {
       console.log(data.id)
 
@@ -97,6 +91,7 @@ export default function Admin() {
          if (user.id === id) {
             // react hook form, reset the form data
             reset(user)
+
             if (user.isUserCollapse === true) {
                return {
                   ...user,
@@ -148,10 +143,6 @@ export default function Admin() {
                                        register={register}/>
 
                            <div className="buttons">
-                              <StyledButton type="submit"
-                                            onClick={handleSubmit(updateUser)}>Update
-                                 User</StyledButton>
-
                               <StyledButton type="submit"
                                             onClick={handleSubmit(deleteUser)}>Delete
                                  User</StyledButton>

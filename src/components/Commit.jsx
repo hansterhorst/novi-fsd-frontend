@@ -9,12 +9,16 @@ import axios from "axios";
 import dateToLocalString from "../utils/dateToLocalString";
 import {USERS_BASE_URL} from "../utils/constants";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import {AlertContext} from "../context/alert/AlertContext";
+import Alert from "./layout/Alert";
 
 export default function Commit({travelstoryId}) {
 
    const {isAuth, authUser} = useContext(AuthContext)
+   const {setAlert} = useContext(AlertContext)
 
-   const {register, handleSubmit} = useForm()
+   const defaultValues = {comment: ""}
+   const {register, handleSubmit, reset} = useForm({defaultValues})
 
    const [comments, setComments] = useState([])
 
@@ -54,10 +58,13 @@ export default function Commit({travelstoryId}) {
 
          if (response.status === 201) {
             await getComments()
+            reset(defaultValues)
          }
 
       } catch (error) {
-         console.log(error.response)
+         const message = error.response.data.message
+         const status = error.response.data.status
+         setAlert(message, status, true)
       }
 
    }
@@ -74,8 +81,10 @@ export default function Commit({travelstoryId}) {
                reactie
                verwijderd.</h3>
 
+            <Alert/>
+
             <TextArea labelTitle="Reactie" name="comment" register={register}
-                      height={100} required={true}/>
+                      height={100} required={false}/>
 
             <div className="form-footer">
                <StyledButton type="onsubmit">Verstuur reactie</StyledButton>

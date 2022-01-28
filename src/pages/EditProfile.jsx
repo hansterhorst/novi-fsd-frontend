@@ -30,7 +30,7 @@ export default function EditProfile() {
    const navigate = useNavigate()
 
    // React Form Hook
-   const defaultValues = {firstname: "", lastname: "", email: "", city: "", country: "", bio: "",}
+   const defaultValues = {firstname: "", lastname: "", email: "", city: undefined, country: undefined, bio: undefined,}
    const {register, handleSubmit, reset} = useForm({defaultValues})
 
 

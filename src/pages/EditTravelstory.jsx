@@ -252,7 +252,7 @@ export default function EditTravelstory() {
    )
 }
 
-const StyledCreateTravelstory = styled.div`
+const StyledCreateTravelstory = styled.section`
 
   h1 {
     padding: 25rem 0 5rem;

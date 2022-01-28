@@ -260,7 +260,7 @@ export default function Travelstory() {
    )
 }
 
-const StyledArticleHeader = styled.div`
+const StyledArticleHeader = styled.section`
   position: relative;
   padding: 7rem 0;
 

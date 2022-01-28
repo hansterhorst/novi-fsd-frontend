@@ -15,7 +15,6 @@ export default function InputImageUpload({
    const [preview, setPreview] = useState("")
 
 
-   // create a preview as a side effect, whenever selected file is changed
    useEffect(() => {
       if (!selectedFile) {
          setPreview(undefined)
@@ -25,7 +24,6 @@ export default function InputImageUpload({
       const objectUrl = URL.createObjectURL(selectedFile)
       setPreview(objectUrl)
 
-      // free memory when ever this component is unmounted
       return () => URL.revokeObjectURL(objectUrl)
    }, [selectedFile])
 
