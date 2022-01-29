@@ -38,7 +38,6 @@ const StyledForm = styled.form`
     display: flex;
   }
 
-
   .form-footer {
     display: flex;
     justify-content: space-between;
@@ -51,6 +50,36 @@ const StyledForm = styled.form`
 
     label {
       width: auto;
+    }
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+
+    .input-container {
+      display: block;
+    }
+    
+    .form-footer {
+      flex-direction: column;
+
+      .form-buttons {
+        justify-content: end;
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.xs} {
+
+    .form-footer {
+      .form-buttons {
+        flex-direction: column;
+        justify-content: center;
+        
+        button{
+          margin: 1rem 0;
+        }
+      }
     }
   }
 

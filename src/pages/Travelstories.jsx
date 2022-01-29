@@ -87,7 +87,7 @@ export default function Travelstories() {
 
          </Link>
 
-         <TravelstoriesGrid dataArray={travelstories} bgImage={whiteAltitudeLines} maxWidth={1200}
+         <TravelstoriesGrid dataArray={travelstories} bgImage={whiteAltitudeLines} maxWidth={1100}
                             title="Laatste TravelStories"/>
       </Layout>
    );

@@ -42,4 +42,36 @@ const StyledTravelstoryHeader = styled.header`
   h4 {
     font-size: 3rem;
   }
+
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+
+    h2 {
+      font-size: 3rem;
+    }
+
+    h3 {
+      font-size: 2.5rem;
+    }
+
+    h4 {
+      font-size: 2rem;
+    }
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.xs} {
+
+    h2 {
+      font-size: 2.5rem;
+    }
+
+    h3 {
+      font-size: 2rem;
+    }
+
+    h4 {
+      font-size: 1.8rem;
+    }
+  }
+  
 `

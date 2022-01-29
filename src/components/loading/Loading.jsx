@@ -4,10 +4,10 @@ import whiteAltitudeLines from "../../assets/images/white-altitude-lines.png"
 import LoadingIcon from "./LoadingIcon";
 
 
-export default function Loading() {
+export default function Loading({fullscreen = false}) {
 
    return (
-      <StyledLoading bgImage={whiteAltitudeLines}>
+      <StyledLoading bgImage={whiteAltitudeLines} fullscreen={fullscreen}>
          <LoadingIcon/>
       </StyledLoading>
    )
@@ -20,8 +20,7 @@ const StyledLoading = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 100%;
-  width: 100%;
+  ${({fullscreen}) => fullscreen ? `height: 100vh; width: 100vw;` : `height: 100%; width: 100%;`});
 
   display: flex;
   align-items: center;

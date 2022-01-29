@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Container from "../Container";
 
 
-export default function TravelstoriesGrid({dataArray, title, maxWidth, bgImage}) {
+export default function TravelstoriesGrid({dataArray, title, maxWidth = 1000, bgImage}) {
 
    const [travelstories, setTravelstories] = useState([])
 
@@ -57,6 +57,24 @@ const StyledTravelstoriesGrid = styled.div`
 
 const StyledThreeColumnsGrid = styled.main`
   display: grid;
-  grid-template-columns: ${({index}) => index % 2 === 0 ? `2fr 1fr 1fr` : `1fr 1fr 2fr`};
-  grid-auto-flow: column;
+  grid-template-columns: ${({index}) => index % 2 === 0 ? `50% 25% 25%` : `25% 25% 50%`};
+    justify-content: center;
+  //grid-auto-flow: column;
+  
+  
+  @media only screen and ${({theme: {breakpoints}})=> breakpoints.md} {
+
+    grid-template-columns: 33% 33% 33%;
+
+    //grid-auto-flow: column;
+
+  }
+
+
+  @media only screen and ${({theme: {breakpoints}})=> breakpoints.sm} {
+    
+    grid-template-columns: 100%;
+    grid-auto-flow: row;
+  }
+  
 `

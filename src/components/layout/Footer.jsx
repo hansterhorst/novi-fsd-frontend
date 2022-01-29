@@ -1,28 +1,24 @@
 import React from "react";
 import styled from "styled-components";
-import TravelStoriesLogo from "../../assets/svg/TravelStoriesLogo";
+import logo from "../../assets/images/logo.png"
 
 export default function Footer() {
    return (
       <StyledFooter>
-         <TravelStoriesLogo />
-         <p>Created by Hans ter Horst</p>
+         <img src={logo} alt="Logo"/>
+         <a href="https://www.hansterhorst.com"><h4>Created by Hans ter Horst</h4></a>
       </StyledFooter>
    );
 }
 
 const StyledFooter = styled.footer`
-  background-color: ${({ theme: { colors } }) => colors.darkGray};
+  background-color: ${({theme: {colors}}) => colors.darkGray};
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px 0 20px;
 
-  p {
-    font-size: 18px;
-    font-weight: 700;
-    font-style: italic;
-    font-family: "Merriweather", serif;
-    color: ${({ theme: { colors } }) => colors.red};
+  h4 {
+    color: ${({theme: {colors}}) => colors.red};
   }
 `;

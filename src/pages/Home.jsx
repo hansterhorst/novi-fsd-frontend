@@ -93,10 +93,10 @@ export default function Home() {
          <HeaderBgImage bgImage={anthemImage}>
             <StyledHome>
                <Container>
-                  <h2>Schrijf verhalen over jouw reizen en deel ze met andere personen</h2>
+                  <h1>Schrijf verhalen over jouw reizen en deel ze met andere personen</h1>
                   <div className="buttons">
                      <StyledLink to="/register">Register</StyledLink>
-                     <StyledTextLink to="/login">or LOGIN</StyledTextLink>
+                     <StyledTextLink to="/login">of LOGIN</StyledTextLink>
                   </div>
                </Container>
             </StyledHome>
@@ -112,7 +112,7 @@ export default function Home() {
          </Container>
 
          <TravelstoriesGrid dataArray={publicTravelstories} title="De laatste TravelStories"
-                            maxWidth={1000}
+                            maxWidth={1100}
                             bgImage={whiteAltitudeLines}/>
       </Layout>
    )
@@ -121,12 +121,11 @@ export default function Home() {
 const StyledHome = styled.div`
   text-align: center;
   display: flex;
+  justify-content: center;
 
 
-  h2 {
-    font-size: 5rem;
+  h1 {
     line-height: 1;
-    padding: 10rem 0 2rem;
   }
 
   .buttons {
@@ -134,6 +133,40 @@ const StyledHome = styled.div`
     flex-direction: column;
     margin: 2rem 0;
     row-gap: 1rem;
+  }
+
+  
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.md} {
+    h1 {
+      font-size: 3rem;
+      padding: 0;
+    }
+
+    .buttons {
+      margin: 1.5rem 0;
+    }
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+    h1 {
+      font-size: 2.5rem;
+      padding: 0;
+    }
+    
+    .buttons {
+      margin: 1.5rem 0;
+    }
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.xs} {
+    h1 {
+      font-size: 2rem;
+      padding: 0;
+    }
+
+    .buttons {
+      margin: 1rem 0;
+    }
   }
 `
 

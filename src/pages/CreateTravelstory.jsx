@@ -184,4 +184,10 @@ const StyledCreateTravelstory = styled.div`
     padding-bottom: 5rem;
   }
 
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.md} {
+    h1 {
+      padding: 5rem 0 5rem;
+    }
+  }
+   
 `

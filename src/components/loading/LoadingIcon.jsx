@@ -1,15 +1,12 @@
-import React, {useContext} from "react";
+import React from "react";
 import styled from "styled-components";
 import kompas from "../../assets/svg/kompas.svg"
 import blades from "../../assets/svg/kompas-blades.svg"
-import {AuthContext} from "../../context/auth/AuthContext";
 
-export default function LoadingIcon({viewWidth=40}) {
-
-   const {isLoading} = useContext(AuthContext)
+export default function LoadingIcon() {
 
    return (
-      <StyledLoadingIcon isLoading={isLoading} viewWidth={viewWidth}>
+      <StyledLoadingIcon>
          <img src={kompas} alt="TravelStories"/>
          <img className="rotated-needles" src={blades} alt="TravelStories"/>
       </StyledLoadingIcon>
@@ -20,14 +17,15 @@ const StyledLoadingIcon = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  
+  width: 100%;
+
   img {
-    width: ${({viewWidth}) => `${viewWidth}%`};
+    width: 40%;
   }
 
   .rotated-needles {
     position: absolute;
-    
+
     @media (prefers-reduced-motion: no-preference) {
       animation: rotated-needles-animation infinite 3s linear;
     }

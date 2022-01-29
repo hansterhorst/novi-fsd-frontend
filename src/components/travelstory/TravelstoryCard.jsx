@@ -1,18 +1,30 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context/auth/AuthContext";
 import awsGetTravelstoryImage from "../../utils/awsGetTravelstoryImage";
+import LoadingIcon from "../loading/LoadingIcon";
+import Loading from "../loading/Loading";
 
 export default function TravelstoryCard({travelstory, maxWidth}) {
 
    const {isAuth} = useContext(AuthContext)
-   const {title, country, author, imageUrl, article, id, userId} = travelstory
+
+   const [loading, setLoading] = useState(false)
+
+   const {title, country, author, article, id, userId} = travelstory
+   const image = awsGetTravelstoryImage(userId, id)
+
+   useEffect(() => {
+      if (image) {
+         setLoading(true)
+      }
+      console.log("loading")
+   }, [image])
 
    return (
       <>
-         {imageUrl && imageUrl.includes("http") ?
-            <StyledTravelstoryCard bgImage={imageUrl} maxWidth={maxWidth}>
+         {loading ? <StyledTravelstoryCard bgImage={image} maxWidth={maxWidth}>
                {/* route validation for public users */}
                <Link to={isAuth ? `/users/travelstories/${id}` : `/public/travelstories/${id}`}>
                   <div className="header">
@@ -26,19 +38,9 @@ export default function TravelstoryCard({travelstory, maxWidth}) {
                </Link>
             </StyledTravelstoryCard>
             :
-            <StyledTravelstoryCard bgImage={awsGetTravelstoryImage(userId, id)} maxWidth={maxWidth}>
-               {/* route validation for public users */}
-               <Link to={isAuth ? `/users/travelstories/${id}` : `/public/travelstories/${id}`}>
-                  <div className="header">
-                     <h3>{country}</h3>
-                     <h2>{title}</h2>
-                     <h4>by {author}</h4>
-                  </div>
-                  <div className="content">
-                     <p>{article}</p>
-                  </div>
-               </Link>
-            </StyledTravelstoryCard>
+            <StyledTravelstoryCardLoading maxWidth={maxWidth}>
+               <Loading><LoadingIcon/></Loading>
+            </StyledTravelstoryCardLoading>
          }
       </>
    )
@@ -91,11 +93,19 @@ const StyledTravelstoryCard = styled.div`
       text-align: center;
       display: -webkit-box;
 
-      // show the first ... lines of text
+      // show the first 6 lines of text
       -webkit-line-clamp: 6;
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
     }
   }
+
+
+`
+
+const StyledTravelstoryCardLoading = styled.div`
+  height: calc((${({maxWidth}) => maxWidth + "px"} / 2) / 4 * 3);
+  margin: 0.5rem;
+  text-align: center;
 `

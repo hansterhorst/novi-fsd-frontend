@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Container from "../Container";
 import styled from "styled-components";
 import StyledNavLink from "../../styles/StyledNavLink";
-import TravelStoriesLogo from "../../assets/svg/TravelStoriesLogo";
+import logo from "../../assets/images/logo.png"
 import ProfileImage from "../ProfileImage";
 
 export default function TopNavbar({navLinks}) {
@@ -29,18 +29,20 @@ export default function TopNavbar({navLinks}) {
       <StyledNavbar hasScrolled={hasScrolled}>
          <Container>
             <Navbar>
-               <TravelStoriesLogo/>
-               <NavUl>
+               <div className="nav-logo">
+                  <img src={logo} alt="Logo"/>
+               </div>
+               <div className="nav-links">
                   {navLinks && navLinks.map(({title, url, cta, image}) => (
-                     <NavLi key={title}>
+                     <div className="nav-link" key={title}>
                         <StyledNavLink to={url}
                                        onClick={cta}>{image &&
                            <span><ProfileImage profileImage={image} squareSize={16}/></span>}
                            {title}
                         </StyledNavLink>
-                     </NavLi>
+                     </div>
                   ))}
-               </NavUl>
+               </div>
             </Navbar>
          </Container>
       </StyledNavbar>
@@ -55,29 +57,33 @@ const StyledNavbar = styled.nav`
   background-color: transparent;
   z-index: 100;
 
-  ${({hasScrolled}) => hasScrolled === true && `
+  ${({hasScrolled}) => hasScrolled && `
       background-color: #232F2F;
       top: 0;
       `
   };
-
 `;
 
 const Navbar = styled.div`
   display: flex;
   justify-content: space-between;
-`;
+  
+  .nav-links {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-link{
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
 
-const NavUl = styled.ul`
-  display: flex;
-  align-items: center;
-`;
-
-const NavLi = styled.li`
-  &:not(:last-child) {
-    margin-right: 20px;
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.md} {
+    display: none;
   }
 `;
+
 
 
 

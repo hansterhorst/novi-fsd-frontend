@@ -181,7 +181,6 @@ export default function Travelstory() {
 
          <StyledHeader bgImage={awsGetTravelstoryImage(travelstory.userId, travelstory.id)}/>
 
-
          {/* ARTICLE DETAILS*/}
          <Container bgImage={grayAltitudeLines}>
             <StyledArticleHeader>
@@ -268,12 +267,12 @@ const StyledArticleHeader = styled.section`
     width: calc(100% - 200px);
 
     h1, h2, h3 {
-      color: ${({theme}) => theme.colors.red};
+      color: ${({theme: {colors}}) => colors.red};
       text-transform: uppercase;
     }
 
     h4 {
-      color: ${({theme}) => theme.colors.green};
+      color: ${({theme: {colors}}) => colors.green};
     }
 
   }
@@ -316,6 +315,28 @@ const StyledArticleHeader = styled.section`
       background-color: ${({theme: {colors}}) => colors.red};
       border: 3px solid ${({theme: {colors}}) => colors.red};
       display: inline-block;
+    }
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0;
+
+    .article-header-titles {
+      position: relative;
+      width: 100%;
+      text-align: center;
+      top: -40px;
+    }
+
+    .article-header-profile {
+      position: relative;
+
+      h3 {
+        font-size: 2rem;
+      }
     }
   }
 

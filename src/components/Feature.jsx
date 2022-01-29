@@ -29,14 +29,28 @@ const StyledFeature = styled.article`
     width: 50%;
 
     h2 {
-      font-size: 3rem;
-      color: ${({theme}) => theme.colors.red};
+      color: ${({theme: {colors}}) => colors.red};
       margin: 2rem 0;
     }
   }
 
   .image-side {
     width: 50%;
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+
+    flex-direction: column-reverse;
+
+    .text-side, .image-side{
+      width: 100%;
+    }
+    
+    .text-side{
+      h2{
+        margin-bottom: 1rem;
+      }
+    }
   }
 
 `

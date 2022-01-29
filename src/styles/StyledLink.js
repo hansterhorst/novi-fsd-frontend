@@ -2,7 +2,6 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 
 const StyledLink = styled(Link)`
-  font-size: 1.6rem;
   font-weight: bold;
   color: ${({theme: {colors}}) => colors.white};
   text-transform: uppercase;
@@ -20,6 +19,12 @@ const StyledLink = styled(Link)`
     background-color: ${({theme: {colors}}) => colors.white};
     border: 3px solid ${({theme: {colors}}) => colors.red};
   }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.md} {
+    
+  }
+
+
 `
 
 export default StyledLink

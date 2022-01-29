@@ -173,9 +173,15 @@ const StyledAdmin = styled.div`
   padding: 30rem 0 5rem;
 
   h1 {
-    color: ${({theme}) => theme.colors.red};
+    color: ${({theme: {colors}}) => colors.red};
     text-align: center;
   }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.md} {
+    padding: 10rem 0 5rem;
+
+  }
+
 `
 
 const StyledCollapseList = styled.div`
@@ -191,13 +197,13 @@ const StyledCollapseList = styled.div`
   }
 
   p {
-    color: ${({theme}) => theme.colors.black};
+    color: ${({theme: {colors}}) => colors.black};
   }
 `
 
 const StyledCollapseContent = styled.div`
-  border: 3px solid ${({theme}) => theme.colors.red};
-  background-color: ${({theme}) => theme.colors.white};
+  border: 3px solid ${({theme: {colors}}) => colors.red};
+  background-color: ${({theme: {colors}}) => colors.white};
   color: ${({theme}) => theme.colors.green};
   padding: 0.5rem;
   display: ${({isCollapse}) => (isCollapse ? 'block' : 'none')};
@@ -233,7 +239,6 @@ const StyledCollapseContent = styled.div`
     }
   }
 `
-
 
 const StyledCollapseButton = styled.button`
   background-color: ${({isCollapse}) => isCollapse ? `#A04340` : `#8B9678`};

@@ -166,7 +166,7 @@ export default function AuthContextProvider({children}) {
             clearErrors
          }}>
          {(!state.isLoading) ? children :
-            <Loading><LoadingIcon/></Loading>}
+            <Loading fullscreen={true}><LoadingIcon/></Loading>}
 
       </AuthContext.Provider>
    )

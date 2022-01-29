@@ -6,12 +6,20 @@ const theme = {
       red: "#A04340",
       lightGray: "#C6C7BC",
       green: "#8B9678",
+      darkGreen: "#7D876C",
       white: "#F1F2EC",
       black: "#111111"
    },
 
    settings:{
       maxWidth: `1000px`
+   },
+
+   breakpoints:{
+      xs: `(max-width: 320px)`,
+      sm: `(max-width: 576px)`,
+      md: `(max-width: 768px)`,
+      lg: `(max-width: 992px)`,
    }
 };
 

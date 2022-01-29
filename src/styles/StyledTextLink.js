@@ -3,8 +3,7 @@ import {Link} from "react-router-dom";
 
 const StyledTextLink = styled(Link)`
   font-weight: 700;
-  font-size: 1.5rem;
-  color: ${({theme: {colors}}) => colors.green};
+  color: ${({theme: {colors}}) => colors.darkGreen};
   text-decoration: underline;
 
   &:hover {

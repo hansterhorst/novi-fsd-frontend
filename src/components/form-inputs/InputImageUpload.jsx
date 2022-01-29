@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import StyledLabel from "../../styles/StyledLabel";
+import StyledInput from "../../styles/StyledInput";
 
 export default function InputImageUpload({
                                             labelTitle,
@@ -47,16 +48,6 @@ export default function InputImageUpload({
 
 }
 
-const StyledInput = styled.input`
-  padding: 0.8rem 1.6rem;
-  font-family: "Merriweather", serif;
-  font-size: 1.8rem;
-  color: ${({theme: {colors}}) => colors.black};
-  border: 3px solid ${({theme: {colors}}) => colors.green};
-  width: 100%;
-  background-color: ${({theme: {colors}}) => colors.white};
-
-`
 
 const StyledPreview = styled.div`
   width: 50%;
@@ -65,9 +56,12 @@ const StyledPreview = styled.div`
     width: 100%;
     aspect-ratio: 16/9;
     object-fit: cover;
-    border: 3px solid ${({theme: {colors}}) => colors.green};
+    border: 3px solid ${({theme: {colors}}) => colors.darkGreen};
     margin-bottom: 1.5rem;
 
   }
 
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.md} {
+    width: 100%;
+  }
 `

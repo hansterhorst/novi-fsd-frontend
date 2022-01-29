@@ -44,7 +44,6 @@ const StyledForm = styled.form`
     justify-content: space-between;
 
     label {
-      color: ${({theme: {colors}}) => colors.green};
       font-size: 1.6rem;
       font-weight: 500;
     }

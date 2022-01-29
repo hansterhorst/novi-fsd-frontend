@@ -2,7 +2,7 @@ import * as React from "react";
 
 export default function TravelStoriesLogo() {
   return (
-    <svg width={396} height={96} xmlns="http://www.w3.org/2000/svg">
+    <svg width={396} height={96} >
       <title>{"LOGO"}</title>
       <g fill="none" fillRule="evenodd">
         <path fill="#232F2F" d="M0 0h396l-15 48 15 48H0z" />

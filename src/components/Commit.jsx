@@ -109,7 +109,7 @@ export default function Commit({travelstoryId}) {
             </StyledComments>
          ))}
          <StyledComments>
-            {comments.length === 0 && <p>Nog geen reacties geplaatst, wees de eerste.</p>}
+            {comments.length === 0 && <p className="no-comments">Nog geen reacties geplaatst, wees de eerste.</p>}
          </StyledComments>
       </>
    )
@@ -133,6 +133,12 @@ const StyledForm = styled.form`
     display: flex;
     justify-content: flex-end;
     margin: 2rem 0 0;
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+    h3 {
+      text-align: center;
+    }
   }
 `
 
@@ -164,4 +170,12 @@ const StyledComments = styled.section`
       }
     }
   }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+      .no-comments{
+        width: 100%;
+       text-align: center; 
+      }
+  }
+
 `

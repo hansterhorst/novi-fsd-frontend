@@ -28,9 +28,8 @@ const StyledSelect = styled.select`
   font-family: "Merriweather", serif;
   font-size: 1.8rem;
   color: ${({theme: {colors}}) => colors.black};
-  border: 3px solid ${({theme: {colors}}) => colors.green};
+  border: 3px solid ${({theme: {colors}}) => colors.darkGreen};
   width: 100%;
   background-color: ${({theme: {colors}}) => colors.white};
   margin-bottom: 1.5rem;
-  height: 50px;
 `

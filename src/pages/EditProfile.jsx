@@ -225,7 +225,7 @@ const StyledEditProfile = styled.div`
   }
 
   label {
-    color: ${({theme: {colors}}) => colors.green};
+    color: ${({theme: {colors}}) => colors.darkGreen};
   }
 
   .delete-button {

@@ -132,7 +132,6 @@ export default function User() {
       }
    }
 
-
    async function handleFollowUser(authUserId) {
 
       const config = {
@@ -166,7 +165,6 @@ export default function User() {
          }
       }
    }
-
 
    async function getAllUserTravelstories(userId) {
 
@@ -213,7 +211,6 @@ export default function User() {
       }
    }
 
-
    function isUserTheSameAuthUser(user, authUser) {
       if (user.email === authUser.email) {
          setUser({...authUser, isUser: true})
@@ -252,14 +249,14 @@ export default function User() {
                   <label>Travelstories
                      <h3>{travelstories && travelstories.length}</h3>
                   </label>
+                  <label>images
+                     <h3>{travelstories && travelstories.length}</h3>
+                  </label>
                   <label>Volgers
                      <h3>{follows && follows.length}</h3>
                   </label>
                   <label>Likes
                      <h3>{getTotalLikesFromUserTravelstories(travelstories)}</h3>
-                  </label>
-                  <label>images
-                     <h3>10</h3>
                   </label>
                </div>
 
@@ -271,7 +268,7 @@ export default function User() {
                         {/* CREATE TRAVELSTORY */}
                         {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>Volg
                            mij</StyledButton>}
-                        <StyledLink to={`/users/travelstories/new/`}>✏️
+                        <StyledLink to={`/users/travelstories/new/`}><span>✏️</span>
                            TravelStory</StyledLink>
 
                         {/* EDIT PROFILE*/}
@@ -280,9 +277,7 @@ export default function User() {
                            edit
                         </StyledLink>}
                      </>
-
                      :
-
                      // follow user
                      <StyledButton onClick={() => handleFollowUser(authUser.id)}>
                         {userAlreadyFollowingUser(follows, authUser.id) ? `Niet volgen` : "Volg mij"}
@@ -294,7 +289,6 @@ export default function User() {
 
             <TravelstoriesGrid title="Mijn TravelStories" dataArray={travelstories} maxWidth={1000}
                                bgImage={whiteAltitudeLines}/>
-
          </StyledUser>
       </Layout>
    )
@@ -334,7 +328,6 @@ const StyledUser = styled.div`
       color: ${({theme: {colors}}) => colors.white};
       margin: 2rem 0 1rem;
     }
-
   }
 
   .profile-buttons {
@@ -357,4 +350,16 @@ const StyledUser = styled.div`
       text-transform: uppercase;
     }
   }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+    .details{
+      flex-wrap: wrap;
+      
+      label{
+        width: 50%;
+      }
+    }
+  }
+
+
 `

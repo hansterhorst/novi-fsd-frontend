@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import StyledLabel from "../../styles/StyledLabel";
+import StyledInput from "../../styles/StyledInput";
 
 export default function InputPassword({
                                          labelTitle,
@@ -23,7 +24,7 @@ export default function InputPassword({
 const StyledPasswordLabel = styled(StyledLabel)`
   button {
     border: none;
-    color: ${({theme: {colors}}) => colors.green};
+    color: ${({theme: {colors}}) => colors.darkGreen};
     font-weight: normal;
     font-size: 1.4rem;
     margin: 0 auto;
@@ -32,14 +33,3 @@ const StyledPasswordLabel = styled(StyledLabel)`
   }
 `
 
-const StyledInput = styled.input`
-  padding: 0.8rem 1.6rem;
-  font-family: "Merriweather", serif;
-  font-size: 1.8rem;
-  color: ${({theme: {colors}}) => colors.black};
-  border: 3px solid ${({theme: {colors}}) => colors.green};
-  width: 100%;
-  background-color: ${({theme: {colors}}) => colors.white};
-  margin-bottom: 1.5rem;
-  height: auto;
-`

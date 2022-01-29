@@ -253,7 +253,6 @@ export default function EditTravelstory() {
 }
 
 const StyledCreateTravelstory = styled.section`
-
   h1 {
     padding: 25rem 0 5rem;
     text-transform: uppercase;
@@ -273,6 +272,20 @@ const StyledCreateTravelstory = styled.section`
       padding: 1rem 0 1rem;
       cursor: pointer;
     }
+  }
+
+  
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.md} {
+    h1{
+      padding: 5rem 0;
+    }
+  }
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+    .description{
+      text-align: center;
+    }
+
   }
 
 `
