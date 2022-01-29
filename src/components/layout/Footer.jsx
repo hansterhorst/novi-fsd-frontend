@@ -16,7 +16,10 @@ const StyledFooter = styled.footer`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-end;
   padding: 10px 0 20px;
+  height: 150px;
+  z-index: 1000;
 
   h4 {
     color: ${({theme: {colors}}) => colors.red};

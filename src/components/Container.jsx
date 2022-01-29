@@ -36,7 +36,7 @@ const ContainerStyled = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      height: calc(100vh - 153px) 
+      height: calc(100vh - 150px) 
   `};
 
 
