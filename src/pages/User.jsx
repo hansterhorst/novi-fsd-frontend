@@ -99,15 +99,6 @@ export default function User() {
    }, [authUser.id])
 
 
-   // useEffect(() => {
-   //    const interval = setInterval(() => {
-   //       randomTravelstory(travelstories)
-   //    }, 5000);
-   //    return () => clearInterval(interval)
-   //    // eslint-disable-next-line
-   // }, [travelstory])
-
-
    async function getTravelstories() {
 
       try {
@@ -180,7 +171,7 @@ export default function User() {
 
          if (response.status === 200) {
 
-            setTravelstories(response.data)
+            await setTravelstories(response.data)
             await randomTravelstory(response.data)
 
          }

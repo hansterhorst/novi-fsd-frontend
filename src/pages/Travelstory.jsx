@@ -64,6 +64,13 @@ export default function Travelstory() {
    ]
 
 
+   useEffect(() => {
+      getTravelstoryById()
+      getAllTravelstoryLikes()
+      // eslint-disable-next-line
+   }, [])
+
+
    const getTravelstoryById = async () => {
 
       if (isAuth) {
@@ -77,7 +84,7 @@ export default function Travelstory() {
             }
 
             const response = await axios.get(`${USERS_BASE_URL}/travelstories/${travelstoryId}`, config)
-            setTravelstory(response.data)
+            await setTravelstory(response.data)
 
          } catch (error) {
             console.error(error.response);
@@ -86,9 +93,8 @@ export default function Travelstory() {
       } else {
 
          try {
-            console.log("PUBLIC")
             const response = await axios.get(`${PUBLIC_BASE_URL}/travelstories/${travelstoryId}`)
-            setTravelstory(response.data)
+            await setTravelstory(response.data)
 
          } catch (error) {
             console.error(error.response);
@@ -155,13 +161,6 @@ export default function Travelstory() {
          }
       }
    }
-
-
-   useEffect(() => {
-      getTravelstoryById()
-      getAllTravelstoryLikes()
-      // eslint-disable-next-line
-   }, [])
 
 
    const {

@@ -120,10 +120,7 @@ export default function Home() {
 
 const StyledHome = styled.div`
   text-align: center;
-  display: flex;
-  justify-content: center;
-
-
+  
   h1 {
     line-height: 1;
   }
@@ -131,7 +128,7 @@ const StyledHome = styled.div`
   .buttons {
     display: inline-flex;
     flex-direction: column;
-    margin: 2rem 0;
+    margin: 2rem 0 0;
     row-gap: 1rem;
   }
 
@@ -148,6 +145,8 @@ const StyledHome = styled.div`
   }
 
   @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+    margin-top: auto;
+
     h1 {
       font-size: 2.5rem;
       padding: 0;

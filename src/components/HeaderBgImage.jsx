@@ -5,7 +5,7 @@ export default function HeaderBgImage({children, bgImage}) {
 
    return (
       <StyledHeaderBgImage bgImage={bgImage}>
-            {children}
+         {children}
       </StyledHeaderBgImage>
    )
 
@@ -16,10 +16,16 @@ const StyledHeaderBgImage = styled.header`
   background-blend-mode: multiply;
   background-size: cover;
   width: 100%;
+  height: calc(100vw / 16 * 9); // fallback safari browser
   aspect-ratio: 16/9;
-  height: calc(100vw /16 * 9); // fallback safari browser
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   justify-content: center;
+
+  @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+    height: calc(100vw / 4 * 3); // fallback safari browser
+    aspect-ratio: 4/3;
+  }
+
 `

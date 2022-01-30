@@ -21,8 +21,8 @@ const StyledTravelstoryHeader = styled.header`
   background-blend-mode: multiply;
   background-size: cover;
   width: 100%;
-  aspect-ratio: 16/9;
   height: calc(100vw / 16 * 9); // fallback safari browser
+  aspect-ratio: 16/9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,6 +45,9 @@ const StyledTravelstoryHeader = styled.header`
 
 
   @media only screen and ${({theme: {breakpoints}}) => breakpoints.sm} {
+
+    height: calc(100vw / 4 * 3); // fallback safari browser
+    aspect-ratio: 4/3;
 
     h2 {
       font-size: 3rem;
