@@ -45,7 +45,10 @@ const StyledForm = styled.form`
 
     .form-buttons {
       display: flex;
-      column-gap: 2rem;
+      
+      button{
+        margin-left: 2rem;
+      }
     }
 
     label {
