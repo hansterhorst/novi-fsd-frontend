@@ -41,7 +41,7 @@ export default function App() {
             {/* ADMIN AUTHENTICATION ROUTES */}
             <Route element={<RequireAdminAuthentication isAuth={isAuth} roles={roles}/>}>
                <Route path="/admin" element={<Admin/>}/>
-               <Route path="/admin/travelstory/:travelstoryId" element={<EditTravelstory/>}/>
+               <Route path="/admin/travelstory/:travelstoryId" element={<Travelstory/>}/>
             </Route>
             {/* PAGE NOT FOUND ROUTE*/}
             <Route path="*" element={<PageNotFound/>}/>
