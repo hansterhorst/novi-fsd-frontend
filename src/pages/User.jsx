@@ -18,6 +18,7 @@ import userAlreadyFollowingUser from "../utils/userAlreadyFollowing";
 import {USERS_BASE_URL} from "../utils/constants";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
 import awsGetTravelstoryImage from "../utils/awsGetTravelstoryImage";
+import randomTravelstory from "../utils/randomTravelstory";
 
 
 export default function User() {
@@ -172,7 +173,7 @@ export default function User() {
          if (response.status === 200) {
 
             await setTravelstories(response.data)
-            await randomTravelstory(response.data)
+            await setTravelstory(randomTravelstory(response.data))
 
          }
       } catch (error) {
@@ -207,12 +208,6 @@ export default function User() {
          setUser({...authUser, isUser: true})
       }
    }
-
-   function randomTravelstory(array) {
-      const index = Math.floor(Math.random() * array.length)
-      setTravelstory(array[index])
-   }
-
 
    return (
       <Layout navLinks={navLinks}>

@@ -8,6 +8,7 @@ import TravelstoryHeader from "../components/travelstory/TravelstoryHeader";
 import {USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import randomTravelstory from "../utils/randomTravelstory";
 
 
 export default function Travelstories() {
@@ -55,18 +56,12 @@ export default function Travelstories() {
 
          setTravelstories(response.data)
 
-         randomTravelstory(response.data)
-
+         setTravelstory(randomTravelstory(response.data))
+         
       } catch (error) {
 
          console.error(error.response);
       }
-   }
-
-
-   function randomTravelstory(array) {
-      const index = Math.floor(Math.random() * array.length)
-      setTravelstory(array[index])
    }
 
 
