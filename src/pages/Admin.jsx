@@ -11,6 +11,7 @@ import whiteAltitudeLines from "../assets/images/white-altitude-lines.png"
 import {ADMIN_BASE_URL, USERS_BASE_URL} from "../utils/constants";
 import {AuthContext} from "../context/auth/AuthContext";
 import awsGetProfileImage from "../utils/awsGetProfileImage";
+import TextArea from "../components/form-inputs/TextArea";
 
 export default function Admin() {
 
@@ -85,6 +86,27 @@ export default function Admin() {
       }
    }
 
+   async function deleteTravelstory(travelstoryId) {
+
+      const config = {
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+         }
+      }
+
+      try {
+         const response = await axios.delete(`${USERS_BASE_URL}/travelstories/${travelstoryId}`, config)
+
+         if (response.status === 200) {
+            await getUsers()
+         }
+
+      } catch (error) {
+         console.log(error.response)
+      }
+   }
+
 
    function handleCollapseList(id, users) {
       const usersData = users.map((user) => {
@@ -134,13 +156,21 @@ export default function Admin() {
                         <StyledCollapseContent isCollapse={user.isUserCollapse}>
 
                            <InputField labelTitle="Voornaam" name="firstname"
-                                       register={register}/>
+                                       register={register} readOnly={true}/>
 
                            <InputField labelTitle="Achternaam" name="lastname"
-                                       register={register}/>
+                                       register={register} readOnly={true}/>
 
                            <InputField labelTitle="Email" name="email" type="email"
-                                       register={register}/>
+                                       register={register} readOnly={true}/>
+
+                           <InputField labelTitle="Woonplaats" name="city"
+                                       register={register} readOnly={true}/>
+
+                           <InputField labelTitle="Land" name="country"
+                                       register={register} readOnly={true}/>
+
+                           <TextArea labelTitle="Bio" name="bio" register={register} height={150} readOnly={true}/>
 
                            <div className="buttons">
                               <StyledButton type="submit"
@@ -153,7 +183,13 @@ export default function Admin() {
 
                                  <div className="link">
                                     <StyledLink
-                                       to={`/admin/travelstory/${story.id}`}>{story.title}<span>⬅</span></StyledLink>
+                                       to={`/admin/travelstory/${story.id}`}>{story.title}
+                                       <span>
+                                          <StyledButton type="submit"
+                                                        onClick={handleSubmit(() => deleteTravelstory(story.id))}>Delete Travelstory
+                                          </StyledButton>
+                                    </span>
+                                    </StyledLink>
                                  </div>
 
                               </div>
@@ -212,7 +248,7 @@ const StyledCollapseContent = styled.div`
     color: ${({theme}) => theme.colors.red};
   }
 
-  input {
+  input, textarea {
     border-color: ${({theme}) => theme.colors.red};
   }
 
@@ -231,11 +267,11 @@ const StyledCollapseContent = styled.div`
       display: flex;
       justify-content: space-between;
 
-      span {
-        text-align: end;
-        transform: rotate(180deg);
-        font-size: 2rem;
-      }
+      //span {
+      //  text-align: end;
+      //  transform: rotate(180deg);
+      //  font-size: 2rem;
+      //}
     }
   }
 `

@@ -7,12 +7,13 @@ export default function InputField({
                                       type = "text",
                                       name,
                                       required = false,
-                                      register
+                                      register,
+                                      readOnly = false
                                    }) {
 
    return (
       <StyledLabel>{labelTitle}
-         <StyledInput type={type} {...register(`${name}`)} required={required}/>
+         <StyledInput type={type} {...register(`${name}`)} required={required} readOnly={readOnly}/>
       </StyledLabel>
    )
 }

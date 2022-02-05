@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import StyledLabel from "../../styles/StyledLabel";
 
-export default function TextArea({labelTitle, name, required = false, height, register}) {
+export default function TextArea({labelTitle, name, required = false, height, register, readOnly= false}) {
 
    return (
       <StyledLabel>{labelTitle}
-         <StyledTextArea {...register(`${name}`)} height={height} required={required}/>
+         <StyledTextArea {...register(`${name}`)} height={height} required={required} readOnly={readOnly}/>
       </StyledLabel>
    )
 }
