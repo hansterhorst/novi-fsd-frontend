@@ -1,6 +1,6 @@
 import {SET_ALERT, REMOVE_ALERT} from "../types"
 
-export default function authReducer(state, action) {
+export default function alertReducer(state, action) {
 
    switch (action.type) {
       case SET_ALERT:
