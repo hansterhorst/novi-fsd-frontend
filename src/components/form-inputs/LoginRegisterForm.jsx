@@ -24,7 +24,7 @@ export default function LoginRegisterForm({
          </div>
 
          <div className="or-register">
-            <StyledTextLink to={`/${orButtonTitle.toLowerCase()}`}>or {orButtonTitle}</StyledTextLink>
+            <StyledTextLink to={`/${orButtonTitle.toLowerCase()}`}>of {orButtonTitle}</StyledTextLink>
          </div>
       </StyledForm>
    )

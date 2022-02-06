@@ -35,7 +35,7 @@ export default function EditTravelstory() {
       isPublic: true,
       article: "",
       country: "",
-      imageOne: undefined,
+      previewImage: undefined,
       imageUrl: "",
       title: "",
       tripDate: "",
@@ -88,7 +88,7 @@ export default function EditTravelstory() {
          const data = {
             ...response.data,
             tripDate: covertDateToInputDate(response.data.tripDate),
-            imageOne: response.data.imageUrl
+            previewImage: response.data.imageUrl
          }
 
          setApiTravelstoryData(data)
@@ -101,13 +101,13 @@ export default function EditTravelstory() {
 
    async function updateTravelstory(data) {
 
-      if (data.imageOne !== data.imageUrl) {
+      if (data.previewImage !== data.imageUrl) {
 
          try {
 
-            const imageOne = data.imageOne[0]
+            const previewImage = data.previewImage[0]
             const formData = new FormData();
-            formData.append("file", imageOne);
+            formData.append("file", previewImage);
 
             const config = {
                headers: {
@@ -118,7 +118,7 @@ export default function EditTravelstory() {
 
             data = {
                ...data,
-               imageUrl: data.imageOne[0].name
+               imageUrl: data.previewImage[0].name
             }
 
             await axios.post(`${USERS_BASE_URL}/user/${apiTravelstoryData.userId}/travelstory/${travelstoryId}/images/upload`,
@@ -236,7 +236,7 @@ export default function EditTravelstory() {
 
                   {/* IMAGE UPLOAD */}
                   <div className="preview-images">
-                     <InputImageUpload labelTitle="* Foto 1" name="imageOne" register={register}
+                     <InputImageUpload labelTitle="* Foto" name="previewImage" register={register}
                                        image={awsGetTravelstoryImage(apiTravelstoryData.userId, travelstoryId)}/>
                   </div>
 
