@@ -252,8 +252,10 @@ export default function User() {
                   {user.isUser ?
                      <>
                         {/* CREATE TRAVELSTORY */}
-                        {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>Volg
-                           mij</StyledButton>}
+                        {!user.isUser && <StyledButton onClick={() => console.log("Follow")}>
+                           Volg mij
+                        </StyledButton>}
+
                         <StyledLink to={`/users/travelstories/new/`}><span>✏️</span>
                            TravelStory</StyledLink>
 
@@ -319,8 +321,11 @@ const StyledUser = styled.div`
   .profile-buttons {
     display: flex;
     justify-content: center;
-    column-gap: 2rem;
     padding: 2rem 0;
+    
+    a:not(:last-child){
+      margin-right: 2rem;
+    }
   }
 
   .details {
